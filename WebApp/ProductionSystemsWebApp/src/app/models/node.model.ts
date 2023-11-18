@@ -1,6 +1,6 @@
 export interface Node{
-    NodeId: string;
-    KeyId: string;
-    ParentId: string;
-    Name: string;
+    nodeId: string;
+    keyId: string;
+    parentId: string;
+    name: string;
 }

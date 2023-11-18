@@ -18,7 +18,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/GetAllNodes")]
+        [Route("GetAllNodes")]
         public async Task<ActionResult<IEnumerable<TreeNode>>> GetAllNodes()
         {
             var nodes = await _productionSystemsRepository.GetAllNodesAsync();

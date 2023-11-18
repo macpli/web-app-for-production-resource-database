@@ -12,7 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ProductionSystemContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionSystems")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionSystems"))
+    );
 
 builder.Services.AddScoped<IProductionSystemsRepository, ProductionSystemsRepository>();
 
@@ -26,6 +27,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseAuthorization();
 

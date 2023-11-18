@@ -11,5 +11,4 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  
 }
