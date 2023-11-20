@@ -29,12 +29,12 @@ namespace WebApi.Services
 
         public async Task<IEnumerable<TreeOfMfgPlants>> GetStationsForDepartment(string departmentId)
         {
-            var factory = await _context.TreeOfMfgPlants
+            var department = await _context.TreeOfMfgPlants
                 .Where(n => n.KeyId == departmentId)
-                .Select(n => n.ParentId)
+                .Select(n => n.NodeId)
                 .FirstOrDefaultAsync();
 
-            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == factory + departmentId).ToListAsync();
+            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == department).ToListAsync();
         }
     }
 }

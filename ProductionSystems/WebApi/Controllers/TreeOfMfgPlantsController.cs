@@ -37,7 +37,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/GetAllFactories")]
+        [Route("GetAllFactories")]
         public async Task<ActionResult<IEnumerable<TreeNode>>> GetAllFactories()
         {
             var nodes = await _productionSystemsRepository.GetAllFactories();
@@ -56,7 +56,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/GetDepartmentsForFactory")]
+        [Route("GetDepartmentsForFactory/{factoryId}")]
         public async Task<ActionResult<IEnumerable<TreeNode>>> GetAllChildrenNodes(string factoryId)
         {
             var nodes = await _productionSystemsRepository.GetDepartmentsForFactory(factoryId);
@@ -75,7 +75,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/GetStationsForDepartment")]
+        [Route("GetStationsForDepartment/{departmentId}")]
         public async Task<ActionResult<IEnumerable<TreeNode>>> GetStationsForDepartment(string departmentId)
         {
             var nodes = await _productionSystemsRepository.GetStationsForDepartment(departmentId);

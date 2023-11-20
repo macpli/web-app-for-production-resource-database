@@ -1,4 +1,4 @@
-export interface Node{
+export interface Station{
     nodeId: string;
     keyId: string;
     parentId: string;
