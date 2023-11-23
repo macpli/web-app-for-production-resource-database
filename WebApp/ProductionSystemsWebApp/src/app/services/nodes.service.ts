@@ -15,19 +15,7 @@ export class NodesService {
     return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetAllFactories');
   }
 
-  getDepartmentsForFactory(factoryId: string): Observable<TreeNode[]> {
-    return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetDepartmentsForFactory/'  + factoryId);
-  }
-
-  GetCellsForDepartment(departmentId: string): Observable<TreeNode[]> {
-    return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetCellsForDepartment/' + departmentId);
-  }
-
-  GetDeviceGroupsForCell(cellId: string): Observable<TreeNode[]> {
-    return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetDeviceGroupsForCell/' + cellId);
-  }
-
-  GetEquipment(deviceGroupId: string): Observable<TreeNode[]> {
-    return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetEquipment/' + deviceGroupId);
+  GetChildren(nodeId: string): Observable<TreeNode[]> {
+    return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetChildren/' + nodeId);
   }
 }

@@ -28,5 +28,8 @@ namespace WebApi.Models
 
         [StringLength(150)]
         public string Name { get; set; }
+
+        [NotMapped]
+        public List<TreeOfMfgPlants> Children { get; set; } = new List<TreeOfMfgPlants>();
     }
 }

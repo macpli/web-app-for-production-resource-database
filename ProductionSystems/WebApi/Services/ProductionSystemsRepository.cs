@@ -12,36 +12,21 @@ namespace WebApi.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<TreeOfMfgPlants>> GetAllNodesAsync()
-        {
-            return await _context.TreeOfMfgPlants.ToListAsync();
-        }
-
         public async Task<IEnumerable<TreeOfMfgPlants>> GetAllFactories()
         {
             return await _context.TreeOfMfgPlants.Where(n => n.KeyId.StartsWith("F")).ToListAsync();
         }
 
-        public async Task<IEnumerable<TreeOfMfgPlants>> GetDepartmentsForFactory(string factoryId)
+        public async Task<List<TreeOfMfgPlants>> GetChildrenForNode(string nodeId)
         {
-            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == factoryId).ToListAsync();
-        }
+            var children = await _context.TreeOfMfgPlants.Where(n => n.ParentId == nodeId).ToListAsync();
 
-        public async Task<IEnumerable<TreeOfMfgPlants>> GetCellsForDepartment(string departmentId)
-        {
-            
+            foreach (var child in children)
+            {
+                child.Children = await GetChildrenForNode(child.NodeId);
+            }
 
-            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == departmentId).ToListAsync();
-        }
-
-        public async Task<IEnumerable<TreeOfMfgPlants>> GetDeviceGroupsForCell(string cellId)
-        {
-            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == cellId).ToListAsync();
-        }
-
-        public async Task<IEnumerable<TreeOfMfgPlants>> GetEquipment(string deviceGroupId)
-        {
-            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == deviceGroupId).ToListAsync();
+            return children;
         }
     }
 }

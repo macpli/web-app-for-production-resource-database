@@ -18,25 +18,6 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllNodes")]
-        public async Task<ActionResult<IEnumerable<TreeNode>>> GetAllNodes()
-        {
-            var nodes = await _productionSystemsRepository.GetAllNodesAsync();
-            var results = new List<TreeNode>();
-            foreach (var node in nodes)
-            {
-                results.Add(new TreeNode
-                { 
-                    NodeId = node.NodeId, 
-                    KeyId = node.KeyId,
-                    ParentId = node.ParentId,
-                    Name = node.Name
-                });
-            }
-            return Ok(results);
-        }
-
-        [HttpGet]
         [Route("GetAllFactories")]
         public async Task<ActionResult<IEnumerable<TreeNode>>> GetAllFactories()
         {
@@ -55,6 +36,7 @@ namespace WebApi.Controllers
             return Ok(results);
         }
 
+        /*
         [HttpGet]
         [Route("GetDepartmentsForFactory/{factoryId}")]
         public async Task<ActionResult<IEnumerable<TreeNode>>> GetAllChildrenNodes(string factoryId)
@@ -73,62 +55,51 @@ namespace WebApi.Controllers
             }
             return Ok(results);
         }
+        */
 
-        [HttpGet]
-        [Route("GetCellsForDepartment/{departmentId}")]
-        public async Task<ActionResult<IEnumerable<TreeNode>>> GetCellsForDepartment(string departmentId)
+        [HttpGet("GetChildren/{nodeId}")]
+        public async Task<ActionResult<List<TreeNode>>> GetChildrenForNode(string nodeId)
         {
-            var nodes = await _productionSystemsRepository.GetCellsForDepartment(departmentId);
+            var nodes = await _productionSystemsRepository.GetChildrenForNode(nodeId);
+
             var results = new List<TreeNode>();
             foreach (var node in nodes)
             {
-                results.Add(new TreeNode
+                var treeNode = new TreeNode
                 {
                     NodeId = node.NodeId,
                     KeyId = node.KeyId,
                     ParentId = node.ParentId,
-                    Name = node.Name
-                });
+                    Name = node.Name,
+                    Children = ConvertToTreeNode(node.Children)
+                };
+
+                results.Add(treeNode);
             }
+
             return Ok(results);
         }
 
-        [HttpGet]
-        [Route("GetDeviceGroupsForCell/{cellId}")]
-        public async Task<ActionResult<IEnumerable<TreeNode>>> GetDeviceGroupsForCell(string cellId)
+        private List<TreeNode> ConvertToTreeNode(List<TreeOfMfgPlants> nodes)
         {
-            var nodes = await _productionSystemsRepository.GetDeviceGroupsForCell(cellId);
-            var results = new List<TreeNode>();
+            var result = new List<TreeNode>();
             foreach (var node in nodes)
             {
-                results.Add(new TreeNode
+                var treeNode = new TreeNode
                 {
                     NodeId = node.NodeId,
                     KeyId = node.KeyId,
                     ParentId = node.ParentId,
-                    Name = node.Name
-                });
+                    Name = node.Name,
+                    Children = ConvertToTreeNode(node.Children)
+                };
+
+                result.Add(treeNode);
             }
-            return Ok(results);
+
+            return result;
         }
 
-        [HttpGet]
-        [Route("GetEquipment/{deviceGroup}")]
-        public async Task<ActionResult<IEnumerable<TreeNode>>> GetEquipment(string deviceGroupId)
-        {
-            var nodes = await _productionSystemsRepository.GetEquipment(deviceGroupId);
-            var results = new List<TreeNode>();
-            foreach (var node in nodes)
-            {
-                results.Add(new TreeNode
-                {
-                    NodeId = node.NodeId,
-                    KeyId = node.KeyId,
-                    ParentId = node.ParentId,
-                    Name = node.Name
-                });
-            }
-            return Ok(results);
-        }
+
     }
 }

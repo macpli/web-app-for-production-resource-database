@@ -6,5 +6,6 @@
         public string KeyId { get; set; }
         public string ParentId { get; set; }
         public string Name { get; set; }
+        public List<TreeNode> Children { get; set;} = new List<TreeNode>();
     }
 }

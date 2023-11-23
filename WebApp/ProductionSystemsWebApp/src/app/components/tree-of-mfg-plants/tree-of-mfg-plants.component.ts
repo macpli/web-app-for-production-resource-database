@@ -1,22 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NodesService } from '../../services/nodes.service';
-import {MatCardModule} from '@angular/material/card';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import { Factory } from '../../models/factory.model';
-import { Department } from '../../models/department.model';
-import { Station } from '../../models/station.model';
-import {MatTreeNestedDataSource, MatTreeModule, MatTreeFlattener, MatTreeFlatDataSource} from '@angular/material/tree';
-import {FlatTreeControl, NestedTreeControl} from '@angular/cdk/tree';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
+import { MatCardModule} from '@angular/material/card';
+import { MatSidenavModule} from '@angular/material/sidenav';
+import { MatTreeNestedDataSource, MatTreeModule} from '@angular/material/tree';
+import { NestedTreeControl} from '@angular/cdk/tree';
+import { MatButtonModule} from '@angular/material/button';
+import { MatIconModule} from '@angular/material/icon';
 import { TreeNode } from '../../models/treeNode.model';
-
-interface ExampleFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
- }
 
 @Component({
   selector: 'app-tree-of-mfg-plants',
@@ -33,69 +24,35 @@ export class TreeOfMfgPlantsComponent {
   treeControl = new NestedTreeControl<TreeNode>(node => node.children);
   dataSource = new MatTreeNestedDataSource<TreeNode>();
   
+  allnodes: any;
 
   ngOnInit(): void {
-    this.InitData();
     
-  }
-  hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
-  InitData(){
-    this.getFactories();
-    console.log(this.dataSource);
+    this.getAllNodes();
   }
 
-  getFactories(){
-    this.nodesService.getAllFactories()
+  hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
+
+  getAllNodes(){
+    this.nodesService.GetChildren('0')
     .subscribe({
       next: (result) => {
-        this.factories = result;
-        
-        if(result)
-        {
-          this.getDepartments();
-        }
-      },
-      error: (response) => {
-        console.log(response);
+        this.dataSource.data = result;
       }
     })
   }
 
-  getDepartments(){
-    this.factories.forEach(f => {
-      this.nodesService.getDepartmentsForFactory(f.keyId).subscribe({
-        next: (result) => {
-          f.children = result;
-          if(result)
-          {
-            this.getCells();
-          }
-        },
-        error: (response) => {
-          console.log(response);
-        }
-      })
-    })
+  getIconClass(keyId: string): string {
+    const startingLetter = keyId.charAt(0).toUpperCase(); 
+
+    const iconClasses:any = {
+      F: 'domain',
+      D: 'pallet',
+      E: 'precision_manufacturing',
+      M: 'factory',
+      C: 'warehouse', //conveyor_belt
+    };
+
+    return iconClasses[startingLetter] || iconClasses.default;
   }
-
-  getCells(){
-    this.factories.forEach(f => {
-      f.children?.forEach(d =>{
-        this.nodesService.GetCellsForDepartment(d.nodeId).subscribe({
-          next: (result) => {
-            d.children = result;
-            if(result != null){
-              this.dataSource.data = this.factories;
-              console.log(d.children);
-            }
-            
-            
-          }
-        })
-      })
-      })
-    }
-
-    
-  
 }
