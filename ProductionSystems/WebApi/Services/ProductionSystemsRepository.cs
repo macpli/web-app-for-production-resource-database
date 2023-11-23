@@ -27,14 +27,21 @@ namespace WebApi.Services
             return await _context.TreeOfMfgPlants.Where(n => n.ParentId == factoryId).ToListAsync();
         }
 
-        public async Task<IEnumerable<TreeOfMfgPlants>> GetStationsForDepartment(string departmentId)
+        public async Task<IEnumerable<TreeOfMfgPlants>> GetCellsForDepartment(string departmentId)
         {
-            var department = await _context.TreeOfMfgPlants
-                .Where(n => n.KeyId == departmentId)
-                .Select(n => n.NodeId)
-                .FirstOrDefaultAsync();
+            
 
-            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == department).ToListAsync();
+            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == departmentId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<TreeOfMfgPlants>> GetDeviceGroupsForCell(string cellId)
+        {
+            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == cellId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<TreeOfMfgPlants>> GetEquipment(string deviceGroupId)
+        {
+            return await _context.TreeOfMfgPlants.Where(n => n.ParentId == deviceGroupId).ToListAsync();
         }
     }
 }

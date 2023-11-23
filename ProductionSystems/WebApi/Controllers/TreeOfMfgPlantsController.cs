@@ -75,10 +75,48 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("GetStationsForDepartment/{departmentId}")]
-        public async Task<ActionResult<IEnumerable<TreeNode>>> GetStationsForDepartment(string departmentId)
+        [Route("GetCellsForDepartment/{departmentId}")]
+        public async Task<ActionResult<IEnumerable<TreeNode>>> GetCellsForDepartment(string departmentId)
         {
-            var nodes = await _productionSystemsRepository.GetStationsForDepartment(departmentId);
+            var nodes = await _productionSystemsRepository.GetCellsForDepartment(departmentId);
+            var results = new List<TreeNode>();
+            foreach (var node in nodes)
+            {
+                results.Add(new TreeNode
+                {
+                    NodeId = node.NodeId,
+                    KeyId = node.KeyId,
+                    ParentId = node.ParentId,
+                    Name = node.Name
+                });
+            }
+            return Ok(results);
+        }
+
+        [HttpGet]
+        [Route("GetDeviceGroupsForCell/{cellId}")]
+        public async Task<ActionResult<IEnumerable<TreeNode>>> GetDeviceGroupsForCell(string cellId)
+        {
+            var nodes = await _productionSystemsRepository.GetDeviceGroupsForCell(cellId);
+            var results = new List<TreeNode>();
+            foreach (var node in nodes)
+            {
+                results.Add(new TreeNode
+                {
+                    NodeId = node.NodeId,
+                    KeyId = node.KeyId,
+                    ParentId = node.ParentId,
+                    Name = node.Name
+                });
+            }
+            return Ok(results);
+        }
+
+        [HttpGet]
+        [Route("GetEquipment/{deviceGroup}")]
+        public async Task<ActionResult<IEnumerable<TreeNode>>> GetEquipment(string deviceGroupId)
+        {
+            var nodes = await _productionSystemsRepository.GetEquipment(deviceGroupId);
             var results = new List<TreeNode>();
             foreach (var node in nodes)
             {

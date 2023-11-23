@@ -7,6 +7,8 @@ namespace WebApi.Services
         Task<IEnumerable<TreeOfMfgPlants>> GetAllNodesAsync();
         Task<IEnumerable<TreeOfMfgPlants>> GetAllFactories();
         Task<IEnumerable<TreeOfMfgPlants>> GetDepartmentsForFactory(string factoryId);
-        Task<IEnumerable<TreeOfMfgPlants>> GetStationsForDepartment(string departmentId);
+        Task<IEnumerable<TreeOfMfgPlants>> GetCellsForDepartment(string departmentId);
+        Task<IEnumerable<TreeOfMfgPlants>> GetDeviceGroupsForCell(string cellId);
+        Task<IEnumerable<TreeOfMfgPlants>> GetEquipment(string deviceGroupId);
     }
 }
