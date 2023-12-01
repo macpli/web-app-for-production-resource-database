@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { NodeDetailsService } from '../../../services/node-details.service';
+import { NodeInfo } from '../../../models/nodeInfo';
 
 @Component({
   selector: 'tree-of-mfg-plants-sidenav',
@@ -17,7 +19,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   styleUrl: './tree-of-mfg-plants-sidenav.component.scss'
 })
 export class TreeOfMfgPlantsSidenavComponent {
-  constructor(private nodesService: NodesService) {}
+
+  constructor(
+    private nodesService: NodesService,
+    private nodeDetailsService: NodeDetailsService,
+    ) {}
   
   factories: TreeNode[] = [];
   treeControl = new NestedTreeControl<TreeNode>(node => node.children);
@@ -52,5 +58,10 @@ export class TreeOfMfgPlantsSidenavComponent {
     };
 
     return iconClasses[startingLetter] || iconClasses.default;
+  }
+
+  setNodeDetails(nodeId: string, keyId: string, parentId: string)
+  {
+    this.nodeDetailsService.setNodeDetails(nodeId, keyId, parentId);
   }
 }

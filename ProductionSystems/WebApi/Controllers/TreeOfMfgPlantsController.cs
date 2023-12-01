@@ -19,13 +19,13 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("GetAllFactories")]
-        public async Task<ActionResult<IEnumerable<TreeNode>>> GetAllFactories()
+        public async Task<ActionResult<IEnumerable<TreeNodeDTO>>> GetAllFactories()
         {
             var nodes = await _productionSystemsRepository.GetAllFactories();
-            var results = new List<TreeNode>();
+            var results = new List<TreeNodeDTO>();
             foreach (var node in nodes)
             {
-                results.Add(new TreeNode
+                results.Add(new TreeNodeDTO
                 {
                     NodeId = node.NodeId,
                     KeyId = node.KeyId,
@@ -58,14 +58,14 @@ namespace WebApi.Controllers
         */
 
         [HttpGet("GetChildren/{nodeId}")]
-        public async Task<ActionResult<List<TreeNode>>> GetChildrenForNode(string nodeId)
+        public async Task<ActionResult<List<TreeNodeDTO>>> GetChildrenForNode(string nodeId)
         {
             var nodes = await _productionSystemsRepository.GetChildrenForNode(nodeId);
 
-            var results = new List<TreeNode>();
+            var results = new List<TreeNodeDTO>();
             foreach (var node in nodes)
             {
-                var treeNode = new TreeNode
+                var treeNode = new TreeNodeDTO
                 {
                     NodeId = node.NodeId,
                     KeyId = node.KeyId,
@@ -80,12 +80,12 @@ namespace WebApi.Controllers
             return Ok(results);
         }
 
-        private List<TreeNode> ConvertToTreeNode(List<TreeOfMfgPlants> nodes)
+        private List<TreeNodeDTO> ConvertToTreeNode(List<TreeOfMfgPlants> nodes)
         {
-            var result = new List<TreeNode>();
+            var result = new List<TreeNodeDTO>();
             foreach (var node in nodes)
             {
-                var treeNode = new TreeNode
+                var treeNode = new TreeNodeDTO
                 {
                     NodeId = node.NodeId,
                     KeyId = node.KeyId,

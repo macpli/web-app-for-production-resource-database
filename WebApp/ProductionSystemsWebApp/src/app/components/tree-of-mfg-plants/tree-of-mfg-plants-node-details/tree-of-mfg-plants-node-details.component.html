@@ -1,1 +1,27 @@
-<p>tree-of-mfg-plants-node-details works!</p>
+<mat-card class="card nodeDetails-card" *ngIf="this.nodeId">
+    
+    <div>
+        <div style="display: flex; justify-content: space-between;">
+            <mat-card-header>
+                <mat-card-title>{{this.nodeId}} {{this.nodeName}}</mat-card-title>
+                <mat-card-subtitle> {{getNodeType(this.keyId)}}</mat-card-subtitle>
+            </mat-card-header>
+
+            <button mat-button
+                    style="width: 50px;" 
+                    (click)="Close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        
+        <mat-card-content>
+        <p>
+              {{this.nodeDesc}}
+        </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button>Action</button>
+        </mat-card-actions>
+    </div>
+</mat-card>
+  

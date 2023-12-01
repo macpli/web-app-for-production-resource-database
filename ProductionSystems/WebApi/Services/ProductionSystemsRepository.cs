@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebApi.Entities;
 using WebApi.Models;
 
 namespace WebApi.Services
@@ -12,6 +13,9 @@ namespace WebApi.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        //
+        // Methods for TreeOfMfgPlants
+        //
         public async Task<IEnumerable<TreeOfMfgPlants>> GetAllFactories()
         {
             return await _context.TreeOfMfgPlants.Where(n => n.KeyId.StartsWith("F")).ToListAsync();
@@ -27,6 +31,19 @@ namespace WebApi.Services
             }
 
             return children;
+        }
+
+        //
+        // Methods for Factory Details
+        //
+        public async Task<FactoryDetails> GetFactoryDetails(string nodeId)
+        {
+            return await _context.FactoryDetails.Where(n => n.IDFct == nodeId).SingleOrDefaultAsync();
+        }
+
+        public async Task<DepartmentDetails> GetDepartmentDetails(string nodeId)
+        {
+            return await _context.DepartmentDetails.Where(d => d.NodeId == nodeId).SingleOrDefaultAsync();
         }
     }
 }

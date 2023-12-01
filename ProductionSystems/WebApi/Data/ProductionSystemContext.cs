@@ -4,19 +4,26 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using WebApi.Entities;
 
 namespace WebApi.Models
 {
     public partial class ProductionSystemContext : DbContext
     {
         public DbSet<TreeOfMfgPlants> TreeOfMfgPlants { get; set; }
+        public DbSet<FactoryDetails> FactoryDetails { get; set; }
+        
+        public DbSet<DepartmentDetails> DepartmentDetails { get; set; }
+
+        /*
+        public DbSet<CellDetails> CellDetails { get; set; }
+        public DbSet<WorkstationDetails> WorkstationDetails { get; set; }
+        */
 
         public ProductionSystemContext(DbContextOptions<ProductionSystemContext> options)
             : base(options)
         {
 
         }
-
-
     }
 }
