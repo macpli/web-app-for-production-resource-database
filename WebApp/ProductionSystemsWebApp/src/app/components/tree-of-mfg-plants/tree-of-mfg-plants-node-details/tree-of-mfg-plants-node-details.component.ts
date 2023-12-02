@@ -5,6 +5,7 @@ import { MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { first } from 'rxjs';
+import { TreeNode } from '../../../models/treeNode.model';
 
 @Component({
   selector: 'tree-of-mfg-plants-node-details',
@@ -85,7 +86,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
     })
   }
 
-  getNodeType(keyId: string): string{
+  public getNodeType(keyId: string): string{
     const firstLetter = keyId.charAt(0).toUpperCase();
 
     switch(firstLetter){
@@ -98,6 +99,5 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
       default:
         return ''
     }
-    
   }
 }

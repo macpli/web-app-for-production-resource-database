@@ -18,4 +18,12 @@ export class NodesService {
   GetChildren(nodeId: string): Observable<TreeNode[]> {
     return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetChildren/' + nodeId);
   }
+
+  getAtomChildren(nodeId: string): Observable<string[]> {
+    return this.http.get<string[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetAtomChildren/' + nodeId)
+  }
+
+  addNode(node: TreeNode): Observable<TreeNode> {
+    return this.http.post<TreeNode>(this.baseApiUrl + '/api/TreeOfMfgPlants/AddNode', node);
+  }
 }

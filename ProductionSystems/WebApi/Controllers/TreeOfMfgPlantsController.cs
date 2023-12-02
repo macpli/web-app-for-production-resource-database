@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Entities;
 using WebApi.Models;
 using WebApi.Services;
 
@@ -100,6 +101,35 @@ namespace WebApi.Controllers
             return result;
         }
 
+        [HttpPost("AddNode")]
+        public async Task<ActionResult<TreeNodeDTO>> AddNode([FromBody] TreeNodeDTO newNode)
+        {
+        var addedNode = await _productionSystemsRepository.AddNode(newNode);
 
+        if (addedNode == null)
+        {
+            return BadRequest("Failed to add the node.");
+        }
+
+        var treeNode = new TreeNodeDTO
+        {
+            NodeId = addedNode.NodeId,
+            KeyId = addedNode.KeyId,
+            ParentId = addedNode.ParentId,
+            Name = addedNode.Name,
+        };
+
+        return Ok(treeNode);
+
+        }
+
+        [HttpGet]
+        [Route("GetAtomChildren/{nodeId}")]
+        public async Task<ActionResult<IEnumerable<string>>> GetAtomChildren(string nodeId)
+        {
+            var nodes = await _productionSystemsRepository.GetAtomChildren(nodeId);
+
+            return Ok(nodes);
+        }
     }
 }

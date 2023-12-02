@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApi.Models
+namespace WebApi.Entities
 {
     public class TreeOfMfgPlants
     {

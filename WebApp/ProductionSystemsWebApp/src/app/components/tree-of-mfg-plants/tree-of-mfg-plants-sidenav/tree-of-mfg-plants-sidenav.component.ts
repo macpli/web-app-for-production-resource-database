@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NodeDetailsService } from '../../../services/node-details.service';
 import { NodeInfo } from '../../../models/nodeInfo';
+import { MatDialog } from '@angular/material/dialog';
+import { AddNodeDialog } from '../shared/dialogs/add-node/add-node-dialog.component';
 
 @Component({
   selector: 'tree-of-mfg-plants-sidenav',
@@ -23,6 +25,7 @@ export class TreeOfMfgPlantsSidenavComponent {
   constructor(
     private nodesService: NodesService,
     private nodeDetailsService: NodeDetailsService,
+    public dialog: MatDialog,
     ) {}
   
   factories: TreeNode[] = [];
@@ -63,5 +66,65 @@ export class TreeOfMfgPlantsSidenavComponent {
   setNodeDetails(nodeId: string, keyId: string, parentId: string)
   {
     this.nodeDetailsService.setNodeDetails(nodeId, keyId, parentId);
+  }
+
+  public getNodeType(keyId: string): string{
+    const firstLetter = keyId.charAt(0).toUpperCase();
+
+    switch(firstLetter){
+      case 'F':
+        return 'M';
+      case 'M':
+        return 'C';
+      case 'C':
+        return 'D';
+      default:
+        return ''
+    }
+  }
+
+  addNode(nodeId: string, keyId: string, parentId: string, nodeName: string){
+    var nodeName = '';
+    const nodeType = this.getNodeType(keyId);
+    var maxNumericValue;
+    var newKeyId: string;
+    
+    this.nodesService.getAtomChildren(nodeId).subscribe({
+      next: (result) => {
+        const numericValues = result.map(value => parseInt(value.substring(1), 10));
+        maxNumericValue = Math.max(...numericValues);
+        newKeyId = nodeType + (maxNumericValue +1);
+
+        const dialogRef = this.dialog.open(AddNodeDialog, {
+          width: '50%',
+          height: '80%',
+          data: {nodeId: nodeId, name: nodeName},
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          nodeName = result;
+
+          if(result){
+            const newNode: TreeNode = {
+              nodeId: nodeId+newKeyId,
+              keyId: newKeyId,
+              parentId: nodeId,
+              name: nodeName
+            }
+
+            this.nodesService.addNode(newNode).subscribe({
+              next: (result) => {
+                console.log('Successfully added a new node.');
+                this.getAllNodes();
+              },
+              error: (message) => {
+                console.log('Error while adding node: ' + message);
+              }
+            })
+          }
+          
+        });
+      }
+    });
   }
 }

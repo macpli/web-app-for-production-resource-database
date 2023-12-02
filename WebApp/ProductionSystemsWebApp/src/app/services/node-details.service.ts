@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { NodeDetails } from '../models/nodeDetails.model';
+import { TreeNode } from '../models/treeNode.model';
 
 @Injectable({
   providedIn: 'any'

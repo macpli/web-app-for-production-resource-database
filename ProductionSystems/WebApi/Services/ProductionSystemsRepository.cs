@@ -45,5 +45,36 @@ namespace WebApi.Services
         {
             return await _context.DepartmentDetails.Where(d => d.NodeId == nodeId).SingleOrDefaultAsync();
         }
+
+        //
+        // Method for adding nodes
+        //
+        public async Task<TreeOfMfgPlants> AddNode(TreeNodeDTO node)
+        {
+            var nodeEntity = new TreeOfMfgPlants
+            {
+                NodeId = node.NodeId,
+                KeyId = node.KeyId,
+                ParentId = node.ParentId,
+                Name = node.Name,
+            };
+
+            _context.TreeOfMfgPlants.Add(nodeEntity);
+            await _context.SaveChangesAsync();
+
+            return nodeEntity;
+        }
+
+        //
+        // Method for getting atom children
+        //
+        public async Task<IEnumerable<string>> GetAtomChildren(string nodeId)
+        {
+            var atomChildren = await _context.TreeOfMfgPlants.Where(n => n.ParentId == nodeId)
+                .Select(n => n.KeyId)
+                .ToListAsync();
+
+            return atomChildren;
+        }
     }
 }
