@@ -93,7 +93,10 @@ export class TreeOfMfgPlantsSidenavComponent {
       next: (result) => {
         const numericValues = result.map(value => parseInt(value.substring(1), 10));
         maxNumericValue = Math.max(...numericValues);
-        newKeyId = nodeType + (maxNumericValue +1);
+
+        if(maxNumericValue && maxNumericValue < 0){
+          newKeyId = nodeType + 1;
+        } else newKeyId = nodeType + (maxNumericValue +1);
 
         const dialogRef = this.dialog.open(AddNodeDialog, {
           width: '50%',
