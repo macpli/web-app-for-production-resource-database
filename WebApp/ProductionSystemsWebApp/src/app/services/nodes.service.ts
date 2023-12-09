@@ -15,7 +15,7 @@ export class NodesService {
     return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetAllFactories');
   }
 
-  GetChildren(nodeId: string): Observable<TreeNode[]> {
+  getChildren(nodeId: string): Observable<TreeNode[]> {
     return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetChildren/' + nodeId);
   }
 
@@ -25,5 +25,9 @@ export class NodesService {
 
   addNode(node: TreeNode): Observable<TreeNode> {
     return this.http.post<TreeNode>(this.baseApiUrl + '/api/TreeOfMfgPlants/AddNode', node);
+  }
+
+  getWorkPieces(): Observable<TreeNode[]> {
+    return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetWorkpieces');
   }
 }

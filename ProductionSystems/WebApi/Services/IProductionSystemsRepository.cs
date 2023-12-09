@@ -6,6 +6,7 @@ namespace WebApi.Services
     public interface IProductionSystemsRepository
     {
         Task<IEnumerable<TreeOfMfgPlants>> GetAllFactories();
+        Task<List<TreeOfMfgPlants>> GetWorkPieces();
         Task<IEnumerable<string>> GetAtomChildren(string nodeId);
         Task<List<TreeOfMfgPlants>> GetChildrenForNode(string nodeId);
 

@@ -27,10 +27,31 @@ namespace WebApi.Services
 
             foreach (var child in children)
             {
+                if (child.KeyId.StartsWith("E"))
+                {
+                    // Break the loop if the current child's KeyId starts with 'E'
+                    break;
+                }
+
                 child.Children = await GetChildrenForNode(child.NodeId);
             }
 
             return children;
+        }
+
+        public async Task<List<TreeOfMfgPlants>> GetWorkPieces()
+        {
+            var children = await _context.TreeOfMfgPlants.Where(n => n.KeyId.StartsWith("Z")).ToListAsync();
+
+            List<TreeOfMfgPlants> result = new List<TreeOfMfgPlants>();
+
+            foreach (var startingNode in children)
+            {
+                startingNode.Children = await GetChildrenForNode(startingNode.NodeId);
+                result.Add(startingNode);
+            }
+
+            return result;
         }
 
         //
@@ -76,5 +97,6 @@ namespace WebApi.Services
 
             return atomChildren;
         }
+
     }
 }

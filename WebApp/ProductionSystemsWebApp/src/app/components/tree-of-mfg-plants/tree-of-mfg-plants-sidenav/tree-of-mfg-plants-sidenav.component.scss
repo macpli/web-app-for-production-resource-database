@@ -9,18 +9,10 @@
     list-style-type: none;
   }
   
-  /*
-   * This padding sets alignment of the nested nodes.
-   */
   .example-tree .mat-nested-tree-node div[role=group] {
     padding-left: 40px;
   }
-  
-  /*
-   * Padding for leaf nodes.
-   * Leaf nodes need to have padding so as to align with other non-leaf nodes
-   * under the same parent.
-   */
+ 
   .example-tree div[role=group] > .mat-tree-node {
     padding-left: 40px;
   }
@@ -28,3 +20,31 @@
   .mat-tree-node {
     cursor: pointer;
   }
+
+  .chosen-node {
+    background-color: rgb(242, 242, 242); 
+    border-radius: 16px; 
+  }
+
+  ::ng-deep .example-tree .mat-tree-node .node-content {
+    display: flex!important ;
+    align-items: center!important ;
+  }
+
+  /* Add this to your component's style file or a global style file */
+
+  ::ng-deep .mat-mdc-tab-group, .mat-mdc-tab-nav-bar {
+    --mdc-tab-indicator-active-indicator-color: lightseagreen;
+    --mat-tab-header-disabled-ripple-color: rgba(0, 0, 0, 0.38);
+    --mat-tab-header-pagination-icon-color: #000;
+    --mat-tab-header-inactive-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-active-label-text-color: lightseagreen;
+    --mat-tab-header-active-ripple-color: lightseagreen;
+    --mat-tab-header-inactive-ripple-color: lightseagreen;
+    --mat-tab-header-inactive-focus-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-inactive-hover-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-active-focus-label-text-color: lightseagreen;
+    --mat-tab-header-active-hover-label-text-color: lightseagreen;
+    --mat-tab-header-active-focus-indicator-color: lightseagreen;
+    --mat-tab-header-active-hover-indicator-color: lightseagreen;
+}

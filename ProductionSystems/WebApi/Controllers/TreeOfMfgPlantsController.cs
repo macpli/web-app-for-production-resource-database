@@ -81,6 +81,29 @@ namespace WebApi.Controllers
             return Ok(results);
         }
 
+        [HttpGet("GetWorkpieces")]
+        public async Task<IActionResult> GetWorkPieces()
+        {
+            var nodes = await _productionSystemsRepository.GetWorkPieces();
+
+            var results = new List<TreeNodeDTO>();
+            foreach (var node in nodes)
+            {
+                var treeNode = new TreeNodeDTO
+                {
+                    NodeId = node.NodeId,
+                    KeyId = node.KeyId,
+                    ParentId = node.ParentId,
+                    Name = node.Name,
+                    Children = ConvertToTreeNode(node.Children)
+                };
+
+                results.Add(treeNode);
+            }
+
+            return Ok(results);
+        }
+
         private List<TreeNodeDTO> ConvertToTreeNode(List<TreeOfMfgPlants> nodes)
         {
             var result = new List<TreeNodeDTO>();
