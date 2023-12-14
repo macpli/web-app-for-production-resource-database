@@ -3,17 +3,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Entities
 {
-    [Table("MP_Department")]
-    public class DepartmentDetails
+    [Table("MP_Cell")]
+    public class CellDetails
     {
         [Key]
+        [Column("IDCel")]
+        [StringLength(10)]
+        public string IDCel { get; set; }
+
         [Column("IDDep")]
         [StringLength(15)]
         public string IDDep { get; set; }
 
-        [Column("IDFct")]
-        [StringLength(10)]
-        public string IDFct { get; set; }
+        [Column("CELType")]
+        [StringLength(15)]
+        public string CELType { get; set; }
 
         [Column("Name")]
         [StringLength(80)]

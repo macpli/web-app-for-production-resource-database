@@ -34,4 +34,28 @@ export class NodeDetailsService {
   getDepartmentDetails(nodeId: string): Observable<NodeDetails> {
     return this.http.get<NodeDetails>(this.baseApiUrl + '/api/FactoryDetails/GetDepartmentDetails/' + nodeId)
   }
+
+  getCellDetails(nodeId: string): Observable<NodeDetails> {
+    return this.http.get<NodeDetails>(this.baseApiUrl + '/api/FactoryDetails/GetCellDetails/' + nodeId)
+  }
+
+  getWorkstationDetails(nodeId: string): Observable<NodeDetails> {
+    return this.http.get<NodeDetails>(this.baseApiUrl + '/api/FactoryDetails/GetWorkstationDetails/' + nodeId)
+  }
+
+  addFactoryDetails(details: NodeDetails): Observable<NodeDetails> {
+    return this.http.post<NodeDetails>(this.baseApiUrl + '/api/FactoryDetails/AddFactoryDetails', details);
+  }
+
+  addDepartmentDetails(details: NodeDetails): Observable<NodeDetails> {
+    return this.http.post<NodeDetails>(this.baseApiUrl + '/api/FactoryDetails/AddDepartmentDetails', details);
+  }
+
+  addCellDetails(details: NodeDetails): Observable<NodeDetails> {
+    return this.http.post<NodeDetails>(this.baseApiUrl + '/api/FactoryDetails/AddCellDetails', details);
+  }
+
+  addWorkstationDetails(details: NodeDetails): Observable<NodeDetails> {
+    return this.http.post<NodeDetails>(this.baseApiUrl + '/api/FactoryDetails/AddWorkstationDetails', details);
+  }
 }

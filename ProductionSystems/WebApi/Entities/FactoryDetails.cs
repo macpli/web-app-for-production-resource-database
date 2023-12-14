@@ -11,9 +11,9 @@ namespace WebApi.Entities
         [StringLength(10)]
         public string IDFct { get; set; }
 
-        [Column("FCTName")]
+        [Column("Name")]
         [StringLength(80)]
-        public string FCTName { get; set; }
+        public string Name { get; set; }
 
         [Column("Description")]
         [StringLength(120)]
@@ -22,5 +22,9 @@ namespace WebApi.Entities
         [Column("IDOrg")]
         [StringLength(10)]
         public string IDOrg { get; set; }
+
+        [Column("NodeId")]
+        [StringLength(50)]
+        public string NodeId { get; set; }
     }
 }

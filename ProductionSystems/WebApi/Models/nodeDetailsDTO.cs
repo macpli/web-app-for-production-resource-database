@@ -2,9 +2,10 @@
 {
     public class nodeDetailsDTO
     {
-        public string nodeName { get; set; }
-        public string nodeDesc { get; set; }
-        public string? nodeType { get; set; }
-        public string? idOrg { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string? CELType { get; set; }
+        public string? WSTType { get; set; }
+        public string? IdOrg { get; set; }
     }
 }

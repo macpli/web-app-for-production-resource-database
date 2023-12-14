@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using WebApi.Entities;
 using WebApi.Models;
 using WebApi.Services;
@@ -72,7 +73,10 @@ namespace WebApi.Controllers
                     KeyId = node.KeyId,
                     ParentId = node.ParentId,
                     Name = node.Name,
-                    Children = ConvertToTreeNode(node.Children)
+                    Width = node.Width,
+                    Height = node.Height,
+                    Children = ConvertToTreeNode(node.Children),
+                    
                 };
 
                 results.Add(treeNode);
@@ -115,7 +119,9 @@ namespace WebApi.Controllers
                     KeyId = node.KeyId,
                     ParentId = node.ParentId,
                     Name = node.Name,
-                    Children = ConvertToTreeNode(node.Children)
+                    Children = ConvertToTreeNode(node.Children),
+                    Width = node.Width,
+                    Height = node.Height
                 };
 
                 result.Add(treeNode);
@@ -140,6 +146,8 @@ namespace WebApi.Controllers
             KeyId = addedNode.KeyId,
             ParentId = addedNode.ParentId,
             Name = addedNode.Name,
+            Width = addedNode.Width,
+            Height = addedNode.Height
         };
 
         return Ok(treeNode);

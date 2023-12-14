@@ -13,15 +13,35 @@
                 <mat-icon>close</mat-icon>
             </button>
         </div>
+
+        <mat-tab-group>
+            <mat-tab label="Szczegóły">
+                <div class="node-details">
+                    <mat-card-content>
+                        <p>
+                              {{this.nodeDesc}}
+                        </p>
+                
+                        <p>
+                            {{this.idOrg}}
+                        </p>
+                
+                        <p>
+                            {{this.nodeType}}
+                        </p>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-raised-button>Action</button>
+                        </mat-card-actions>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Rysunek">
+                <tree-of-mfg-plants-draft *ngFor="let elements of factoryToDraw" [node]="elements"></tree-of-mfg-plants-draft>
+            </mat-tab>
+        </mat-tab-group>
         
-        <mat-card-content>
-        <p>
-              {{this.nodeDesc}}
-        </p>
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-raised-button>Action</button>
-        </mat-card-actions>
+        
     </div>
 </mat-card>
   

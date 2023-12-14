@@ -32,6 +32,10 @@ namespace WebApi.Services
                     // Break the loop if the current child's KeyId starts with 'E'
                     break;
                 }
+                // Fetch width and height values from the database for the child
+                var childFromDatabase = await _context.TreeOfMfgPlants
+                    .Where(n => n.NodeId == child.NodeId)
+                    .FirstOrDefaultAsync();
 
                 child.Children = await GetChildrenForNode(child.NodeId);
             }
@@ -41,7 +45,7 @@ namespace WebApi.Services
 
         public async Task<List<TreeOfMfgPlants>> GetWorkPieces()
         {
-            var children = await _context.TreeOfMfgPlants.Where(n => n.KeyId.StartsWith("Z")).ToListAsync();
+            var children = await _context.TreeOfMfgPlants.Where(n => n.KeyId.StartsWith("E")).ToListAsync();
 
             List<TreeOfMfgPlants> result = new List<TreeOfMfgPlants>();
 
@@ -57,15 +61,100 @@ namespace WebApi.Services
         //
         // Methods for Factory Details
         //
+        // Getting Details
+        //
         public async Task<FactoryDetails> GetFactoryDetails(string nodeId)
         {
-            return await _context.FactoryDetails.Where(n => n.IDFct == nodeId).SingleOrDefaultAsync();
+            return await _context.FactoryDetails.Where(n => n.NodeId == nodeId).SingleOrDefaultAsync();
         }
 
         public async Task<DepartmentDetails> GetDepartmentDetails(string nodeId)
         {
             return await _context.DepartmentDetails.Where(d => d.NodeId == nodeId).SingleOrDefaultAsync();
         }
+
+        public async Task<CellDetails> GetCellDetails(string nodeId)
+        {
+            return await _context.CellDetails.Where(c => c.NodeId == nodeId).SingleOrDefaultAsync();
+        }
+
+        public async Task<WorkstationDetails> GetWorkstationDetails(string nodeId)
+        {
+            return await _context.WorkstationDetails.Where(w => w.NodeId == nodeId).SingleOrDefaultAsync();
+        }
+        //
+        // Adding Details
+        //
+        public async Task<FactoryDetails> AddFactoryDetails(FactoryDetailsDTO details)
+        {
+            var detailsEntity = new FactoryDetails
+            {
+                IDFct = details.IDFct,
+                Name = details.Name,
+                Description = details.Description,
+                IDOrg = details.IDOrg,
+                NodeId = details.NodeId,
+            };
+
+            _context.FactoryDetails.Add(detailsEntity);
+            await _context.SaveChangesAsync();
+
+            return detailsEntity;
+        }
+
+        public async Task<DepartmentDetails> AddDepartmentDetails(DepartmentDetailsDTO details)
+        {
+            var detailsEntity = new DepartmentDetails
+            {
+                IDDep = details.IDDep,
+                IDFct = details.IDFct,
+                Name = details.Name,
+                Description = details.Description,
+                NodeId = details.NodeId,
+            };
+
+            _context.DepartmentDetails.Add(detailsEntity);
+            await _context.SaveChangesAsync();
+
+            return detailsEntity;
+        }
+
+        public async Task<CellDetails> AddCellDetails(CellDetailsDTO details)
+        {
+            var detailsEntity = new CellDetails
+            {
+                IDCel = details.IDCel,
+                IDDep = details.IDDep,
+                CELType = details.CELType,
+                Name = details.Name,
+                Description = details.Description,
+                NodeId = details.NodeId,
+            };
+
+            _context.CellDetails.Add(detailsEntity);
+            await _context.SaveChangesAsync();
+
+            return detailsEntity;
+        }
+
+        public async Task<WorkstationDetails> AddWorkstationDetails(WorkstationDetailsDTO details)
+        {
+            var detailsEntity = new WorkstationDetails
+            {
+                IDWst = details.IDWst,
+                IDCel = details.IDCel,
+                WSTType = details.WSTType,
+                Name = details.Name,
+                Description = details.Description,
+                NodeId = details.NodeId,
+            };
+
+            _context.WorkstationDetails.Add(detailsEntity);
+            await _context.SaveChangesAsync();
+
+            return detailsEntity;
+        }
+
 
         //
         // Method for adding nodes
@@ -78,6 +167,8 @@ namespace WebApi.Services
                 KeyId = node.KeyId,
                 ParentId = node.ParentId,
                 Name = node.Name,
+                Width = node.Width,
+                Height = node.Height,
             };
 
             _context.TreeOfMfgPlants.Add(nodeEntity);

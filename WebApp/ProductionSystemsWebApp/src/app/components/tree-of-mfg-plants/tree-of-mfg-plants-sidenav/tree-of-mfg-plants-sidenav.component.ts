@@ -13,13 +13,17 @@ import { NodeInfo } from '../../../models/nodeInfo';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNodeDialog } from '../shared/dialogs/add-node/add-node-dialog.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { TreeOfMfgPlantsDraftComponent } from "./tree-of-mfg-plants-draft/tree-of-mfg-plants-draft.component";
+import { TreePainterDirective } from '../../../directives/painter.directive';
+import { NodeDetails } from '../../../models/nodeDetails.model';
 
 @Component({
-  selector: 'tree-of-mfg-plants-sidenav',
-  standalone: true,
-  imports: [CommonModule, MatCardModule, MatSidenavModule, MatTreeModule, MatButtonModule, MatIconModule, MatTabsModule],
-  templateUrl: './tree-of-mfg-plants-sidenav.component.html',
-  styleUrl: './tree-of-mfg-plants-sidenav.component.scss'
+    selector: 'tree-of-mfg-plants-sidenav',
+    standalone: true,
+    templateUrl: './tree-of-mfg-plants-sidenav.component.html',
+    styleUrl: './tree-of-mfg-plants-sidenav.component.scss',
+    imports: [CommonModule, MatCardModule, MatSidenavModule, MatTreeModule, MatButtonModule, MatIconModule, MatTabsModule, TreeOfMfgPlantsDraftComponent, TreePainterDirective],
+    
 })
 export class TreeOfMfgPlantsSidenavComponent {
 
@@ -29,7 +33,7 @@ export class TreeOfMfgPlantsSidenavComponent {
     public dialog: MatDialog,
     ) {}
   
-  factories: TreeNode[] = [];
+  public factories!: TreeNode[];
   treeControl = new NestedTreeControl<TreeNode>(node => node.children);
   factoriesData = new MatTreeNestedDataSource<TreeNode>();
   workPiecesData = new MatTreeNestedDataSource<TreeNode>();
@@ -37,6 +41,7 @@ export class TreeOfMfgPlantsSidenavComponent {
   hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
 
   chosenNode: any;
+  factoryToDraw!: TreeNode[];
   
   ngOnInit(): void {
     this.refresh();
@@ -45,6 +50,17 @@ export class TreeOfMfgPlantsSidenavComponent {
   refresh(){
     this.getAllNodes();
     this.getWorkPieces();
+    
+
+  }
+
+  getFactoryToDraft(nodeId: string){
+    this.nodesService.getChildren(nodeId).subscribe({
+      next: (result) => {
+        this.factoryToDraw = result;
+        console.log(result);
+      }
+    })
   }
 
   getAllNodes(){
@@ -53,6 +69,7 @@ export class TreeOfMfgPlantsSidenavComponent {
     .subscribe({
       next: (result) => {
         this.factoriesData.data = result;
+        //this.factories = result;
         this.isLoading = false;
       }
     })
@@ -63,7 +80,6 @@ export class TreeOfMfgPlantsSidenavComponent {
     .subscribe({
       next: (result) => {
         this.workPiecesData.data = result;
-        console.log(result);
       }
     })
   }
@@ -82,9 +98,11 @@ export class TreeOfMfgPlantsSidenavComponent {
     return iconClasses[startingLetter] || iconClasses.default;
   }
 
-  setNodeDetails(nodeId: string, keyId: string, parentId: string, )
+  setNodeDetails(nodeId: string, keyId: string, parentId: string, width: number, height: number)
   {
-    this.chosenNode = { nodeId, keyId, parentId };
+    this.chosenNode = { nodeId, keyId, parentId, width, height };
+  
+    this.getFactoryToDraft(nodeId);
 
     this.nodeDetailsService.setNodeDetails(nodeId, keyId, parentId);
   }
@@ -101,6 +119,10 @@ export class TreeOfMfgPlantsSidenavComponent {
         return 'C';
       case 'C':
         return 'D';
+      case 'D':
+        return 'E'
+        case 'E':
+          return 'Z'
       default:
         return ''
     }
@@ -108,10 +130,16 @@ export class TreeOfMfgPlantsSidenavComponent {
 
   addNode(nodeId: string, keyId: string, parentId: string){
     var nodeName = '';
+    var nodeDesc = '';
+    var width, height: number;
+    var idOrg = '';
+    var celType = '';
+    var wstType = '';
     const nodeType = this.getNodeType(keyId);
     var maxNumericValue;
     var newKeyId: string;
     
+    // Adding Factory
     if(parentId == '0' && keyId == '0' && nodeId == '0'){
       this.nodesService.getAtomChildren(parentId).subscribe({
         next: (result) => {
@@ -125,20 +153,41 @@ export class TreeOfMfgPlantsSidenavComponent {
           const dialogRef = this.dialog.open(AddNodeDialog, {
             width: '50%',
             height: '80%',
-            data: {nodeId: nodeId, name: nodeName},
+            data: {nodeId: nodeId, name: nodeName, nodeType: nodeType},
           });
   
           dialogRef.afterClosed().subscribe(result => {
-            nodeName = result;
-  
+            nodeName = result.name;
+            width = result.width;
+            height = result.height;
+            nodeDesc = result.description;
+            idOrg = result.idOrg;
+            
             if(result){
               const newNode: TreeNode = {
                 nodeId: newKeyId,
                 keyId: newKeyId,
                 parentId: '0',
-                name: nodeName
+                name: nodeName,
+                width: width,
+                height: height,
               }
-              console.log(newNode);
+
+              const newNodeDetails: NodeDetails = {
+                name: nodeName,
+                description: nodeDesc,
+                idFct: newKeyId,
+                idOrg: idOrg,
+                nodeId: newKeyId
+              }
+
+              this.nodeDetailsService.addFactoryDetails(newNodeDetails).subscribe({
+                next: (result) => {
+                  console.log('Successfully added details');
+                  this.refresh();
+                }
+              })
+
               this.nodesService.addNode(newNode).subscribe({
                 next: (result) => {
                   console.log('Successfully added a new node.');
@@ -154,6 +203,7 @@ export class TreeOfMfgPlantsSidenavComponent {
         }
       });
     }else {
+      // Adding An Element
       this.nodesService.getAtomChildren(nodeId).subscribe({
         next: (result) => {
           const numericValues = result.map(value => parseInt(value.substring(1), 10));
@@ -166,20 +216,74 @@ export class TreeOfMfgPlantsSidenavComponent {
           const dialogRef = this.dialog.open(AddNodeDialog, {
             width: '50%',
             height: '80%',
-            data: {nodeId: nodeId, name: nodeName},
+            data: {nodeId: nodeId, name: nodeName, nodeType: nodeType},
           });
   
           dialogRef.afterClosed().subscribe(result => {
-            nodeName = result;
+            nodeName = result.name;
+            width = result.width;
+            height = result.height;
+            nodeDesc = result.description;
+            idOrg = result.idOrg;
+            celType = result.celType;
+            wstType = result.wstType;
   
             if(result){
               const newNode: TreeNode = {
                 nodeId: nodeId+newKeyId,
                 keyId: newKeyId,
                 parentId: nodeId,
-                name: nodeName
+                name: nodeName,
+                width: width, 
+                height: height
               }
   
+              if(nodeType == 'M'){
+                const newNodeDetails: NodeDetails = {
+                  name: nodeName,
+                  description: nodeDesc,
+                  idDep: newKeyId,
+                  idFct: '0',
+                  nodeId: nodeId+newKeyId
+                }
+                this.nodeDetailsService.addDepartmentDetails(newNodeDetails).subscribe({
+                  next: (result) => {
+                    console.log('Successfully added details');
+                    this.refresh();
+                  }
+                })
+              }else if(nodeType == 'C'){
+                const newNodeDetails: NodeDetails = {
+                  name: nodeName,
+                  description: nodeDesc,
+                  idCel: newKeyId,
+                  idDep: keyId,
+                  nodeId: nodeId+newKeyId,
+                  celType: celType,
+                }
+                this.nodeDetailsService.addCellDetails(newNodeDetails).subscribe({
+                  next: (result) => {
+                    console.log('Successfully added details');
+                    this.refresh();
+                  }
+                })
+              }else if(nodeType == 'D'){
+                const newNodeDetails: NodeDetails = {
+                  name: nodeName,
+                  description: nodeDesc,
+                  idWst: newKeyId,
+                  idCel: keyId,
+                  nodeId: nodeId+newKeyId,
+                  wstType: wstType,
+                }
+                this.nodeDetailsService.addWorkstationDetails(newNodeDetails).subscribe({
+                  next: (result) => {
+                    console.log('Successfully added details');
+                    this.refresh();
+                  }
+                })
+              }
+
               this.nodesService.addNode(newNode).subscribe({
                 next: (result) => {
                   console.log('Successfully added a new node.');
@@ -195,5 +299,9 @@ export class TreeOfMfgPlantsSidenavComponent {
         }
       });
     }
+  }
+
+  addDetails(nodeType: string, nodeName: string, nodeDesc: string, newKeyId: string, idOrg: string) {
+    
   }
 }

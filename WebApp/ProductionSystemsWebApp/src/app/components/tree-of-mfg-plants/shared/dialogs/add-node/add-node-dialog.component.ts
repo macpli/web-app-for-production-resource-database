@@ -1,4 +1,5 @@
 import {Component, Inject} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
@@ -18,6 +19,7 @@ import { FormsModule } from '@angular/forms';
     templateUrl: 'add-node-dialog.component.html',
     standalone: true,
     imports: [
+      CommonModule,
       MatFormFieldModule,
       MatInputModule,
       FormsModule,
@@ -29,11 +31,34 @@ import { FormsModule } from '@angular/forms';
     ],
   })  
   export class AddNodeDialog {
+    name: string = '';
+    description: string = '';
+    idOrg: string = '';
+    celType: string = '';
+    wstType: string = '';
+    width: number = 100;
+    height: number = 100;
 
     constructor(
       public dialogRef: MatDialogRef<AddNodeDialog>,
       @Inject(MAT_DIALOG_DATA) public data: any,
     ) {}
+
+    getType(nodeType: string){
+      switch(nodeType){
+        case 'F':
+          return 'fabrykę'
+        case 'M':
+          return 'wydział'
+        case 'C':
+          return 'komórkę'
+        case 'D':
+          return 'stanowisko'
+        default:
+          return ''
+      }
+
+    }
 
     onNoClick(): void {
       this.dialogRef.close();

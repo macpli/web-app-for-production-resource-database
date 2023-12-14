@@ -1,6 +1,13 @@
 export interface NodeDetails {
-  nodeName: string;
-  nodeDesc: string;
-  nodeType?: string;
+  
+  name: string;
+  description: string;
+  celType?: string;
+  wstType?: string;
   idOrg?: string;
+  nodeId?: string;
+  idFct?: string;
+  idDep?: string;
+  idCel?: string;
+  idWst?: string;
 }

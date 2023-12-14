@@ -1,19 +1,49 @@
-<h1 mat-dialog-title>Add a new element of type: </h1>
+<h1 mat-dialog-title>Dodaj {{getType(data.nodeType)}}</h1>
 
 
 <div mat-dialog-content>
-  <h3>Belongs to: {{data.nodeId}}</h3>
-  <p>Fill out data</p>
+  <h3 *ngIf="data.nodeId != '0'">Należy do: {{data.nodeId}}</h3>
+  <p>Wypełnij Dane</p>
 
   <div style="display: flex; flex-direction: column;">
     <mat-form-field>
-      <mat-label >Name</mat-label>
-      <input matInput [(ngModel)]="data.name">
+      <mat-label >Nazwa</mat-label>
+      <input matInput [(ngModel)]="name">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label >Opis</mat-label>
+      <input matInput [(ngModel)]="description">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label >Długość</mat-label>
+      <input matInput [(ngModel)]="height">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label >Szerokość</mat-label>
+      <input matInput [(ngModel)]="width">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="data.nodeType == 'F'">
+      <mat-label >ID Organizacji</mat-label>
+      <input matInput [(ngModel)]="idOrg">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="data.nodeType == 'C'">
+      <mat-label >Typ komórki</mat-label>
+      <input matInput [(ngModel)]="celType">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="data.nodeType == 'D'">
+      <mat-label >Typ stanowiska</mat-label>
+      <input matInput [(ngModel)]="wstType">
     </mat-form-field>
   </div>
 
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data.name" cdkFocusInitial>Save</button>
+  <button mat-button [mat-dialog-close]="{name: name, description: description, idOrg: idOrg, celType: celType, wstType: wstType, width: width, height: height}" cdkFocusInitial>Save</button>
 </div>

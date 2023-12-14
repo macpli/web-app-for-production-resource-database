@@ -10,9 +10,21 @@ namespace WebApi.Services
         Task<IEnumerable<string>> GetAtomChildren(string nodeId);
         Task<List<TreeOfMfgPlants>> GetChildrenForNode(string nodeId);
 
-        Task<FactoryDetails> GetFactoryDetails(string nodeId);
-        Task<DepartmentDetails> GetDepartmentDetails(string nodeId);
+        
 
-        Task<TreeOfMfgPlants> AddNode(TreeNodeDTO nodeDTO);
+        Task<TreeOfMfgPlants> AddNode(TreeNodeDTO node);
+
+        // Details
+        // Getting Details
+        Task<FactoryDetails>     GetFactoryDetails(string nodeId);
+        Task<DepartmentDetails>  GetDepartmentDetails(string nodeId);
+        Task<CellDetails>        GetCellDetails(string nodeId);
+        Task<WorkstationDetails> GetWorkstationDetails(string nodeId);
+
+        // Adding Details
+        Task<FactoryDetails> AddFactoryDetails(FactoryDetailsDTO details);
+        Task<DepartmentDetails> AddDepartmentDetails(DepartmentDetailsDTO details);
+        Task<CellDetails> AddCellDetails(CellDetailsDTO details);
+        Task<WorkstationDetails> AddWorkstationDetails(WorkstationDetailsDTO details);
     }
 }

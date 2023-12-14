@@ -1,0 +1,8 @@
+<!-- tree-of-mfg-plants-draft.component.html -->
+<div class="tree-node" [style.width.px]="node.width" [style.height.px]="node.height">
+  <div *ngIf="node.children && node.children.length > 0" class="children-container">
+    <div *ngFor="let child of node.children" class="child-node" [style.width.px]="child.width" [style.height.px]="child.height">
+      <tree-of-mfg-plants-draft [node]="child"></tree-of-mfg-plants-draft>
+    </div>
+  </div>
+</div>

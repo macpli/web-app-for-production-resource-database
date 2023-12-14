@@ -3,17 +3,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Entities
 {
-    [Table("MP_Department")]
-    public class DepartmentDetails
+    [Table("MP_Workstation")]
+    public class WorkstationDetails
     {
         [Key]
-        [Column("IDDep")]
-        [StringLength(15)]
-        public string IDDep { get; set; }
-
-        [Column("IDFct")]
+        [Column("IDWst")]
         [StringLength(10)]
-        public string IDFct { get; set; }
+        public string IDWst { get; set; }
+
+        [Column("IDCel")]
+        [StringLength(15)]
+        public string IDCel { get; set; }
+
+        [Column("WSTType")]
+        [StringLength(15)]
+        public string WSTType { get; set; }
 
         [Column("Name")]
         [StringLength(80)]
@@ -24,7 +28,7 @@ namespace WebApi.Entities
         public string Description { get; set; }
 
         [Column("NodeId")]
-        [StringLength(15)]
+        [StringLength(50)]
         public string NodeId { get; set; }
     }
 }

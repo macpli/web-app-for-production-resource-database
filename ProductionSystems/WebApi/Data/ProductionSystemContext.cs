@@ -10,15 +10,15 @@ namespace WebApi.Models
 {
     public partial class ProductionSystemContext : DbContext
     {
+        // Tree
         public DbSet<TreeOfMfgPlants> TreeOfMfgPlants { get; set; }
-        public DbSet<FactoryDetails> FactoryDetails { get; set; }
-        
-        public DbSet<DepartmentDetails> DepartmentDetails { get; set; }
 
-        /*
+        // Details 
+        public DbSet<FactoryDetails> FactoryDetails { get; set; }
+        public DbSet<DepartmentDetails> DepartmentDetails { get; set; }        
         public DbSet<CellDetails> CellDetails { get; set; }
         public DbSet<WorkstationDetails> WorkstationDetails { get; set; }
-        */
+        
 
         public ProductionSystemContext(DbContextOptions<ProductionSystemContext> options)
             : base(options)

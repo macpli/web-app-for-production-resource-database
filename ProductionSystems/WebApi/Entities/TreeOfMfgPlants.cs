@@ -26,8 +26,15 @@ namespace WebApi.Entities
         [Unicode(false)]
         public string ParentId { get; set; }
 
+        [Column("Name")]
         [StringLength(150)]
         public string Name { get; set; }
+
+        [Column("Width")]
+        public int? Width { get; set; }
+
+        [Column("Height")]
+        public int? Height { get; set; }
 
         [NotMapped]
         public List<TreeOfMfgPlants> Children { get; set; } = new List<TreeOfMfgPlants>();
