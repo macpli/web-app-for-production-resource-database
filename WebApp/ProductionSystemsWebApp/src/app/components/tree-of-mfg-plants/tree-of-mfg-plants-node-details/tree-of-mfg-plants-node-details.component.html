@@ -17,22 +17,29 @@
         <mat-tab-group>
             <mat-tab label="Szczegóły">
                 <div class="node-details">
+                    <mat-card-actions style="padding: 16px;">
+                        <button class="edit-buttons" mat-raised-button (click)="setEditMode()">Edytuj</button>
+                        <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode">Zapisz</button>
+                        <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode">Usuń element</button>
+                    </mat-card-actions>
                     <mat-card-content>
-                        <p>
-                              {{this.nodeDesc}}
-                        </p>
+
+                        <mat-form-field class="input-full-width">
+                            <mat-label>Opis</mat-label>
+                            <textarea [disabled]="!this.editMode" style="height: 100px;" matInput placeholder="Twój opis">{{nodeDesc}}</textarea>
+                        </mat-form-field>
                 
-                        <p>
-                            {{this.idOrg}}
-                        </p>
-                
-                        <p>
-                            {{this.nodeType}}
-                        </p>
-                        </mat-card-content>
-                        <mat-card-actions>
-                            <button mat-raised-button>Action</button>
-                        </mat-card-actions>
+                        <mat-form-field *ngIf="this.keyId == 'F'" class="example-full-width">
+                            <mat-label>ID Organizacji</mat-label>
+                            <input [disabled]="!this.editMode" matInput placeholder="ORG001" value="{{this.idOrg}}">
+                        </mat-form-field>
+                        
+                        <mat-form-field *ngIf="this.keyId.charAt(0) == 'D' || this.keyId.charAt(0) == 'C'" class="example-full-width">
+                            <mat-label>Typ</mat-label>
+                            <input [disabled]="!this.editMode" matInput placeholder="" value="{{this.nodeType}}">
+                        </mat-form-field>
+                    </mat-card-content>
+                    
                 </div>
             </mat-tab>
 

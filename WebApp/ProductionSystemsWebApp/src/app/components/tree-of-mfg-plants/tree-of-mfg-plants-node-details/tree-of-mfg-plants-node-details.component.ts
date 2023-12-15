@@ -9,13 +9,15 @@ import { TreeNode } from '../../../models/treeNode.model';
 import {MatTabsModule} from '@angular/material/tabs';
 import { NodesService } from '../../../services/nodes.service';
 import { TreeOfMfgPlantsDraftComponent } from "../tree-of-mfg-plants-sidenav/tree-of-mfg-plants-draft/tree-of-mfg-plants-draft.component";
+import {MatInputModule} from '@angular/material/input';
 
 @Component({
     selector: 'tree-of-mfg-plants-node-details',
     standalone: true,
     templateUrl: './tree-of-mfg-plants-node-details.component.html',
     styleUrl: './tree-of-mfg-plants-node-details.component.scss',
-    imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatTabsModule, TreeOfMfgPlantsDraftComponent]
+    imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatTabsModule, TreeOfMfgPlantsDraftComponent,
+              MatInputModule]
 })
 export class TreeOfMfgPlantsNodeDetailsComponent {
   nodeId: string = '';
@@ -27,6 +29,8 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
   idOrg: string = '';
 
   factoryToDraw!: TreeNode[];
+
+  editMode: boolean = false;
 
   constructor(
     private nodeDetailsService: NodeDetailsService,
@@ -153,5 +157,9 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
       default:
         return ''
     }
+  }
+
+  setEditMode(): boolean {
+    return this.editMode = !this.editMode;
   }
 }
