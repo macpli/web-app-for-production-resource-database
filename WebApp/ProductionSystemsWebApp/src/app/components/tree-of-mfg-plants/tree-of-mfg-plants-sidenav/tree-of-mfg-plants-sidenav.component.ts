@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeModule, MatTreeNestedDataSource } from '@angular/material/tree';
@@ -26,6 +26,7 @@ import { NodeDetails } from '../../../models/nodeDetails.model';
     
 })
 export class TreeOfMfgPlantsSidenavComponent {
+  @Input() refreshTriggered = false;
 
   constructor(
     private nodesService: NodesService,
@@ -47,18 +48,22 @@ export class TreeOfMfgPlantsSidenavComponent {
     this.refresh();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['refreshTriggered'] && this.refreshTriggered) {
+      this.refresh();
+      this.refreshTriggered = false;
+    }
+  }
+
   refresh(){
     this.getAllNodes();
     this.getWorkPieces();
-    
-
   }
 
   getFactoryToDraft(nodeId: string){
     this.nodesService.getChildren(nodeId).subscribe({
       next: (result) => {
         this.factoryToDraw = result;
-        console.log(result);
       }
     })
   }
@@ -243,12 +248,11 @@ export class TreeOfMfgPlantsSidenavComponent {
                   name: nodeName,
                   description: nodeDesc,
                   idDep: newKeyId,
-                  idFct: '0',
+                  idFct: keyId,
                   nodeId: nodeId+newKeyId
                 }
                 this.nodeDetailsService.addDepartmentDetails(newNodeDetails).subscribe({
                   next: (result) => {
-                    console.log('Successfully added details');
                     this.refresh();
                   }
                 })
@@ -263,7 +267,6 @@ export class TreeOfMfgPlantsSidenavComponent {
                 }
                 this.nodeDetailsService.addCellDetails(newNodeDetails).subscribe({
                   next: (result) => {
-                    console.log('Successfully added details');
                     this.refresh();
                   }
                 })
@@ -278,7 +281,6 @@ export class TreeOfMfgPlantsSidenavComponent {
                 }
                 this.nodeDetailsService.addWorkstationDetails(newNodeDetails).subscribe({
                   next: (result) => {
-                    console.log('Successfully added details');
                     this.refresh();
                   }
                 })
@@ -286,7 +288,6 @@ export class TreeOfMfgPlantsSidenavComponent {
 
               this.nodesService.addNode(newNode).subscribe({
                 next: (result) => {
-                  console.log('Successfully added a new node.');
                   this.getAllNodes();
                 },
                 error: (message) => {

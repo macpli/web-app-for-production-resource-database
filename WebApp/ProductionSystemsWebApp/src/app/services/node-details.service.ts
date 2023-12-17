@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { NodeDetails } from '../models/nodeDetails.model';
 import { TreeNode } from '../models/treeNode.model';
@@ -11,7 +11,7 @@ import { TreeNode } from '../models/treeNode.model';
 export class NodeDetailsService {
   private dataSubject = new BehaviorSubject<{ nodeId: string, keyId: string, parentId: string }>({ nodeId: '', keyId: '', parentId: '' });
   baseApiUrl: string = 'https://localhost:7299';
-
+  
   constructor(
     private http: HttpClient,
     ) {}
@@ -57,5 +57,9 @@ export class NodeDetailsService {
 
   addWorkstationDetails(details: NodeDetails): Observable<NodeDetails> {
     return this.http.post<NodeDetails>(this.baseApiUrl + '/api/FactoryDetails/AddWorkstationDetails', details);
+  }
+
+  deleteDetails(nodeId: string): Observable<string> {
+    return this.http.delete<string>(this.baseApiUrl + '/api/FactoryDetails/DeleteDetails/' + nodeId);
   }
 }

@@ -13,4 +13,10 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     styleUrl: './tree-of-mfg-plants.component.scss',
     imports: [CommonModule, MatToolbarModule, MatSidenavModule, TreeOfMfgPlantsNodeDetailsComponent, TreeOfMfgPlantsSidenavComponent]
 })
-export class TreeOfMfgPlantsComponent { }
+export class TreeOfMfgPlantsComponent {
+    refreshTriggered = false;
+
+    onRefresh(trigger: boolean){
+        this.refreshTriggered = trigger;
+    }
+ }

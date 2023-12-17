@@ -27,6 +27,10 @@ export class NodesService {
     return this.http.post<TreeNode>(this.baseApiUrl + '/api/TreeOfMfgPlants/AddNode', node);
   }
 
+  deleteNode(nodeId: string): Observable<string> {
+    return this.http.delete<string>(this.baseApiUrl+ '/api/TreeOfMfgPlants/' + nodeId);
+  }
+
   getWorkPieces(): Observable<TreeNode[]> {
     return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetWorkpieces');
   }

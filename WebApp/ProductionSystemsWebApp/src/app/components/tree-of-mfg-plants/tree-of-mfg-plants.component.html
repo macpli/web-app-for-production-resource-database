@@ -6,11 +6,11 @@
 
 <mat-drawer-container class="container" style="border: none;">
   <mat-drawer class="side-container" mode="side" opened>
-    <tree-of-mfg-plants-sidenav></tree-of-mfg-plants-sidenav>
+    <tree-of-mfg-plants-sidenav [refreshTriggered]="refreshTriggered"></tree-of-mfg-plants-sidenav>
   </mat-drawer>
 
   <mat-drawer-content>
-    <tree-of-mfg-plants-node-details></tree-of-mfg-plants-node-details>
+    <tree-of-mfg-plants-node-details (refresh)="onRefresh($event)"></tree-of-mfg-plants-node-details>
   </mat-drawer-content>
 
 </mat-drawer-container>

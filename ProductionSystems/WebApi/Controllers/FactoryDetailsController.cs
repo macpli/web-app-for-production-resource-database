@@ -148,5 +148,14 @@ namespace WebApi.Controllers
 
             return Ok(workstationDetails);
         }
+
+        [HttpDelete("DeleteDetails/{nodeId}")]
+        public async Task<IActionResult> DeleteDetails(string nodeId)
+        {
+            
+            await _productionSystemsRepository.DeleteDetails(nodeId);
+            return Ok();
+            
+        }
     }
 }

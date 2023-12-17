@@ -20,7 +20,7 @@
                     <mat-card-actions style="padding: 16px;">
                         <button class="edit-buttons" mat-raised-button (click)="setEditMode()">Edytuj</button>
                         <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode">Zapisz</button>
-                        <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode">Usuń element</button>
+                        <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode" (click)="deleteNode(this.nodeId)">Usuń element</button>
                     </mat-card-actions>
                     <mat-card-content>
 

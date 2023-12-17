@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NodeDetailsService } from '../../../services/node-details.service';
 import { MatCardModule} from '@angular/material/card';
@@ -20,6 +20,8 @@ import {MatInputModule} from '@angular/material/input';
               MatInputModule]
 })
 export class TreeOfMfgPlantsNodeDetailsComponent {
+  @Output() refresh = new EventEmitter<boolean>();
+
   nodeId: string = '';
   keyId: string = '';
   parentId: string = '';
@@ -161,5 +163,17 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
 
   setEditMode(): boolean {
     return this.editMode = !this.editMode;
+  }
+
+  deleteNode(nodeId: string){
+    this.nodesService.deleteNode(nodeId).subscribe();
+
+    this.nodeDetailsService.deleteDetails(nodeId).subscribe({
+      next: (result) => {
+        this.clearData();
+        this.Close();
+        this.refresh.emit(true);
+      }
+    });
   }
 }

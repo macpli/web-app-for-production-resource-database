@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using WebApi.Entities;
 using WebApi.Models;
 
@@ -16,11 +17,73 @@ namespace WebApi.Services
         //
         // Methods for TreeOfMfgPlants
         //
+
+        //
+        // Method for adding nodes
+        //
+        public async Task<TreeOfMfgPlants> AddNode(TreeNodeDTO node)
+        {
+            var nodeEntity = new TreeOfMfgPlants
+            {
+                NodeId = node.NodeId,
+                KeyId = node.KeyId,
+                ParentId = node.ParentId,
+                Name = node.Name,
+                Width = node.Width,
+                Height = node.Height,
+            };
+
+            _context.TreeOfMfgPlants.Add(nodeEntity);
+            await _context.SaveChangesAsync();
+
+            return nodeEntity;
+        }
+
+        //
+        // Method for deleting a node and it's children recursively
+        //
+        public async Task DeleteNode(string nodeId)
+        {
+            var nodeToDelete = _context.TreeOfMfgPlants.FindAsync(nodeId);
+
+            if(nodeToDelete != null)
+            {
+                _context.TreeOfMfgPlants.Remove(await nodeToDelete);
+                await _context.SaveChangesAsync();
+
+                var childrenToDelete = await _context.TreeOfMfgPlants.Where(n => n.ParentId == nodeId).ToListAsync();
+
+                foreach (var child in childrenToDelete)
+                {
+                    // Recursively delete children of the current child
+                    await DeleteNode(child.NodeId);
+                }
+            }
+        }
+
+        //
+        // Method for getting atom children
+        //
+        public async Task<IEnumerable<string>> GetAtomChildren(string nodeId)
+        {
+            var atomChildren = await _context.TreeOfMfgPlants.Where(n => n.ParentId == nodeId)
+                .Select(n => n.KeyId)
+                .ToListAsync();
+
+            return atomChildren;
+        }
+
+        //
+        // Method for getting closest children 
+        //
         public async Task<IEnumerable<TreeOfMfgPlants>> GetAllFactories()
         {
             return await _context.TreeOfMfgPlants.Where(n => n.KeyId.StartsWith("F")).ToListAsync();
         }
 
+        //
+        // Method for recursively getting children 
+        //
         public async Task<List<TreeOfMfgPlants>> GetChildrenForNode(string nodeId)
         {
             var children = await _context.TreeOfMfgPlants.Where(n => n.ParentId == nodeId).ToListAsync();
@@ -43,6 +106,9 @@ namespace WebApi.Services
             return children;
         }
 
+        //
+        // Method for getting workpieces
+        //
         public async Task<List<TreeOfMfgPlants>> GetWorkPieces()
         {
             var children = await _context.TreeOfMfgPlants.Where(n => n.KeyId.StartsWith("E")).ToListAsync();
@@ -82,6 +148,7 @@ namespace WebApi.Services
         {
             return await _context.WorkstationDetails.Where(w => w.NodeId == nodeId).SingleOrDefaultAsync();
         }
+
         //
         // Adding Details
         //
@@ -155,39 +222,33 @@ namespace WebApi.Services
             return detailsEntity;
         }
 
-
         //
-        // Method for adding nodes
+        // Deleting Details
         //
-        public async Task<TreeOfMfgPlants> AddNode(TreeNodeDTO node)
+        public async Task DeleteDetails(string nodeId)
         {
-            var nodeEntity = new TreeOfMfgPlants
+            try
             {
-                NodeId = node.NodeId,
-                KeyId = node.KeyId,
-                ParentId = node.ParentId,
-                Name = node.Name,
-                Width = node.Width,
-                Height = node.Height,
-            };
+                await DeleteRecordsByNodeId<DepartmentDetails>(nodeId);
+                await DeleteRecordsByNodeId<CellDetails>(nodeId);
+                await DeleteRecordsByNodeId<WorkstationDetails>(nodeId);
+                await DeleteRecordsByNodeId<FactoryDetails>(nodeId);
 
-            _context.TreeOfMfgPlants.Add(nodeEntity);
-            await _context.SaveChangesAsync();
-
-            return nodeEntity;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it accordingly
+                throw new ApplicationException("An error occurred while deleting the node and its children.", ex);
+            }
         }
 
-        //
-        // Method for getting atom children
-        //
-        public async Task<IEnumerable<string>> GetAtomChildren(string nodeId)
+        private async Task DeleteRecordsByNodeId<T>(string nodeId) where T : class
         {
-            var atomChildren = await _context.TreeOfMfgPlants.Where(n => n.ParentId == nodeId)
-                .Select(n => n.KeyId)
-                .ToListAsync();
+            IEntityType entityType = _context.Model.FindEntityType(typeof(T));
+            string tableName = entityType.GetTableName();
 
-            return atomChildren;
+            await _context.Database.ExecuteSqlRawAsync($"DELETE FROM {tableName} WHERE NodeId LIKE '{nodeId}%'");
         }
-
     }
 }

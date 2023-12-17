@@ -39,6 +39,8 @@ import { FormsModule } from '@angular/forms';
     width: number = 100;
     height: number = 100;
 
+    inputValid: boolean = false;
+
     constructor(
       public dialogRef: MatDialogRef<AddNodeDialog>,
       @Inject(MAT_DIALOG_DATA) public data: any,
@@ -54,6 +56,8 @@ import { FormsModule } from '@angular/forms';
           return 'komórkę'
         case 'D':
           return 'stanowisko'
+        case 'E':
+          return 'urządzenie'
         default:
           return ''
       }
@@ -62,5 +66,35 @@ import { FormsModule } from '@angular/forms';
 
     onNoClick(): void {
       this.dialogRef.close();
+    }
+
+    validateInput(nodeType: string, name: string, description: string, height: number, width: number, idOrg: string, celType: string, wstType: string): boolean {
+      
+      switch(nodeType){
+        case 'F':
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || idOrg.length == 0){
+            return this.inputValid = false;
+          } else return this.inputValid = true;
+        case 'M':
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0){
+            return this.inputValid = false;
+          } else return this.inputValid = true;
+        case 'C':
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || celType.length == 0){
+            return this.inputValid = false;
+          } else return this.inputValid = true;
+        case 'D':
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || wstType.length == 0){
+            return this.inputValid = false;
+          } else return this.inputValid = true;
+        case 'E':
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0){
+            return this.inputValid = false;
+          } else return this.inputValid = true;
+        default:
+          return this.inputValid = false;
+      }
+        
+      
     }
   }

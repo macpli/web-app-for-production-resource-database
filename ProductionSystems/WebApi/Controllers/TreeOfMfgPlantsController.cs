@@ -133,25 +133,34 @@ namespace WebApi.Controllers
         [HttpPost("AddNode")]
         public async Task<ActionResult<TreeNodeDTO>> AddNode([FromBody] TreeNodeDTO newNode)
         {
-        var addedNode = await _productionSystemsRepository.AddNode(newNode);
+            var addedNode = await _productionSystemsRepository.AddNode(newNode);
 
-        if (addedNode == null)
-        {
-            return BadRequest("Failed to add the node.");
+            if (addedNode == null)
+            {
+                return BadRequest("Failed to add the node.");
+            }
+
+            var treeNode = new TreeNodeDTO
+            {
+                NodeId = addedNode.NodeId,
+                KeyId = addedNode.KeyId,
+                ParentId = addedNode.ParentId,
+                Name = addedNode.Name,
+                Width = addedNode.Width,
+                Height = addedNode.Height
+            };
+
+            return Ok(treeNode);
         }
 
-        var treeNode = new TreeNodeDTO
+        [HttpDelete("{nodeId}")]
+        public async Task<IActionResult> DeleteNodeAndChildren(string nodeId)
         {
-            NodeId = addedNode.NodeId,
-            KeyId = addedNode.KeyId,
-            ParentId = addedNode.ParentId,
-            Name = addedNode.Name,
-            Width = addedNode.Width,
-            Height = addedNode.Height
-        };
-
-        return Ok(treeNode);
-
+          
+            
+            await _productionSystemsRepository.DeleteNode(nodeId);
+            return Ok();
+            
         }
 
         [HttpGet]
