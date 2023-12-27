@@ -16,6 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TreeOfMfgPlantsDraftComponent } from "./tree-of-mfg-plants-draft/tree-of-mfg-plants-draft.component";
 import { TreePainterDirective } from '../../../directives/painter.directive';
 import { NodeDetails } from '../../../models/nodeDetails.model';
+import { CreatorDialogComponent } from '../shared/dialogs/creator-dialog/creator-dialog.component';
 
 @Component({
     selector: 'tree-of-mfg-plants-sidenav',
@@ -302,7 +303,10 @@ export class TreeOfMfgPlantsSidenavComponent {
     }
   }
 
-  addDetails(nodeType: string, nodeName: string, nodeDesc: string, newKeyId: string, idOrg: string) {
-    
+  openCreator(){
+    const dialogRef = this.dialog.open(CreatorDialogComponent, {
+      width: '50%',
+      height: '80%',
+    });
   }
 }

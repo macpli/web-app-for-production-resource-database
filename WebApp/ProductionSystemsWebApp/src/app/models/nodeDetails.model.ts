@@ -10,4 +10,7 @@ export interface NodeDetails {
   idDep?: string;
   idCel?: string;
   idWst?: string;
+  location?: string;
+  manager?: string;
+  supervisor?: string;
 }

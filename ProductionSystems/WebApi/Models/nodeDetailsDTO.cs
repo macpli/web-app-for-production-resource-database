@@ -7,5 +7,8 @@
         public string? CELType { get; set; }
         public string? WSTType { get; set; }
         public string? IdOrg { get; set; }
+        public string? Location { get; set; }
+        public string? Manager { get; set; }
+        public string? Supervisor { get; set; }
     }
 }

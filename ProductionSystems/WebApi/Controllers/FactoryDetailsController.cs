@@ -26,6 +26,7 @@ namespace WebApi.Controllers
                 Name = details.Name,
                 Description = details.Description,
                 IdOrg = details.IDOrg,
+                Location = details.Location
             };
 
             return Ok(result);
@@ -40,6 +41,7 @@ namespace WebApi.Controllers
             {
                 Name = details.Name,
                 Description = details.Description,
+                Manager = details.Manager,
             };
 
             return Ok(result);
@@ -54,7 +56,8 @@ namespace WebApi.Controllers
             {
                 Name = details.Name,
                 Description = details.Description,
-                CELType = details.CELType
+                CELType = details.CELType,
+                Supervisor = details.Supervisor,
             };
 
             return Ok(result);

@@ -1,5 +1,11 @@
-<div style="display: flex; justify-content: right;" >
-    <button [disabled]="!chosenNode"   
+<div style="display: flex; flex-direction: column;" >
+    <button mat-stroked-button style="margin: 0.1em;"
+            (click)="openCreator()">
+            <mat-icon>open_in_new</mat-icon>
+        Otwórz kreator
+    </button>
+    <div style="display: flex;">
+        <button [disabled]="!chosenNode"   
             mat-stroked-button style="margin: 0.1em; width: 50%;"   
             mat-button class="add-button" 
             (click)="addNode(chosenNode.nodeId, chosenNode.keyId, chosenNode.parentId)">
@@ -14,6 +20,7 @@
         <mat-icon>add</mat-icon>
         Dodaj nową fabrykę
     </button>
+    </div>
   </div>
 
 <mat-tab-group class="custom-tab-group">
@@ -62,7 +69,8 @@
             <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle >
                 <div class="mat-tree-node" [ngClass]="{'chosen-node': chosenNode && node.nodeId === chosenNode.nodeId}">
                     <!-- Your existing content -->
-                    <div class="node-content" (click)="setNodeDetails(node.nodeId, node.keyId, node.parentId, node.width, node.height)">
+                    <div class="node-content" >
+                        <!-- (click)="setNodeDetails(node.nodeId, node.keyId, node.parentId, node.width, node.height)" -->
                         <mat-icon class="example-tree-icon" [ngClass]="getIconClass(node.keyId)" style="margin-right: 5px;">
                             {{ getIconClass(node.keyId) }}
                         </mat-icon>
@@ -75,7 +83,8 @@
             <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
                 <div class="mat-tree-node" [ngClass]="{'chosen-node': chosenNode && node.nodeId === chosenNode.nodeId}" style="display: flex; flex-direction: column;" >
                     <!-- Your existing content -->
-                    <div class="node-content"  style="align-self: flex-start;" (click)="setNodeDetails(node.nodeId, node.keyId, node.parentId, node.width, node.height)">
+                    <div class="node-content"  style="align-self: flex-start;" >
+                        <!-- (click)="setNodeDetails(node.nodeId, node.keyId, node.parentId, node.width, node.height)"-->
                         <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' +  node.name">
                             <mat-icon class="mat-icon-rtl-mirror">
                                 {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}

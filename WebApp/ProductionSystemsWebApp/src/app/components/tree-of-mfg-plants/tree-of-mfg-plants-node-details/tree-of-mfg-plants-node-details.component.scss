@@ -7,6 +7,10 @@
     margin-right: 10px;
 }
 
-.input-full-width {
-    width: 80%;
+
+
+.input-fields {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
 }

@@ -26,5 +26,9 @@ namespace WebApi.Entities
         [Column("NodeId")]
         [StringLength(50)]
         public string NodeId { get; set; }
+
+        [Column("Location")]
+        [StringLength(50)]
+        public string Location { get; set; }
     }
 }

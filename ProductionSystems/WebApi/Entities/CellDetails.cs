@@ -30,5 +30,9 @@ namespace WebApi.Entities
         [Column("NodeId")]
         [StringLength(15)]
         public string NodeId { get; set; }
+
+        [Column("Supervisor")]
+        [StringLength(50)]
+        public string Supervisor { get; set; }
     }
 }

@@ -107,6 +107,24 @@ namespace WebApi.Services
         }
 
         //
+        // Method for getting a node and its children for draft
+        //
+        public async Task<List<TreeOfMfgPlants>> GetNodesToDraft(string nodeId)
+        {
+            // Fetch the node itself
+            var node = await _context.TreeOfMfgPlants.FirstOrDefaultAsync(n => n.NodeId == nodeId);
+
+            if (node != null)
+            {
+                // Fetch children if the node exists
+                node.Children = await GetChildrenForNode(nodeId);
+            }
+
+            // Return the node and its children
+            return node != null ? new List<TreeOfMfgPlants> { node } : null;
+        }
+
+        //
         // Method for getting workpieces
         //
         public async Task<List<TreeOfMfgPlants>> GetWorkPieces()

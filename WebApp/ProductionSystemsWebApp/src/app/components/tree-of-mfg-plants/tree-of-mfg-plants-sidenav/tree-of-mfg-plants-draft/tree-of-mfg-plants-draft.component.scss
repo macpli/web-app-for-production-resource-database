@@ -1,6 +1,6 @@
 /* tree-of-mfg-plants-draft.component.css */
 .tree-node {
-  border: 1px solid #000;
+  border: 3px solid #000;
   margin: 5px;
   padding: 5px;
   box-sizing: border-box;
@@ -10,10 +10,31 @@
 
 .children-container {
   display: flex;
+
   flex-wrap: wrap; /* Allow child nodes to wrap to the next line */
   gap: 5px; /* Adjust the spacing between child nodes */
 }
 
 .child-node {
   margin-bottom: 5px; /* Adjust the spacing between rows of child nodes */
+}
+
+.red-border {
+  border-color: red;
+}
+
+.blue-border {
+  border-color: blue;
+}
+
+.green-border {
+  border-color: green;
+}
+
+.yellow-border {
+  border-color: yellow;
+}
+
+.violet-border {
+  border-color: violet;
 }

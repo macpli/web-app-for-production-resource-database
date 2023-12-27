@@ -38,27 +38,6 @@ namespace WebApi.Controllers
             return Ok(results);
         }
 
-        /*
-        [HttpGet]
-        [Route("GetDepartmentsForFactory/{factoryId}")]
-        public async Task<ActionResult<IEnumerable<TreeNode>>> GetAllChildrenNodes(string factoryId)
-        {
-            var nodes = await _productionSystemsRepository.GetDepartmentsForFactory(factoryId);
-            var results = new List<TreeNode>();
-            foreach (var node in nodes)
-            {
-                results.Add(new TreeNode
-                {
-                    NodeId = node.NodeId,
-                    KeyId = node.KeyId,
-                    ParentId = node.ParentId,
-                    Name = node.Name
-                });
-            }
-            return Ok(results);
-        }
-        */
-
         [HttpGet("GetChildren/{nodeId}")]
         public async Task<ActionResult<List<TreeNodeDTO>>> GetChildrenForNode(string nodeId)
         {
@@ -77,6 +56,31 @@ namespace WebApi.Controllers
                     Height = node.Height,
                     Children = ConvertToTreeNode(node.Children),
                     
+                };
+
+                results.Add(treeNode);
+            }
+
+            return Ok(results);
+        }
+
+        [HttpGet("GetNodesToDraft/{nodeId}")]
+        public async Task<ActionResult<List<TreeNodeDTO>>> GetNodesToDraft(string nodeId)
+        {
+            var nodes = await _productionSystemsRepository.GetNodesToDraft(nodeId);
+
+            var results = new List<TreeNodeDTO>();
+            foreach (var node in nodes)
+            {
+                var treeNode = new TreeNodeDTO
+                {
+                    NodeId = node.NodeId,
+                    KeyId = node.KeyId,
+                    ParentId = node.ParentId,
+                    Name = node.Name,
+                    Width = node.Width,
+                    Height = node.Height,
+                    Children = ConvertToTreeNode(node.Children),
                 };
 
                 results.Add(treeNode);
@@ -155,12 +159,9 @@ namespace WebApi.Controllers
 
         [HttpDelete("{nodeId}")]
         public async Task<IActionResult> DeleteNodeAndChildren(string nodeId)
-        {
-          
-            
+        {            
             await _productionSystemsRepository.DeleteNode(nodeId);
             return Ok();
-            
         }
 
         [HttpGet]
@@ -168,7 +169,6 @@ namespace WebApi.Controllers
         public async Task<ActionResult<IEnumerable<string>>> GetAtomChildren(string nodeId)
         {
             var nodes = await _productionSystemsRepository.GetAtomChildren(nodeId);
-
             return Ok(nodes);
         }
     }

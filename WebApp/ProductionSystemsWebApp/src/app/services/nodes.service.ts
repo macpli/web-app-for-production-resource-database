@@ -19,6 +19,10 @@ export class NodesService {
     return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetChildren/' + nodeId);
   }
 
+  getNodesToDraft(nodeId: string): Observable<TreeNode[]> {
+    return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetNodesToDraft/' + nodeId);
+  }
+
   getAtomChildren(nodeId: string): Observable<string[]> {
     return this.http.get<string[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetAtomChildren/' + nodeId)
   }

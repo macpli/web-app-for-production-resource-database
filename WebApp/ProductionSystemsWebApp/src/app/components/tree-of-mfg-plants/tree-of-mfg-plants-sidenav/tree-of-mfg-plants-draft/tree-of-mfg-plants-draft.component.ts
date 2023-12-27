@@ -12,4 +12,19 @@ import { TreeNode } from '../../../../models/treeNode.model';
 })
 export class TreeOfMfgPlantsDraftComponent {
   @Input() node!: TreeNode;
+
+  getKeyIdClass(): string {
+    
+    if (this.node.keyId.startsWith('F')) {
+      return 'red-border';
+    } else if (this.node.keyId.startsWith('M')) {
+      return 'blue-border';
+    } else if (this.node.keyId.startsWith('C')) {
+      return 'green-border';
+    } else if (this.node.keyId.startsWith('D')){
+      return 'yellow-border'
+    } else if (this.node.keyId.startsWith('E')){
+      return 'violet-border'
+    }else return '';
+  }
 }

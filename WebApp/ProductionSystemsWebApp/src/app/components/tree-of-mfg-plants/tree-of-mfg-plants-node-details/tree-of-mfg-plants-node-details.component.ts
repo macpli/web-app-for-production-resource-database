@@ -10,6 +10,8 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { NodesService } from '../../../services/nodes.service';
 import { TreeOfMfgPlantsDraftComponent } from "../tree-of-mfg-plants-sidenav/tree-of-mfg-plants-draft/tree-of-mfg-plants-draft.component";
 import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'tree-of-mfg-plants-node-details',
@@ -17,10 +19,18 @@ import {MatInputModule} from '@angular/material/input';
     templateUrl: './tree-of-mfg-plants-node-details.component.html',
     styleUrl: './tree-of-mfg-plants-node-details.component.scss',
     imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatTabsModule, TreeOfMfgPlantsDraftComponent,
-              MatInputModule]
+              MatInputModule, MatSelectModule, FormsModule]
 })
 export class TreeOfMfgPlantsNodeDetailsComponent {
   @Output() refresh = new EventEmitter<boolean>();
+
+  cellTypes: string[] = [
+    'Cell', 'Line', 'Warehouse'
+  ]
+
+  workstationTypes: string[] = [
+    'Machining','Assembly','Measurement','Storage'
+  ]
 
   nodeId: string = '';
   keyId: string = '';
@@ -29,6 +39,9 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
   nodeDesc: string = '';
   nodeType: string = '';
   idOrg: string = '';
+  location: string = '';
+  manager: string = '';
+  supervisor: string = '';
 
   factoryToDraw!: TreeNode[];
 
@@ -47,7 +60,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
           this.nodeId = result.nodeId;
           this.keyId = result.keyId;
           this.parentId = result.parentId;
-          this.getFactoryToDraft(this.nodeId);
+          this.getNodesToDraft(this.nodeId);
 
           var firstLetter = this.keyId.charAt(0).toUpperCase();
 
@@ -80,11 +93,10 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
     this.idOrg = '';
   }
 
-  getFactoryToDraft(nodeId: string){
-    this.nodesService.getChildren(nodeId).subscribe({
+  getNodesToDraft(nodeId: string){
+    this.nodesService.getNodesToDraft(nodeId).subscribe({
       next: (result) => {
         this.factoryToDraw = result;
-        console.log(result);
       }
     })
   }
@@ -96,6 +108,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
         this.nodeName = result.name;
         this.nodeDesc = result.description;
         this.idOrg = result.idOrg!;
+        this.location = result.location!;
       }, 
       error: (error) => {
         console.log('Error while recieving node details. Error: ' + error);
@@ -109,6 +122,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
       next: (result) => {
         this.nodeName = result.name;
         this.nodeDesc = result.description;
+        this.manager = result.manager!;
       }, 
       error: (error) => {
         console.log('Error while recieving node details. Error: ' + error);
@@ -123,6 +137,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
         this.nodeName = result.name;
         this.nodeDesc = result.description;
         this.nodeType = result.celType!;
+        this.supervisor = result.supervisor!;
       }, 
       error: (error) => {
         console.log('Error while recieving node details. Error: ' + error);
