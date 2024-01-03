@@ -305,7 +305,7 @@ export class TreeOfMfgPlantsSidenavComponent {
 
   openCreator(){
     const dialogRef = this.dialog.open(CreatorDialogComponent, {
-      width: '50%',
+      width: '80%',
       height: '80%',
     });
   }

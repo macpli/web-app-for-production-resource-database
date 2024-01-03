@@ -1,66 +1,117 @@
 <mat-stepper #stepper>
-    <!-- Factories step-->
-  <mat-step [stepControl]="firstFormGroup" >
-    <div style="display: flex; flex-direction: column; height: 100%;">
-        <form [formGroup]="firstFormGroup">
-            <ng-template matStepLabel>Dodaj fabrykę</ng-template>
-            <div style="display: flex; flex-direction: column;">
-              <mat-form-field>
-                <mat-label >Nazwa</mat-label>
-                <input matInput formControlName="name" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
-              </mat-form-field>
-          
-              <mat-form-field>
-                <mat-label >Opis</mat-label>
-                <input matInput formControlName="description" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
-              </mat-form-field>
-          
-              <mat-form-field>
-                <mat-label >Długość</mat-label>
-                <input matInput formControlName="width" required  (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
-              </mat-form-field>
-          
-              <mat-form-field>
-                <mat-label >Szerokość</mat-label>
-                <input matInput formControlName="height" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
-              </mat-form-field>
-          
-              <mat-form-field>
-                <mat-label >ID Organizacji</mat-label>
-                <input matInput formControlName="idOrg" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
-              </mat-form-field>
-            </div>
-            
-            <div>
-              <button mat-button matStepperNext>Dalej</button>
-            </div>
-          </form>
-    </div>
-    
-  </mat-step>
+  <!-- Factories step-->
+<mat-step [stepControl]="firstFormGroup" >
+  <div style="display: flex; flex-direction: column; height: 100%;">
+      <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Dodaj fabrykę</ng-template>
+          <div style="display: flex; flex-direction: column;">
+            <mat-form-field>
+              <mat-label >Nazwa</mat-label>
+              <input matInput formControlName="name" required (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
+            </mat-form-field>
+        
+            <mat-form-field>
+              <mat-label >Opis</mat-label>
+              <input matInput formControlName="description" required (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
+            </mat-form-field>
+        
+            <mat-form-field>
+              <mat-label >Długość</mat-label>
+              <input matInput formControlName="width" required  (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
+            </mat-form-field>
+        
+            <mat-form-field>
+              <mat-label >Szerokość</mat-label>
+              <input matInput formControlName="height" required (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
+            </mat-form-field>
+        
+            <mat-form-field>
+              <mat-label >ID Organizacji</mat-label>
+              <input matInput formControlName="idOrg" required (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
+            </mat-form-field>
 
-  <!-- Departments step-->
-  <mat-step [stepControl]="secondFormGroup" label="Fill out your address">
-    <form [formGroup]="secondFormGroup">
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-               required>
-      </mat-form-field>
+            <button mat-button (click)="saveFactory()">Zapisz</button>
+          </div>
+          
+          <div>
+            <button mat-button matStepperNext >Dalej</button>
+          </div>
+        </form>
+  </div>
+  
+</mat-step>
+
+<!-- Departments step-->
+<mat-step [stepControl]="secondFormGroup" label="Dodaj wydziały">
+  <div style="display: flex; gap: 600px;">
+    <div style="display: flex; flex-direction: column; justify-content: space-between;">
+      <h1 *ngIf="this.factoryToAdd" style="display: inline;">{{this.factoryToAdd.name}}</h1>
+      <mat-list role="list">
+        <mat-list-item role="listitem">Item 1</mat-list-item>
+        <mat-list-item role="listitem">Item 2</mat-list-item>
+        <mat-list-item role="listitem">Item 3</mat-list-item>
+      </mat-list>
+
       <div>
         <button mat-button matStepperPrevious>Wstecz</button>
         <button mat-button matStepperNext>Dalej</button>
       </div>
-    </form>
-  </mat-step>
-
-
-  <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
-    <div>
-      <button mat-button matStepperPrevious>Wstecz</button>
-      <button mat-button (click)="stepper.reset()">Zapisz</button>
     </div>
-  </mat-step>
+
+    <div> 
+      <form [formGroup]="secondFormGroup" style="display: flex; flex-direction: column;">
+        <mat-form-field>
+          <mat-label >Nazwa</mat-label>
+          <input matInput formControlName="name" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Opis</mat-label>
+          <input matInput formControlName="description" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Długość</mat-label>
+          <input matInput formControlName="width" required  (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Szerokość</mat-label>
+          <input matInput formControlName="height" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+
+        <button mat-button>Dodaj</button>
+      </form>
+    </div>
+
+  </div>
+  
+</mat-step>
+
+<!-- Cells step -->
+<mat-step label="Dodaj komórki">
+
+  <div>
+    <button mat-button matStepperPrevious>Wstecz</button>
+    <button mat-button matStepperNext>Dalej</button>
+  </div>
+</mat-step>
+
+<!-- Stations step-->
+<mat-step label="Dodaj stanowiska">
+
+  <div>
+    <button mat-button matStepperPrevious>Wstecz</button>
+    <button mat-button matStepperNext>Dalej</button>
+  </div>
+</mat-step>
+
+<mat-step>
+  <ng-template matStepLabel>Zapisz</ng-template>
+  <p>You are now done.</p>
+  <div>
+    <button mat-button matStepperPrevious>Wstecz</button>
+    <button mat-button (click)="stepper.reset()">Zapisz</button>
+  </div>
+</mat-step>
 </mat-stepper>
