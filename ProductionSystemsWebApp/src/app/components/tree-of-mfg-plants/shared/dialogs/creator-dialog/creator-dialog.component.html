@@ -1,10 +1,11 @@
 <mat-stepper #stepper>
     <!-- Factories step-->
-  <mat-step [stepControl]="firstFormGroup">
+  <mat-step [stepControl]="firstFormGroup" >
     <div style="display: flex; flex-direction: column; height: 100%;">
         <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Dodaj fabrykę</ng-template>
-            <mat-form-field>
+            <div style="display: flex; flex-direction: column;">
+              <mat-form-field>
                 <mat-label >Nazwa</mat-label>
                 <input matInput formControlName="name" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
               </mat-form-field>
@@ -28,6 +29,8 @@
                 <mat-label >ID Organizacji</mat-label>
                 <input matInput formControlName="idOrg" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
               </mat-form-field>
+            </div>
+            
             <div>
               <button mat-button matStepperNext>Dalej</button>
             </div>

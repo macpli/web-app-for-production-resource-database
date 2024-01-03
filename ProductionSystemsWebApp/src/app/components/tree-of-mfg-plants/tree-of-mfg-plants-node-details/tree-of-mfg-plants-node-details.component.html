@@ -18,6 +18,7 @@
             <mat-tab label="Szczegóły">
                 <div class="node-details">
                     <mat-card-actions style="padding: 16px;">
+                        <button class="edit-buttons" mat-raised-button (click)="generatePDF(factoryToDraw)">Generuj raport</button>
                         <button class="edit-buttons" mat-raised-button (click)="setEditMode()">Edytuj</button>
                         <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode">Zapisz</button>
                         <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode" (click)="deleteNode(this.nodeId)">Usuń element</button>

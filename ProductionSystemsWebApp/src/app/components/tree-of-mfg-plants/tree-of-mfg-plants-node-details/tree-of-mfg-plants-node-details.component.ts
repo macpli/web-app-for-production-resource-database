@@ -12,6 +12,7 @@ import { TreeOfMfgPlantsDraftComponent } from "../tree-of-mfg-plants-sidenav/tre
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import jsPDF from 'jspdf';
 
 @Component({
     selector: 'tree-of-mfg-plants-node-details',
@@ -97,6 +98,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
     this.nodesService.getNodesToDraft(nodeId).subscribe({
       next: (result) => {
         this.factoryToDraw = result;
+        console.log(result)
       }
     })
   }
@@ -191,4 +193,53 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
       }
     });
   }
+  
+  generatePDF(nodes: TreeNode[]) {
+    const pdf = new jsPDF();
+
+    // Load the TTF font
+    const fontPath = 'assets/fonts/AbhayaLibre-Regular.ttf';
+    const fontData = this.loadFontData(fontPath);
+
+    // Add the custom TTF font to jsPDF
+    pdf.addFileToVFS('AbhayaLibre-Regular.ttf', fontData);
+    pdf.addFont('AbhayaLibre-Regular.ttf', 'Abhaya', 'normal');
+
+    // Set the custom font
+    pdf.setFont('Abhaya');
+
+    if (nodes) {
+      // Function to recursively add data to the PDF
+      function addDataToPDF(nodes: TreeNode[], yPos: number) {
+        for (const currentNode of nodes) {
+          pdf.text(`Name: ${currentNode.name}`, 10, yPos);
+          pdf.text(`Width: ${currentNode.width}`, 10, yPos + 10);
+          pdf.text(`Height: ${currentNode.height}`, 10, yPos + 20);
+          yPos += 30; // Adjust the spacing
+
+          // Recursively process children
+          if (currentNode.children && currentNode.children.length > 0) {
+            yPos = addDataToPDF(currentNode.children, yPos);
+          }
+        }
+
+        return yPos;
+      }
+
+      // Start the recursive process with the array of nodes
+      addDataToPDF(nodes, 10);
+
+      // Save or download the PDF
+      pdf.save('generated-pdf.pdf');
+    }
+  }
+
+  // Helper function to load font data
+  private loadFontData(url: string): any {
+    const request = new XMLHttpRequest();
+    request.open('GET', url, false);
+    request.send();
+    return request.response;
+  }
 }
+  

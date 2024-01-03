@@ -34,7 +34,8 @@ import {MatStepperModule} from '@angular/material/stepper';
   ],
   templateUrl: './creator-dialog.component.html',
   styles: ['.mat-stepper-horizontal { margin-top: 8px; } ',
-           '.mat-mdc-form-field { margin-top: 16px; } '
+           '.mat-mdc-form-field { margin-top: 16px; } ',
+           '.mat-mdc-form-field { marign-right: 8px!important; }'
   ]
 })
 

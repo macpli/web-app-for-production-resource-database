@@ -62,7 +62,7 @@ export class TreeOfMfgPlantsSidenavComponent {
   }
 
   getFactoryToDraft(nodeId: string){
-    this.nodesService.getChildren(nodeId).subscribe({
+    this.nodesService.getNodesToDraft(nodeId).subscribe({
       next: (result) => {
         this.factoryToDraw = result;
       }
@@ -309,4 +309,6 @@ export class TreeOfMfgPlantsSidenavComponent {
       height: '80%',
     });
   }
+
+  
 }
