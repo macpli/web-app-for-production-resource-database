@@ -19,6 +19,7 @@ import { TreeNode } from '../../../../../models/treeNode.model';
 import { NodesService } from '../../../../../services/nodes.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {MatListModule} from '@angular/material/list';
+import {MatSelectModule} from '@angular/material/select';
 
 @Component({
   selector: 'creator-dialog',
@@ -36,14 +37,16 @@ import {MatListModule} from '@angular/material/list';
     MatStepperModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule,
   ],
   templateUrl: './creator-dialog.component.html',
   styles: ['.mat-stepper-horizontal { margin-top: 8px; } ',
            '.mat-mdc-form-field { margin-top: 16px; } ',
-           '.mat-mdc-form-field { margin-right: 8px!important; }'
+           '.mat-mdc-form-field { margin-right: 8px!important; }',
+           '.selected-department { font-weight: bold; background: #20B2AA; color: white; border-radius: 6px; }'
   ],
-  providers: [NodesService], // Provide the NodesService here
+  providers: [NodesService],
 })
 
 export class CreatorDialogComponent {
@@ -63,11 +66,17 @@ export class CreatorDialogComponent {
   width: number = 100;
   height: number = 100;
 
+  selectedDepartment: any = { nodeId: '', keyId: ''}
+
+  cellsToDisplay: TreeNode[] = [];
+
   factoryToAdd!: TreeNode;
   departmentsToAdd: TreeNode[] = [];
+  cellsToAdd: TreeNode[] = [];
 
   nodesToAdd!: TreeNode[];
 
+  // factory
   firstFormGroup = this._formBuilder.group({
     name: ['', Validators.required],
     description: ['', Validators.required],
@@ -75,11 +84,22 @@ export class CreatorDialogComponent {
     height: [100, Validators.required],
     idOrg: ['', Validators.required],
   });
+
+  // departments
   secondFormGroup = this._formBuilder.group({
     name: ['', Validators.required],
     description: ['', Validators.required],
     width: [100, Validators.required],
     height: [100, Validators.required],
+  });
+
+  // cells
+  thirdFormGroup = this._formBuilder.group({
+    name: ['', Validators.required],
+    description: ['', Validators.required],
+    width: [100, Validators.required],
+    height: [100, Validators.required],
+    celType: ['', Validators.required]
   });
 
   onNoClick(): void {
@@ -181,12 +201,18 @@ export class CreatorDialogComponent {
   }
 
   addDepartment(){
-    var maxNumericValue;
     var newKeyId: string;
     const nodeType = this.getNodeType(this.factoryToAdd.keyId);
 
-
-    newKeyId = nodeType + this.getNewKeyId()
+    var index: number = 0;
+    if(this.departmentsToAdd.length > 0){
+      index = 1;
+      this.departmentsToAdd.forEach(d => {
+        index++;
+      })
+    } else index = 1;
+    
+    newKeyId = nodeType + index;
     if (this.secondFormGroup && this.secondFormGroup.valid) {
       const newDepartment: TreeNode = {
         nodeId: this.factoryToAdd.nodeId + newKeyId,
@@ -200,5 +226,45 @@ export class CreatorDialogComponent {
       console.log(this.departmentsToAdd)
     }
   }
-     
+
+  selectDepartment(nodeId: string, keyId: string) {
+    this.selectedDepartment.nodeId = nodeId;
+    this.selectedDepartment.keyId = keyId;
+
+    this.cellsToDisplay = this.getCellsToDisplay();
+  }
+
+  getCellsToDisplay(){
+    return this.cellsToAdd.filter(cell => cell.parentId === this.selectedDepartment.nodeId);
+  }
+
+  addCell(parentNodeId: string, parentKeyId: string) {
+    var newKeyId: string;
+    const nodeType = this.getNodeType(parentKeyId);
+
+    var index: number = 0;
+    if(this.cellsToAdd.length > 0){
+      index = 1;
+      this.cellsToAdd.forEach(d => {
+        index++;
+      })
+    } else index = 1;
+    
+    newKeyId = nodeType + index;
+
+    if(this.thirdFormGroup && this.thirdFormGroup.valid) {
+      const newCell: TreeNode = {
+        nodeId: parentNodeId + newKeyId,
+        keyId: newKeyId,
+        parentId: parentNodeId,
+        name: this.thirdFormGroup.get('name')!.value ?? '',
+        width: this.thirdFormGroup.get('width')!.value ?? 0,
+        height: this.thirdFormGroup.get('height')!.value ?? 0,
+      }
+      this.cellsToAdd.push(newCell)
+      this.cellsToDisplay = this.getCellsToDisplay();
+    }
+    
+    console.log(this.cellsToAdd)
+  }  
 }
