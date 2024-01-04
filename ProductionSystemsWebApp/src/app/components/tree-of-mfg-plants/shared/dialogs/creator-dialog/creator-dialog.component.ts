@@ -66,13 +66,16 @@ export class CreatorDialogComponent {
   width: number = 100;
   height: number = 100;
 
-  selectedDepartment: any = { nodeId: '', keyId: ''}
+  selectedDepartment: any = { nodeId: '', keyId: '' }
+  selectedCell: any = { nodeId: '', keyId: '' }
 
   cellsToDisplay: TreeNode[] = [];
+  stationsToDisplay: TreeNode[] = [];
 
   factoryToAdd!: TreeNode;
   departmentsToAdd: TreeNode[] = [];
   cellsToAdd: TreeNode[] = [];
+  stationsToAdd: TreeNode[] = [];
 
   nodesToAdd!: TreeNode[];
 
@@ -100,6 +103,15 @@ export class CreatorDialogComponent {
     width: [100, Validators.required],
     height: [100, Validators.required],
     celType: ['', Validators.required]
+  });
+
+  // stations
+  fourthFormGroup = this._formBuilder.group({
+    name: ['', Validators.required],
+    description: ['', Validators.required],
+    width: [100, Validators.required],
+    height: [100, Validators.required],
+    wstType: ['', Validators.required]
   });
 
   onNoClick(): void {
@@ -189,17 +201,6 @@ export class CreatorDialogComponent {
     });  
   }
 
-  getNewKeyId(): number {
-    var index: number = 0;
-    if(this.departmentsToAdd.length > 0){
-      index = 1;
-      this.departmentsToAdd.forEach(d => {
-        index++;
-      })
-    } else return index = 1;
-    return index
-  }
-
   addDepartment(){
     var newKeyId: string;
     const nodeType = this.getNodeType(this.factoryToAdd.keyId);
@@ -267,4 +268,43 @@ export class CreatorDialogComponent {
     
     console.log(this.cellsToAdd)
   }  
+
+  selectCell(nodeId: string, keyId: string) {
+    this.selectedCell.nodeId = nodeId;
+    this.selectedCell.keyId = keyId;
+
+    this.stationsToDisplay = this.getStationsToDisplay();
+  }
+
+  getStationsToDisplay(){
+    return this.stationsToAdd.filter(station => station.parentId === this.selectedCell.nodeId);
+  }
+
+  addStation(parentNodeId: string, parentKeyId: string){
+    var newKeyId: string;
+    const nodeType = this.getNodeType(parentKeyId);
+
+    var index: number = 0;
+    if(this.stationsToAdd.length > 0){
+      index = 1;
+      this.stationsToAdd.forEach(d => {
+        index++;
+      })
+    } else index = 1;
+    
+    newKeyId = nodeType + index;
+
+    if(this.fourthFormGroup && this.fourthFormGroup.valid) {
+      const newCell: TreeNode = {
+        nodeId: parentNodeId + newKeyId,
+        keyId: newKeyId,
+        parentId: parentNodeId,
+        name: this.fourthFormGroup.get('name')!.value ?? '',
+        width: this.fourthFormGroup.get('width')!.value ?? 0,
+        height: this.fourthFormGroup.get('height')!.value ?? 0,
+      }
+      this.stationsToAdd.push(newCell)
+      this.stationsToDisplay = this.getStationsToDisplay();
+    }
+  }
 }

@@ -41,7 +41,7 @@
   
 </mat-step>
 
-<!-- Departments step-->
+<!-- Departments step -->
 <mat-step [stepControl]="secondFormGroup" label="Dodaj wydziały">
   <div style="display: flex; gap: 400px; justify-content: center;">
     <div style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -159,8 +159,81 @@
   </div>
 </mat-step>
 
-<!-- Stations step-->
+<!-- Stations step -->
 <mat-step label="Dodaj stanowiska">
+  <div style="display: flex; gap: 200px; justify-content: center;">
+    <div style="display: flex; flex-direction: column;">
+      <h2>Komórki:</h2>
+      <mat-divider></mat-divider>
+      <mat-list role="list" style="height: 300px;">
+        <mat-list-item *ngFor="let cell of cellsToAdd;" 
+                        (click)="selectCell(cell.nodeId, cell.keyId)"
+                        [ngClass]="{'selected-department': cell.nodeId === this.selectedCell.nodeId}" 
+                        style="cursor: pointer;" 
+                        role="listitem">
+                        - {{cell.name}}
+          </mat-list-item>
+      </mat-list>
+      <mat-divider></mat-divider>
+    </div>
+
+    <div>
+      <div style="display: flex; flex-direction: column; justify-content: space-between;">
+        <h2>Stanowiska:</h2>
+        <mat-divider></mat-divider>
+        <mat-list role="list" style="height: 300px;">
+          <mat-list-item *ngFor="let stations of stationsToDisplay; " role="listitem">- {{stations.name}}</mat-list-item>
+        </mat-list>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+
+    <div> 
+      <form [formGroup]="fourthFormGroup" style="display: flex; flex-direction: column;">
+        <mat-form-field>
+          <mat-label >Nazwa</mat-label>
+          <input matInput formControlName="name" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Opis</mat-label>
+          <input matInput formControlName="description" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Długość</mat-label>
+          <input matInput formControlName="width" required  (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Szerokość</mat-label>
+          <input matInput formControlName="height" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Rodzaj stanowiska</mat-label>
+          <mat-select formControlName="wstType" required>
+            <mat-option value="Machining">Obróbcze</mat-option>
+            <mat-option value="Assembly">Montazowe</mat-option>
+            <mat-option value="Measurement">Pomiarowe</mat-option>
+            <mat-option value="Storage">Magazyn</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button (click)="addStation(this.selectedCell.nodeId, this.selectedCell.keyId)">Dodaj</button>
+      </form>
+    </div>
+
+  </div>
+
+  <div>
+    <button mat-raised-button matStepperPrevious>Wstecz</button>
+    <button mat-raised-button matStepperNext>Dalej</button>
+  </div>
+</mat-step>
+
+<!-- Devices step -->
+<mat-step label="Dodaj urządzenia">
 
   <div>
     <button mat-raised-button matStepperPrevious>Wstecz</button>
