@@ -30,11 +30,11 @@
               <input matInput formControlName="idOrg" required (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
             </mat-form-field>
 
-            <button mat-button (click)="saveFactory()">Zapisz</button>
+            <button mat-raised-button (click)="addFactory()" style="width: 30%;">Zapisz</button>
           </div>
           
-          <div>
-            <button mat-button matStepperNext >Dalej</button>
+          <div style="margin-top: 25px;">
+            <button mat-raised-button matStepperNext >Dalej</button>
           </div>
         </form>
   </div>
@@ -43,18 +43,18 @@
 
 <!-- Departments step-->
 <mat-step [stepControl]="secondFormGroup" label="Dodaj wydziały">
-  <div style="display: flex; gap: 600px;">
+  <div style="display: flex; gap: 400px; justify-content: center;">
     <div style="display: flex; flex-direction: column; justify-content: space-between;">
       <h1 *ngIf="this.factoryToAdd" style="display: inline;">{{this.factoryToAdd.name}}</h1>
-      <mat-list role="list">
-        <mat-list-item role="listitem">Item 1</mat-list-item>
-        <mat-list-item role="listitem">Item 2</mat-list-item>
-        <mat-list-item role="listitem">Item 3</mat-list-item>
+      <h2>Wydziały:</h2>
+      <mat-divider></mat-divider>
+      <mat-list role="list" style="height: 300px;">
+        <mat-list-item *ngFor="let department of departmentsToAdd; " role="listitem">- {{department.name}}</mat-list-item>
       </mat-list>
-
+      <mat-divider></mat-divider>
       <div>
-        <button mat-button matStepperPrevious>Wstecz</button>
-        <button mat-button matStepperNext>Dalej</button>
+        <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
+        <button mat-raised-button matStepperNext>Dalej</button>
       </div>
     </div>
 
@@ -80,7 +80,7 @@
           <input matInput formControlName="height" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
         </mat-form-field>
 
-        <button mat-button>Dodaj</button>
+        <button mat-raised-button (click)="addDepartment()">Dodaj</button>
       </form>
     </div>
 
@@ -92,8 +92,8 @@
 <mat-step label="Dodaj komórki">
 
   <div>
-    <button mat-button matStepperPrevious>Wstecz</button>
-    <button mat-button matStepperNext>Dalej</button>
+    <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
+    <button mat-raised-button matStepperNext>Dalej</button>
   </div>
 </mat-step>
 
@@ -101,8 +101,8 @@
 <mat-step label="Dodaj stanowiska">
 
   <div>
-    <button mat-button matStepperPrevious>Wstecz</button>
-    <button mat-button matStepperNext>Dalej</button>
+    <button mat-raised-button matStepperPrevious>Wstecz</button>
+    <button mat-raised-button matStepperNext>Dalej</button>
   </div>
 </mat-step>
 
@@ -110,8 +110,8 @@
   <ng-template matStepLabel>Zapisz</ng-template>
   <p>You are now done.</p>
   <div>
-    <button mat-button matStepperPrevious>Wstecz</button>
-    <button mat-button (click)="stepper.reset()">Zapisz</button>
+    <button mat-raised-button matStepperPrevious>Wstecz</button>
+    <button mat-raised-button (click)="stepper.reset()">Zapisz</button>
   </div>
 </mat-step>
 </mat-stepper>

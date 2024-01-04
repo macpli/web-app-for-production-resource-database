@@ -64,7 +64,9 @@ export class CreatorDialogComponent {
   height: number = 100;
 
   factoryToAdd!: TreeNode;
-  departmentsToAdd!: TreeNode[];
+  departmentsToAdd: TreeNode[] = [];
+
+  nodesToAdd!: TreeNode[];
 
   firstFormGroup = this._formBuilder.group({
     name: ['', Validators.required],
@@ -135,7 +137,7 @@ export class CreatorDialogComponent {
     }
   }
 
-  saveFactory() {
+  addFactory() {
     var maxNumericValue;
     var newKeyId: string;
     const nodeType = this.getNodeType('0');
@@ -164,8 +166,39 @@ export class CreatorDialogComponent {
           console.log(this.factoryToAdd)
         }
       }
-    });
-
-    
+    });  
   }
+
+  getNewKeyId(): number {
+    var index: number = 0;
+    if(this.departmentsToAdd.length > 0){
+      index = 1;
+      this.departmentsToAdd.forEach(d => {
+        index++;
+      })
+    } else return index = 1;
+    return index
+  }
+
+  addDepartment(){
+    var maxNumericValue;
+    var newKeyId: string;
+    const nodeType = this.getNodeType(this.factoryToAdd.keyId);
+
+
+    newKeyId = nodeType + this.getNewKeyId()
+    if (this.secondFormGroup && this.secondFormGroup.valid) {
+      const newDepartment: TreeNode = {
+        nodeId: this.factoryToAdd.nodeId + newKeyId,
+        keyId: newKeyId,
+        parentId: this.factoryToAdd.nodeId,
+        name: this.secondFormGroup.get('name')!.value ?? '',
+        width: this.secondFormGroup.get('width')!.value ?? 0,
+        height: this.secondFormGroup.get('height')!.value ?? 0,
+      }
+      this.departmentsToAdd.push(newDepartment)
+      console.log(this.departmentsToAdd)
+    }
+  }
+     
 }
