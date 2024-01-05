@@ -227,26 +227,80 @@
   </div>
 
   <div>
-    <button mat-raised-button matStepperPrevious>Wstecz</button>
+    <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
     <button mat-raised-button matStepperNext>Dalej</button>
   </div>
 </mat-step>
 
 <!-- Devices step -->
 <mat-step label="Dodaj urządzenia">
+  <div style="display: flex; gap: 200px; justify-content: center;">
+    <div style="display: flex; flex-direction: column;">
+      <h2>Stanowiska:</h2>
+      <mat-divider></mat-divider>
+      <mat-list role="list" style="height: 300px;">
+        <mat-list-item *ngFor="let station of stationsToAdd;" 
+                        (click)="selectStation(station.nodeId, station.keyId)"
+                        [ngClass]="{'selected-department': station.nodeId === this.selectedStation.nodeId}" 
+                        style="cursor: pointer;" 
+                        role="listitem">
+                        - {{station.name}}
+          </mat-list-item>
+      </mat-list>
+      <mat-divider></mat-divider>
+    </div>
+
+    <div>
+      <div style="display: flex; flex-direction: column; justify-content: space-between;">
+        <h2>Urządzenia:</h2>
+        <mat-divider></mat-divider>
+        <mat-list role="list" style="height: 300px;">
+          <mat-list-item *ngFor="let device of devicesToDisplay; " role="listitem">- {{device.name}}</mat-list-item>
+        </mat-list>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+
+    <div> 
+      <form [formGroup]="fifthFormGroup" style="display: flex; flex-direction: column;">
+        <mat-form-field>
+          <mat-label >Nazwa</mat-label>
+          <input matInput formControlName="name" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Opis</mat-label>
+          <input matInput formControlName="description" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Długość</mat-label>
+          <input matInput formControlName="width" required  (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label >Szerokość</mat-label>
+          <input matInput formControlName="height" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+
+        <button mat-raised-button (click)="addDevice(this.selectedStation.nodeId, this.selectedStation.keyId)">Dodaj</button>
+      </form>
+    </div>
+
+  </div>
 
   <div>
-    <button mat-raised-button matStepperPrevious>Wstecz</button>
+    <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
     <button mat-raised-button matStepperNext>Dalej</button>
   </div>
 </mat-step>
 
 <mat-step>
   <ng-template matStepLabel>Zapisz</ng-template>
-  <p>You are now done.</p>
+  <p>Struktura stworzona. Czy chcesz zapisać?</p>
   <div>
-    <button mat-raised-button matStepperPrevious>Wstecz</button>
-    <button mat-raised-button (click)="stepper.reset()">Zapisz</button>
+    <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
+    <button mat-raised-button (click)="saveStructure()">Zapisz</button>
   </div>
 </mat-step>
 </mat-stepper>
