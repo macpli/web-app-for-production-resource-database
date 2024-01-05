@@ -20,6 +20,8 @@ import { NodesService } from '../../../../../services/nodes.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
+import { NodeDetails } from '../../../../../models/nodeDetails.model';
+import { NodeDetailsService } from '../../../../../services/node-details.service';
 
 @Component({
   selector: 'creator-dialog',
@@ -46,7 +48,7 @@ import {MatSelectModule} from '@angular/material/select';
            '.mat-mdc-form-field { margin-right: 8px!important; }',
            '.selected-department { font-weight: bold; background: #20B2AA; color: white; border-radius: 6px; }'
   ],
-  providers: [NodesService],
+  providers: [NodesService, NodeDetailsService],
 })
 
 export class CreatorDialogComponent {
@@ -55,6 +57,7 @@ export class CreatorDialogComponent {
     private _formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private nodesService: NodesService,
+    private nodeDetailsService: NodeDetailsService,
   ) {}
 
   inputValid: boolean = false;
@@ -79,6 +82,12 @@ export class CreatorDialogComponent {
   cellsToAdd: TreeNode[] = [];
   stationsToAdd: TreeNode[] = [];
   devicesToAdd: TreeNode[] = [];
+
+  nodesDetails: NodeDetails[] = [];
+  factoryDetails!: NodeDetails;
+  departmentsDetails: NodeDetails[] = [];
+  cellsDetails: NodeDetails[] = [];
+  stationsDetails: NodeDetails[] = [];
 
   nodesToAdd!: TreeNode[];
 
@@ -206,7 +215,16 @@ export class CreatorDialogComponent {
             height: this.firstFormGroup.get('height')!.value ?? 0,
           };
 
+          this.factoryDetails = {
+            name: this.firstFormGroup.get('name')!.value ?? '',
+            description: this.firstFormGroup.get('description')!.value ?? '',
+            idFct: newKeyId,
+            idOrg: this.firstFormGroup.get('idOrg')!.value ?? '',
+            nodeId: newKeyId,
+          }
+
           console.log(this.factoryToAdd)
+          console.log(this.factoryDetails)
         }
       }
     });  
@@ -234,8 +252,17 @@ export class CreatorDialogComponent {
         width: this.secondFormGroup.get('width')!.value ?? 0,
         height: this.secondFormGroup.get('height')!.value ?? 0,
       }
-      this.departmentsToAdd.push(newDepartment)
-      console.log(this.departmentsToAdd)
+      this.departmentsToAdd.push(newDepartment);
+      console.log(this.departmentsToAdd);
+
+      const newDepartmentDetails: NodeDetails = {
+        nodeId: this.factoryToAdd.keyId + newKeyId,
+        name: this.secondFormGroup.get('name')!.value ?? '',
+        description: this.secondFormGroup.get('description')!.value ?? '',
+        idFct: this.factoryToAdd.keyId,
+        idDep: newKeyId,
+      }
+      this.departmentsDetails.push(newDepartmentDetails);
     }
   }
 
@@ -276,6 +303,16 @@ export class CreatorDialogComponent {
       }
       this.cellsToAdd.push(newCell)
       this.cellsToDisplay = this.getCellsToDisplay();
+
+      const newCellDetails: NodeDetails = {
+        nodeId: parentNodeId + newKeyId,
+        name: this.thirdFormGroup.get('name')!.value ?? '',
+        description: this.thirdFormGroup.get('description')!.value ?? '',
+        idDep: parentKeyId,
+        idCel: newKeyId,
+        celType: this.thirdFormGroup.get('celType')!.value ?? '',
+      }
+      this.cellsDetails.push(newCellDetails);
     }
     
     console.log(this.cellsToAdd)
@@ -318,6 +355,16 @@ export class CreatorDialogComponent {
       }
       this.stationsToAdd.push(newStation)
       this.stationsToDisplay = this.getStationsToDisplay();
+
+      const newStationDetails: NodeDetails = {
+        nodeId: parentNodeId + newKeyId,
+        name: this.fourthFormGroup.get('name')!.value ?? '',
+        description: this.fourthFormGroup.get('description')!.value ?? '',
+        idWst: newKeyId,
+        idCel: parentKeyId,
+        wstType: this.fourthFormGroup.get('wstType')!.value ?? '',
+      }
+      this.stationsDetails.push(newStationDetails);
     }
   }
 
@@ -372,6 +419,16 @@ export class CreatorDialogComponent {
       }
     })
 
+    // Adding factory details
+    this.nodeDetailsService.addFactoryDetails(this.factoryDetails).subscribe({
+      next: (result) => {
+        console.log(`Added ${this.factoryDetails}`);
+      },
+      error: (message) => {
+        console.log('Error while adding node: ' + message);
+      }
+    })
+
     // Adding departments
     this.departmentsToAdd.forEach(node => {
       this.nodesService.addNode(node).subscribe({
@@ -382,6 +439,18 @@ export class CreatorDialogComponent {
           console.log('Error while adding node: ' + message);
         }
       });
+    })
+
+    // Adding department details
+    this.departmentsDetails.forEach(nodeDetails => {
+      this.nodeDetailsService.addDepartmentDetails(nodeDetails).subscribe({
+        next: (result) => {
+          console.log(`Added ${nodeDetails}`);
+        },
+        error: (message) => {
+          console.log('Error while adding node: ' + message);
+        }
+      })
     })
 
     // Adding cells
@@ -396,6 +465,18 @@ export class CreatorDialogComponent {
       });
     })
 
+    // Adding cells details
+    this.cellsDetails.forEach(nodeDetails => {
+      this.nodeDetailsService.addCellDetails(nodeDetails).subscribe({
+        next: (result) => {
+          console.log(`Added ${nodeDetails}`);
+        },
+        error: (message) => {
+          console.log('Error while adding node: ' + message);
+        }
+      })
+    })
+
     // Adding workstations
     this.stationsToAdd.forEach(node => {
       this.nodesService.addNode(node).subscribe({
@@ -406,6 +487,18 @@ export class CreatorDialogComponent {
           console.log('Error while adding node: ' + message);
         }
       });
+    })
+
+     // Adding workstations details
+     this.stationsDetails.forEach(nodeDetails => {
+      this.nodeDetailsService.addWorkstationDetails(nodeDetails).subscribe({
+        next: (result) => {
+          console.log(`Added ${nodeDetails}`);
+        },
+        error: (message) => {
+          console.log('Error while adding node: ' + message);
+        }
+      })
     })
 
     // Adding devices
@@ -419,5 +512,7 @@ export class CreatorDialogComponent {
         }
       });
     })
+
+    
   }
 }
