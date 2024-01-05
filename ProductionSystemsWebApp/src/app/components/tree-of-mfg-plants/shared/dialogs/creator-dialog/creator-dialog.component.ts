@@ -253,11 +253,12 @@ export class CreatorDialogComponent {
   addCell(parentNodeId: string, parentKeyId: string) {
     var newKeyId: string;
     const nodeType = this.getNodeType(parentKeyId);
+    const childrenCells = this.cellsToAdd.filter(cell => cell.parentId === this.selectedDepartment.nodeId);
 
     var index: number = 0;
-    if(this.cellsToAdd.length > 0){
+    if(childrenCells.length > 0){
       index = 1;
-      this.cellsToAdd.forEach(d => {
+      childrenCells.forEach(d => {
         index++;
       })
     } else index = 1;
@@ -294,11 +295,12 @@ export class CreatorDialogComponent {
   addStation(parentNodeId: string, parentKeyId: string){
     var newKeyId: string;
     const nodeType = this.getNodeType(parentKeyId);
+    const childrenStations = this.stationsToAdd.filter(station => station.parentId === this.selectedCell.nodeId);
 
     var index: number = 0;
-    if(this.stationsToAdd.length > 0){
+    if(childrenStations.length > 0){
       index = 1;
-      this.stationsToAdd.forEach(d => {
+      childrenStations.forEach(s => {
         index++;
       })
     } else index = 1;
@@ -333,11 +335,12 @@ export class CreatorDialogComponent {
   addDevice(parentNodeId: string, parentKeyId: string){
     var newKeyId: string;
     const nodeType = this.getNodeType(parentKeyId);
+    const childrenDevices = this.devicesToAdd.filter(device => device.parentId === this.selectedStation.nodeId);
 
     var index: number = 0;
-    if(this.stationsToAdd.length > 0){
+    if(childrenDevices.length > 0){
       index = 1;
-      this.stationsToAdd.forEach(d => {
+      childrenDevices.forEach(d => {
         index++;
       })
     } else index = 1;
@@ -359,10 +362,62 @@ export class CreatorDialogComponent {
   }
 
   saveStructure(){
-    console.log(this.factoryToAdd);
-    console.log(this.departmentsToAdd);
-    console.log(this.cellsToAdd);
-    console.log(this.stationsToAdd);
-    console.log(this.devicesToAdd);
+    // Adding factory
+    this.nodesService.addNode(this.factoryToAdd).subscribe({
+      next: (result) => {
+        console.log(`Added ${this.factoryToAdd}`);
+      },
+      error: (message) => {
+        console.log('Error while adding node: ' + message);
+      }
+    })
+
+    // Adding departments
+    this.departmentsToAdd.forEach(node => {
+      this.nodesService.addNode(node).subscribe({
+        next: (result) => {
+          console.log(`Added ${node}`);
+        },
+        error: (message) => {
+          console.log('Error while adding node: ' + message);
+        }
+      });
+    })
+
+    // Adding cells
+    this.cellsToAdd.forEach(node => {
+      this.nodesService.addNode(node).subscribe({
+        next: (result) => {
+          console.log(`Added ${node}`);
+        },
+        error: (message) => {
+          console.log('Error while adding node: ' + message);
+        }
+      });
+    })
+
+    // Adding workstations
+    this.stationsToAdd.forEach(node => {
+      this.nodesService.addNode(node).subscribe({
+        next: (result) => {
+          console.log(`Added ${node}`);
+        },
+        error: (message) => {
+          console.log('Error while adding node: ' + message);
+        }
+      });
+    })
+
+    // Adding devices
+    this.devicesToAdd.forEach(node => {
+      this.nodesService.addNode(node).subscribe({
+        next: (result) => {
+          console.log(`Added ${node}`);
+        },
+        error: (message) => {
+          console.log('Error while adding node: ' + message);
+        }
+      });
+    })
   }
 }

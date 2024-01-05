@@ -308,7 +308,9 @@ export class TreeOfMfgPlantsSidenavComponent {
       width: '80%',
       height: '80%',
     });
-  }
 
-  
+    dialogRef.afterClosed().subscribe(result => {
+      this.refresh()
+    })
+  }  
 }
