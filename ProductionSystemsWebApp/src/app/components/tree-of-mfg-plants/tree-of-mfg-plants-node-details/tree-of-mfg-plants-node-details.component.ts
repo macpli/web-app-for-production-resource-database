@@ -12,7 +12,10 @@ import { TreeOfMfgPlantsDraftComponent } from "../tree-of-mfg-plants-sidenav/tre
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-import jsPDF from 'jspdf';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 
 @Component({
     selector: 'tree-of-mfg-plants-node-details',
@@ -195,56 +198,43 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
         this.clearData();
         this.Close();
         this.refresh.emit(true);
+        this.editMode = false;
       }
     });
   }
   
-  generatePDF(nodes: TreeNode[]) {
-    const pdf = new jsPDF();
+  generatePDF(factoryToDraw: TreeNode[]) {
+    const content: any[] = [];
 
-    // Load the TTF font
-    const fontPath = 'assets/fonts/AbhayaLibre-Regular.ttf';
-    const fontData = this.loadFontData(fontPath);
+  // Add a title to the PDF
+  content.push({ text: 'Raport:', style: 'header' });
 
-    // Add the custom TTF font to jsPDF
-    pdf.addFileToVFS('AbhayaLibre-Regular.ttf', fontData);
-    pdf.addFont('AbhayaLibre-Regular.ttf', 'Abhaya', 'normal');
+  this.addNodesToContent(factoryToDraw, content);
 
-    // Set the custom font
-    pdf.setFont('Abhaya');
+  const docDefinition = {
+    content,
+    styles: {
+      header: {
+        fontSize: 18,
+        bold: true,
+      },
+    },
+  };
 
-    if (nodes) {
-      // Function to recursively add data to the PDF
-      function addDataToPDF(nodes: TreeNode[], yPos: number) {
-        for (const currentNode of nodes) {
-          pdf.text(`Name: ${currentNode.name}`, 10, yPos);
-          pdf.text(`Width: ${currentNode.width}`, 10, yPos + 10);
-          pdf.text(`Height: ${currentNode.height}`, 10, yPos + 20);
-          yPos += 30; // Adjust the spacing
-
-          // Recursively process children
-          if (currentNode.children && currentNode.children.length > 0) {
-            yPos = addDataToPDF(currentNode.children, yPos);
-          }
-        }
-
-        return yPos;
-      }
-
-      // Start the recursive process with the array of nodes
-      addDataToPDF(nodes, 10);
-
-      // Save or download the PDF
-      pdf.save('generated-pdf.pdf');
-    }
+    pdfMake.createPdf(docDefinition).download("raport.pdf");
   }
 
-  // Helper function to load font data
-  private loadFontData(url: string): any {
-    const request = new XMLHttpRequest();
-    request.open('GET', url, false);
-    request.send();
-    return request.response;
+  addNodesToContent(nodes: TreeNode[], content: any[]) {
+    nodes.forEach((node) => {
+    
+    content.push(`${node.name}, ID: ${node.nodeId}`);
+
+      if (node.children && node.children.length > 0) {
+        const childContent: any[] = [];
+        this.addNodesToContent(node.children, childContent);
+       content.push({ ul: childContent });
+      }
+    });
   }
 }
   
