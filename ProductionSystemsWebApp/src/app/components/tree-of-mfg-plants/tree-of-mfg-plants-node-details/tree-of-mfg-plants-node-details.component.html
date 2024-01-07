@@ -49,7 +49,7 @@
                                 <mat-label>Typ komórki</mat-label>
                                 <mat-select [disabled]="!this.editMode" [(ngModel)] ="this.nodeType" name="type">
                                     @for (type of cellTypes; track type) {
-                                      <mat-option [value]="type">{{type}}</mat-option>
+                                      <mat-option [value]="type.value">{{type.label}}</mat-option>
                                     }
                                   </mat-select>
                             </mat-form-field>
@@ -57,8 +57,8 @@
                             <mat-form-field *ngIf="this.keyId.charAt(0) == 'D'" class="example-full-width">
                                 <mat-label>Typ stanowiska</mat-label>
                                 <mat-select [disabled]="!this.editMode" [(ngModel)] ="this.nodeType" name="type">
-                                    @for (type of workstationTypes; track type) {
-                                      <mat-option [value]="type">{{type}}</mat-option>
+                                    @for (type of wstTypes; track type) {
+                                      <mat-option [value]="type.value">{{type.label}}</mat-option>
                                     }
                                   </mat-select>
                             </mat-form-field>
@@ -75,18 +75,20 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="Rysunek">
-                <tree-of-mfg-plants-draft *ngFor="let elements of factoryToDraw" [node]="elements"></tree-of-mfg-plants-draft>
-
-                <div style="margin-left: 15px; margin-top: 15px;">
-                    <h3>Legenda</h3>
-                      <li style="color: red;">fabryka</li>
-                      <li style="color: blue;">wydział</li>
-                      <li style="color: green;">komórka</li>
-                      <li style="color: yellow;">stanowisko</li>
-                      <li style="color: violet;">urządzenia</li>
-                      
-                  </div>
+            <mat-tab label="Schemat">
+                <div style="display: flex; justify-content: space-around;">
+                    <tree-of-mfg-plants-draft *ngFor="let elements of factoryToDraw" [node]="elements"></tree-of-mfg-plants-draft>
+                    <div style="margin-left: 15px; margin-top: 15px;">
+                        <h3>Legenda</h3>
+                          <li style="color: red;">fabryka</li>
+                          <li style="color: blue;">wydział</li>
+                          <li style="color: green;">komórka</li>
+                          <li style="color: yellow;">stanowisko</li>
+                          <li style="color: violet;">urządzenia</li>
+                          
+                    </div>
+                </div>
+                
             </mat-tab>
         </mat-tab-group>
         

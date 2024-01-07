@@ -33,12 +33,20 @@
 
     <mat-form-field *ngIf="data.nodeType == 'C'">
       <mat-label >Typ komórki</mat-label>
-      <input matInput (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)" [(ngModel)]="celType">
+      <mat-select [(ngModel)] ="celType" name="type">
+        @for (type of cellTypes; track type) {
+          <mat-option [value]="type.value">{{type.label}}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field *ngIf="data.nodeType == 'D'">
       <mat-label >Typ stanowiska</mat-label>
-      <input matInput (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)" [(ngModel)]="wstType">
+      <mat-select [(ngModel)] ="wstType" name="type">
+        @for (type of wstTypes; track type) {
+          <mat-option [value]="type.value">{{type.label}}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
   </div>
 

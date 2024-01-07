@@ -13,6 +13,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import {MatSelectModule} from '@angular/material/select';
 
 @Component({
     selector: 'add-node-dialog',
@@ -28,6 +29,7 @@ import { FormsModule } from '@angular/forms';
       MatDialogContent,
       MatDialogActions,
       MatDialogClose,
+      MatSelectModule
     ],
   })  
   export class AddNodeDialog {
@@ -38,6 +40,19 @@ import { FormsModule } from '@angular/forms';
     wstType: string = '';
     width: number = 100;
     height: number = 100;
+
+    cellTypes = [
+      { value: 'Cell', label: 'Komórka' },
+      { value: 'Line', label: 'Linia' },
+      { value: 'Warehouse', label: 'Magazyn' }
+    ];
+
+    wstTypes = [
+      { value: 'Machining', label: 'Obróbcze' },
+      { value: 'Assembly', label: 'Montażowe' },
+      { value: 'Measurement', label: 'Pomiarowe' },
+      { value: 'Storage', label: 'Magazynowe' }
+    ];
 
     inputValid: boolean = false;
 

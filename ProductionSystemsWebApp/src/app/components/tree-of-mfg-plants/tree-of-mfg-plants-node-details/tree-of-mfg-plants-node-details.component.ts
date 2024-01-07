@@ -25,13 +25,18 @@ import jsPDF from 'jspdf';
 export class TreeOfMfgPlantsNodeDetailsComponent {
   @Output() refresh = new EventEmitter<boolean>();
 
-  cellTypes: string[] = [
-    'Cell', 'Line', 'Warehouse'
-  ]
+  cellTypes = [
+    { value: 'Cell', label: 'Komórka' },
+    { value: 'Line', label: 'Linia' },
+    { value: 'Warehouse', label: 'Magazyn' }
+  ];
 
-  workstationTypes: string[] = [
-    'Machining','Assembly','Measurement','Storage'
-  ]
+  wstTypes = [
+    { value: 'Machining', label: 'Obróbcze' },
+    { value: 'Assembly', label: 'Montażowe' },
+    { value: 'Measurement', label: 'Pomiarowe' },
+    { value: 'Storage', label: 'Magazynowe' }
+  ];
 
   nodeId: string = '';
   keyId: string = '';
