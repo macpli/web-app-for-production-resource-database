@@ -6,6 +6,6 @@ export interface TreeNode {
   expandable?: boolean;
   level?: number;
   children?: TreeNode[];
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
 }
