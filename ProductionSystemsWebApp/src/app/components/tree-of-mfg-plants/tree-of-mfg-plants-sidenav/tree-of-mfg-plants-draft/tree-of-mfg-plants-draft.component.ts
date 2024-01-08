@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TreeNode } from '../../../../models/treeNode.model';
 import { fabric } from 'fabric';
@@ -15,6 +15,7 @@ export class TreeOfMfgPlantsDraftComponent {
   private canvas!: fabric.Canvas;
   
   @Input() node!: TreeNode;
+  @Output() canvasImage: EventEmitter<string> = new EventEmitter<string>();
 
   ngAfterViewInit() {
     this.canvas = new fabric.Canvas(this.layoutCanvas.nativeElement, {
@@ -42,7 +43,7 @@ export class TreeOfMfgPlantsDraftComponent {
 
   generateLayout(canvas: fabric.Canvas) {
   
-    const colors = ['red', 'blue', 'green', 'yellow', 'pink'];
+    const colors = ['#bae1ff', '#ffb3ba',  '#baffc9', '#ffffba', '#f6e3ff'];
     this.drawLayout(this.node, canvas, 0, 0, colors, 0);
   }
 
@@ -110,5 +111,16 @@ export class TreeOfMfgPlantsDraftComponent {
         currentY += child.width + 10;
       }
     }
+
+     const savedDraft = this.saveCanvasAsImage('png');
+     this.canvasImage.emit(savedDraft);
+     this.canvas.renderAll(); // 
+  }
+
+  saveCanvasAsImage(format: string): string {
+    return this.canvas.toDataURL({
+      format: 'jpeg', 
+      quality: 1, 
+    });
   }
 }

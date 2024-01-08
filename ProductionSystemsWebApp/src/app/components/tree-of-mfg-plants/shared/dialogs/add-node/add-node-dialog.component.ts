@@ -99,7 +99,7 @@ import {MatSelectModule} from '@angular/material/select';
             return this.inputValid = false;
           } else return this.inputValid = true;
         case 'D':
-          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || wstType.length == 0){
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || wstType.length == null){
             return this.inputValid = false;
           } else return this.inputValid = true;
         case 'E':

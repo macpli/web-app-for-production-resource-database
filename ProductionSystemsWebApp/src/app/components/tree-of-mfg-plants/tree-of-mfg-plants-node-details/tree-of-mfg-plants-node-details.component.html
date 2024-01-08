@@ -18,7 +18,7 @@
             <mat-tab label="Szczegóły">
                 <div class="node-details">
                     <mat-card-actions *ngIf="this.nodeToDraw" style="padding: 16px;">
-                        <button class="edit-buttons" mat-raised-button [disabled]="this.nodeToDraw[0].keyId.charAt(0) != 'F'" (click)="generatePDF(nodeToDraw)">Generuj raport</button>
+                        <button class="edit-buttons" mat-raised-button [disabled]="this.nodeToDraw[0].keyId.charAt(0) != 'F'" (click)="generatePDF(nodeToDraw, this.imageUrl)">Generuj raport</button>
                         <button class="edit-buttons" mat-raised-button (click)="setEditMode()">Edytuj</button>
                         <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode">Zapisz</button>
                         <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode" (click)="deleteNode(this.nodeId)">Usuń element</button>
@@ -92,7 +92,7 @@
 
             <mat-tab label="Schemat">
                 <div style="display: flex; justify-content: space-around;">
-                    <tree-of-mfg-plants-draft *ngFor="let elements of nodeToDraw" [node]="elements"></tree-of-mfg-plants-draft>
+                    <tree-of-mfg-plants-draft *ngFor="let elements of nodeToDraw" [node]="elements" (canvasImage)="onCanvasImageReceived($event)"></tree-of-mfg-plants-draft>
                     <div style="margin-left: 15px; margin-top: 15px;">
                         <h3>Legenda</h3>
                           <li style="color: red;">fabryka</li>

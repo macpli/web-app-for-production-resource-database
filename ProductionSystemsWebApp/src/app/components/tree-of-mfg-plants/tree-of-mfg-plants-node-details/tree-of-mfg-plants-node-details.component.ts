@@ -55,6 +55,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
   nodeToDraw!: TreeNode[];
 
   editMode: boolean = false;
+  imageUrl: string = '';
 
   constructor(
     private nodeDetailsService: NodeDetailsService,
@@ -203,13 +204,17 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
     });
   }
   
-  generatePDF(nodeToDraw: TreeNode[]) {
+  generatePDF(nodeToDraw: TreeNode[], canvasImageDataURL: string) {
     const content: any[] = [];
 
   // Add a title to the PDF
   content.push({ text: 'Raport:', style: 'header' });
 
   this.addNodesToContent(nodeToDraw, content);
+  
+  if (canvasImageDataURL) {
+    content.push({ image: canvasImageDataURL, width: 500 }); // Adjust the width as needed
+  }
 
   const docDefinition = {
     content,
@@ -235,6 +240,10 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
        content.push({ ul: childContent });
       }
     });
+  }
+
+  onCanvasImageReceived(draft: string) {
+    this.imageUrl = draft;
   }
 }
   
