@@ -1,1 +1,35 @@
-<canvas #layoutCanvas width="0" height="0"></canvas>
+<div style="display: flex; gap: 30px; margin: 10px 10px;">
+    <canvas style="border: 1px black solid;" #layoutCanvas width="0" height="0"></canvas>
+    
+    <div style="display: flex">
+        <div style="display: flex; flex-direction: column;">
+            <mat-form-field class="example-full-width" style="margin-right: 15px;">
+                <mat-label>X</mat-label>
+                <input matInput type="number" [(ngModel)]="this.xCoordinate">
+              </mat-form-field>
+    
+              <mat-form-field class="example-full-width">
+                <mat-label>Y</mat-label>
+                <input matInput type="number" [(ngModel)]="this.yCoordinate">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Wybierz kolor</mat-label>
+                <mat-select [(ngModel)]="selectedColor">
+                    @for (color of colors; track color) {
+                        <mat-option [value]="color.value">{{ color.name }}</mat-option>
+                      }
+                </mat-select>
+              </mat-form-field>
+        </div>
+    
+        <mat-list role="list">
+            <mat-list-item *ngFor="let node of nodesFlat" role="listitem" style="cursor: pointer;">
+                {{node.name}}
+                <mat-icon (click)="getNodeToDraft(node)">add</mat-icon>
+                
+            </mat-list-item>
+        </mat-list>
+    </div>
+    
+</div>

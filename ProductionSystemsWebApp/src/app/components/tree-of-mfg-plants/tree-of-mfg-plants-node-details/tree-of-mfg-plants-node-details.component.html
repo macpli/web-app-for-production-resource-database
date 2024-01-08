@@ -91,18 +91,9 @@
             </mat-tab>
 
             <mat-tab label="Schemat">
-                <div style="display: flex; justify-content: space-around;">
-                    <tree-of-mfg-plants-draft *ngFor="let elements of nodeToDraw" [node]="elements" (canvasImage)="onCanvasImageReceived($event)"></tree-of-mfg-plants-draft>
-                    <div style="margin-left: 15px; margin-top: 15px;">
-                        <h3>Legenda</h3>
-                          <li style="color: red;">fabryka</li>
-                          <li style="color: blue;">wydział</li>
-                          <li style="color: green;">komórka</li>
-                          <li style="color: yellow;">stanowisko</li>
-                          <li style="color: violet;">urządzenia</li>
-                          
-                    </div>
-                </div>
+                
+                <tree-of-mfg-plants-draft *ngFor="let elements of nodeToDraw" [node]="elements" (canvasImage)="onCanvasImageReceived($event)"></tree-of-mfg-plants-draft>
+                
                 
             </mat-tab>
         </mat-tab-group>
