@@ -52,7 +52,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
   manager: string = '';
   supervisor: string = '';
 
-  factoryToDraw!: TreeNode[];
+  nodeToDraw!: TreeNode[];
 
   editMode: boolean = false;
 
@@ -105,7 +105,7 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
   getNodesToDraft(nodeId: string){
     this.nodesService.getNodesToDraft(nodeId).subscribe({
       next: (result) => {
-        this.factoryToDraw = result;
+        this.nodeToDraw = result;
         console.log(result)
       }
     })
@@ -203,13 +203,13 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
     });
   }
   
-  generatePDF(factoryToDraw: TreeNode[]) {
+  generatePDF(nodeToDraw: TreeNode[]) {
     const content: any[] = [];
 
   // Add a title to the PDF
   content.push({ text: 'Raport:', style: 'header' });
 
-  this.addNodesToContent(factoryToDraw, content);
+  this.addNodesToContent(nodeToDraw, content);
 
   const docDefinition = {
     content,

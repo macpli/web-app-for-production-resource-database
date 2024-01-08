@@ -1,4 +1,4 @@
-<mat-card class="card nodeDetails-card" *ngIf="this.nodeId">
+<mat-card class="card nodeDetails-card" *ngIf="this.nodeId" style="overflow: scroll;">
     
     <div>
         <div style="display: flex; justify-content: space-between;">
@@ -17,14 +17,29 @@
         <mat-tab-group>
             <mat-tab label="Szczegóły">
                 <div class="node-details">
-                    <mat-card-actions style="padding: 16px;">
-                        <button class="edit-buttons" mat-raised-button [disabled]="this.factoryToDraw[0].keyId.charAt(0) != 'F'" (click)="generatePDF(factoryToDraw)">Generuj raport</button>
+                    <mat-card-actions *ngIf="this.nodeToDraw" style="padding: 16px;">
+                        <button class="edit-buttons" mat-raised-button [disabled]="this.nodeToDraw[0].keyId.charAt(0) != 'F'" (click)="generatePDF(nodeToDraw)">Generuj raport</button>
                         <button class="edit-buttons" mat-raised-button (click)="setEditMode()">Edytuj</button>
                         <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode">Zapisz</button>
                         <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode" (click)="deleteNode(this.nodeId)">Usuń element</button>
                     </mat-card-actions>
                     <mat-card-content>
                         <div class="input-fields">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Szerokość</mat-label>
+                                <input [disabled]="!this.editMode" matInput  value="{{this.nodeToDraw[0].width}}">
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Długość</mat-label>
+                                <input [disabled]="!this.editMode" matInput  value="{{this.nodeToDraw[0].height}}">
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Powierzchnia [m<sup>2</sup>]</mat-label>
+                                <input [disabled]="true" matInput placeholder="" value="{{this.nodeToDraw[0].width * this.nodeToDraw[0].height}}">
+                            </mat-form-field>
+
                             <mat-form-field *ngIf="this.keyId.charAt(0) == 'F'" class="example-full-width">
                                 <mat-label>ID Organizacji</mat-label>
                                 <input [disabled]="!this.editMode" matInput placeholder="ORG001" value="{{this.idOrg}}">
@@ -77,7 +92,7 @@
 
             <mat-tab label="Schemat">
                 <div style="display: flex; justify-content: space-around;">
-                    <tree-of-mfg-plants-draft *ngFor="let elements of factoryToDraw" [node]="elements"></tree-of-mfg-plants-draft>
+                    <tree-of-mfg-plants-draft *ngFor="let elements of nodeToDraw" [node]="elements"></tree-of-mfg-plants-draft>
                     <div style="margin-left: 15px; margin-top: 15px;">
                         <h3>Legenda</h3>
                           <li style="color: red;">fabryka</li>

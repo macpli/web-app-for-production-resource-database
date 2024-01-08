@@ -1,0 +1,21 @@
+<mat-stepper>
+    <mat-step label="Start">
+        <mat-form-field>
+            <mat-label>Rodzaj urządzenia</mat-label>
+            <mat-select formControlName="celType" required>
+              <mat-option value="Machining">Obróbcze</mat-option>
+              <mat-option value="Transport">Transportowe</mat-option>
+              <mat-option value="Storage">Magazynowe</mat-option>
+              <mat-option value="Measurement">Pomiarowe</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div style="margin-top: 25px;">
+            <button mat-raised-button matStepperNext >Dalej</button>
+          </div>
+    </mat-step>
+
+    <mat-step label="Zapisz">
+
+    </mat-step>
+</mat-stepper>

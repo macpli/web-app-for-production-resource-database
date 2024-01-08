@@ -17,6 +17,7 @@ import { TreeOfMfgPlantsDraftComponent } from "./tree-of-mfg-plants-draft/tree-o
 import { TreePainterDirective } from '../../../directives/painter.directive';
 import { NodeDetails } from '../../../models/nodeDetails.model';
 import { CreatorDialogComponent } from '../shared/dialogs/creator-dialog/creator-dialog.component';
+import { DeviceCreatorDialogComponent } from '../shared/dialogs/device-creator-dialog/device-creator-dialog.component';
 
 @Component({
     selector: 'tree-of-mfg-plants-sidenav',
@@ -44,6 +45,8 @@ export class TreeOfMfgPlantsSidenavComponent {
 
   chosenNode: any;
   factoryToDraw!: TreeNode[];
+
+  selectedTabIndex: number = 0;
   
   ngOnInit(): void {
     this.refresh();
@@ -306,11 +309,22 @@ export class TreeOfMfgPlantsSidenavComponent {
   openCreator(){
     const dialogRef = this.dialog.open(CreatorDialogComponent, {
       width: '80%',
+      height: '90%',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.refresh()
+    })
+  } 
+  
+  openDeviceCreator(){
+    const dialogRef = this.dialog.open(DeviceCreatorDialogComponent, {
+      width: '80%',
       height: '80%',
     });
 
     dialogRef.afterClosed().subscribe(result => {
       this.refresh()
     })
-  }  
+  }
 }

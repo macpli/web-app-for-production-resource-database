@@ -1,14 +1,22 @@
 <div style="display: flex; flex-direction: column;" >
-    <button mat-stroked-button style="margin: 0.1em;"
+    <button *ngIf="selectedTabIndex === 0" mat-stroked-button style="margin: 0.1em;"
             (click)="openCreator()">
             <mat-icon>open_in_new</mat-icon>
-        Otwórz kreator
+        Otwórz kreator 
     </button>
+
+    <button *ngIf="selectedTabIndex === 1" mat-stroked-button style="margin: 0.1em;"
+            (click)="openDeviceCreator()">
+            <mat-icon>open_in_new</mat-icon>
+        Otwórz kreator urządzeń 
+    </button>
+
     <div style="display: flex;">
-        <button [disabled]="!chosenNode"   
+        <button    
             mat-stroked-button style="margin: 0.1em; width: 50%;"   
             mat-button class="add-button" 
-            (click)="addNode(chosenNode.nodeId, chosenNode.keyId, chosenNode.parentId)">
+            (click)="addNode(chosenNode.nodeId, chosenNode.keyId, chosenNode.parentId)"
+            [disabled]="!chosenNode || selectedTabIndex === 1">
         <mat-icon>add</mat-icon>
         Dodaj nowy element
     </button>
@@ -16,14 +24,15 @@
     <button     
             mat-stroked-button style="margin: 0.1em; width: 50%;"   
             mat-button class="add-button" 
-            (click)="addNode('0', '0', '0')">
+            (click)="addNode('0', '0', '0')"
+            [disabled]="selectedTabIndex === 1">
         <mat-icon>add</mat-icon>
         Dodaj nową fabrykę
     </button>
     </div>
   </div>
 
-<mat-tab-group class="custom-tab-group">
+<mat-tab-group class="custom-tab-group" [(selectedIndex)]="selectedTabIndex">
     <mat-tab label="Fabryki">
         <mat-tree *ngIf="!isLoading" [dataSource]="factoriesData" [treeControl]="treeControl" class="example-tree">
             <!-- Leaf nodes --> 
