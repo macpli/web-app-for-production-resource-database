@@ -208,11 +208,17 @@ namespace WebApi.Services
 
         public async Task<CellDetails> AddCellDetails(CellDetailsDTO details)
         {
+            // WarehouseType"
+            // 0 - not a warehouse
+            // 1 - input warehouse
+            // 2 - output warehouse
+
             var detailsEntity = new CellDetails
             {
                 IDCel = details.IDCel,
                 IDDep = details.IDDep,
                 CELType = details.CELType,
+                WarehouseType = details.WarehouseType,
                 Name = details.Name,
                 Description = details.Description,
                 NodeId = details.NodeId,

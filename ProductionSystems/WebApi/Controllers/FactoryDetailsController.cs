@@ -54,9 +54,11 @@ namespace WebApi.Controllers
             var details = await _productionSystemsRepository.GetCellDetails(nodeId);
             var result = new nodeDetailsDTO()
             {
+                NodeId = details.NodeId,
                 Name = details.Name,
                 Description = details.Description,
                 CELType = details.CELType,
+                WarehouseType = details.WarehouseType,
                 Supervisor = details.Supervisor,
             };
 
@@ -127,6 +129,7 @@ namespace WebApi.Controllers
                 IDCel = addedDetails.IDCel,
                 IDDep = addedDetails.IDDep,
                 CELType = addedDetails.CELType,
+                WarehouseType = addedDetails.WarehouseType,
                 Name = addedDetails.Name,
                 Description = addedDetails.Description,
                 NodeId = addedDetails.NodeId,

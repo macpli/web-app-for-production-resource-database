@@ -19,6 +19,9 @@ namespace WebApi.Entities
         [StringLength(15)]
         public string CELType { get; set; }
 
+        [Column("WarehouseType")]
+        public int WarehouseType { get; set; }
+
         [Column("Name")]
         [StringLength(80)]
         public string Name { get; set; }

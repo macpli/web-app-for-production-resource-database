@@ -68,6 +68,10 @@ export class CreatorDialogComponent {
   wstType: string = '';
   width: number = 100;
   height: number = 100;
+  location: string = '';
+  manager: string = '';
+  warehouseType: number = 0;
+  supervisor: string = '';
 
   selectedDepartment: any = { nodeId: '', keyId: '' }
   selectedCell: any = { nodeId: '', keyId: '' }
@@ -98,6 +102,7 @@ export class CreatorDialogComponent {
     width: [100, Validators.required],
     height: [100, Validators.required],
     idOrg: ['', Validators.required],
+    location: ['', Validators.required],
   });
 
   // departments
@@ -106,6 +111,7 @@ export class CreatorDialogComponent {
     description: ['', Validators.required],
     width: [100, Validators.required],
     height: [100, Validators.required],
+    manager: ['', Validators.required]
   });
 
   // cells
@@ -114,7 +120,9 @@ export class CreatorDialogComponent {
     description: ['', Validators.required],
     width: [100, Validators.required],
     height: [100, Validators.required],
-    celType: ['', Validators.required]
+    celType: ['', Validators.required],
+    warehouseType: [0],
+    supervisor: ['', Validators.required]
   });
 
   // stations
@@ -221,6 +229,7 @@ export class CreatorDialogComponent {
             idFct: newKeyId,
             idOrg: this.firstFormGroup.get('idOrg')!.value ?? '',
             nodeId: newKeyId,
+            location: this.firstFormGroup.get('location')!.value ?? ''
           }
 
           console.log(this.factoryToAdd)
@@ -261,6 +270,7 @@ export class CreatorDialogComponent {
         description: this.secondFormGroup.get('description')!.value ?? '',
         idFct: this.factoryToAdd.keyId,
         idDep: newKeyId,
+        manager: this.secondFormGroup.get('manager')!.value ?? '',
       }
       this.departmentsDetails.push(newDepartmentDetails);
     }
@@ -311,6 +321,8 @@ export class CreatorDialogComponent {
         idDep: parentKeyId,
         idCel: newKeyId,
         celType: this.thirdFormGroup.get('celType')!.value ?? '',
+        warehouseType: this.thirdFormGroup.get('warehouseType')!.value ?? 0,
+        supervisor: this.thirdFormGroup.get('supervisor')!.value ?? '',
       }
       this.cellsDetails.push(newCellDetails);
     }

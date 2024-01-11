@@ -24,7 +24,12 @@
               <mat-label >Szerokość</mat-label>
               <input matInput formControlName="height" required (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
             </mat-form-field>
-        
+
+            <mat-form-field>
+              <mat-label >Lokalizacja</mat-label>
+              <input matInput formControlName="location" required (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
+            </mat-form-field>
+
             <mat-form-field>
               <mat-label >ID Organizacji</mat-label>
               <input matInput formControlName="idOrg" required (keyup)="validateInput(getNodeType('0'), name, description, height, width, idOrg, celType, wstType)">
@@ -78,6 +83,11 @@
         <mat-form-field>
           <mat-label >Szerokość</mat-label>
           <input matInput formControlName="height" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label >Kierownik</mat-label>
+          <input matInput formControlName="manager" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
         </mat-form-field>
 
         <button mat-raised-button (click)="addDepartment()">Dodaj</button>
@@ -140,11 +150,25 @@
 
         <mat-form-field>
           <mat-label>Rodzaj komórki</mat-label>
-          <mat-select formControlName="celType" required>
+          <mat-select formControlName="celType" [(ngModel)]="celType" required>
             <mat-option value="Cell">Gniazdo</mat-option>
             <mat-option value="Line">Linia</mat-option>
             <mat-option value="Warehouse">Magazyn</mat-option>
           </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="celType === 'Warehouse'">
+          <mat-label>Rodzaj magazynu</mat-label>
+          <mat-select formControlName="warehouseType" required>
+            <mat-option *ngIf="false" value="0"></mat-option>
+            <mat-option value=1>Wejściowy</mat-option>
+            <mat-option value=2>Wyjściowy</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label >Nadzorca</mat-label>
+          <input matInput formControlName="supervisor" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
         </mat-form-field>
 
         <button mat-raised-button (click)="addCell(this.selectedDepartment.nodeId, this.selectedDepartment.keyId)">Dodaj</button>
