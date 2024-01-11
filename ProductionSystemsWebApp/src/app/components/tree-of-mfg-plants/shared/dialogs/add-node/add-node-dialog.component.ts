@@ -40,6 +40,9 @@ import {MatSelectModule} from '@angular/material/select';
     wstType: string = '';
     width: number = 100;
     height: number = 100;
+    location: string = '';
+    manager: string = '';
+    supervisor: string = '';
 
     cellTypes = [
       { value: 'Cell', label: 'Komórka' },
@@ -76,7 +79,6 @@ import {MatSelectModule} from '@angular/material/select';
         default:
           return ''
       }
-
     }
 
     onNoClick(): void {
@@ -87,15 +89,15 @@ import {MatSelectModule} from '@angular/material/select';
       
       switch(nodeType){
         case 'F':
-          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || idOrg.length == 0){
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || idOrg.length == 0 || this.location.length == 0){
             return this.inputValid = false;
           } else return this.inputValid = true;
         case 'M':
-          if(name.length == 0 || description.length == 0 || width == 0 || height == 0){
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || this.manager.length == 0){
             return this.inputValid = false;
           } else return this.inputValid = true;
         case 'C':
-          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || celType.length == 0){
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || celType.length == 0 || this.supervisor.length == 0){
             return this.inputValid = false;
           } else return this.inputValid = true;
         case 'D':
@@ -109,7 +111,5 @@ import {MatSelectModule} from '@angular/material/select';
         default:
           return this.inputValid = false;
       }
-        
-      
     }
   }

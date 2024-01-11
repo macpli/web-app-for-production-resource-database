@@ -31,6 +31,21 @@
       <input matInput (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)" [(ngModel)]="idOrg">
     </mat-form-field>
 
+    <mat-form-field *ngIf="data.nodeType == 'F'">
+      <mat-label >Lokalizacja</mat-label>
+      <input matInput (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)" [(ngModel)]="location">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="data.nodeType == 'M'">
+      <mat-label >Kierownik</mat-label>
+      <input matInput (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)" [(ngModel)]="manager">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="data.nodeType == 'C'">
+      <mat-label >Nadzorca</mat-label>
+      <input matInput (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)" [(ngModel)]="supervisor">
+    </mat-form-field>
+
     <mat-form-field *ngIf="data.nodeType == 'C'">
       <mat-label >Typ komórki</mat-label>
       <mat-select [(ngModel)] ="celType" name="type">
@@ -53,5 +68,12 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Anuluj</button>
-  <button mat-button  [disabled]="!this.inputValid" [mat-dialog-close]="{name: name, description: description, idOrg: idOrg, celType: celType, wstType: wstType, width: width, height: height}" cdkFocusInitial>Zapisz</button>
+  <button mat-button  [disabled]="!this.inputValid" 
+          [mat-dialog-close]="
+          {name: name, description: description, idOrg: idOrg, 
+          celType: celType, wstType: wstType, width: width, 
+          height: height, location: location, manager: manager, supervisor: supervisor}" 
+          cdkFocusInitial>
+          Zapisz
+  </button>
 </div>

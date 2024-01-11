@@ -179,6 +179,7 @@ namespace WebApi.Services
                 Description = details.Description,
                 IDOrg = details.IDOrg,
                 NodeId = details.NodeId,
+                Location = details.Location,
             };
 
             _context.FactoryDetails.Add(detailsEntity);
@@ -196,6 +197,7 @@ namespace WebApi.Services
                 Name = details.Name,
                 Description = details.Description,
                 NodeId = details.NodeId,
+                Manager = details.Manager,
             };
 
             _context.DepartmentDetails.Add(detailsEntity);
@@ -214,6 +216,7 @@ namespace WebApi.Services
                 Name = details.Name,
                 Description = details.Description,
                 NodeId = details.NodeId,
+                Supervisor = details.Supervisor,
             };
 
             _context.CellDetails.Add(detailsEntity);

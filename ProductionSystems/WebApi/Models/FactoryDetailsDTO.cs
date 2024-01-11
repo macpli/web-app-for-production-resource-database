@@ -7,5 +7,6 @@
         public string Description { get; set; }
         public string IDOrg { get; set; }
         public string NodeId { get; set; }
+        public string Location { get; set; }
     }
 }

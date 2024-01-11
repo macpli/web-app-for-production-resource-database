@@ -90,7 +90,8 @@ namespace WebApi.Controllers
                 Name = addedDetails.Name,
                 Description = addedDetails.Description,
                 IDOrg = addedDetails.IDOrg,
-                NodeId = addedDetails.NodeId
+                NodeId = addedDetails.NodeId,
+                Location = addedDetails.Location,
             };
 
             return Ok(factoryDetails); 
@@ -108,7 +109,8 @@ namespace WebApi.Controllers
                 IDFct = addedDetails.IDFct,
                 Name = addedDetails.Name,
                 Description = addedDetails.Description,
-                NodeId = addedDetails.NodeId
+                NodeId = addedDetails.NodeId,
+                Manager = addedDetails.Manager,
             };
 
             return Ok(departmentDetails);
@@ -127,7 +129,8 @@ namespace WebApi.Controllers
                 CELType = addedDetails.CELType,
                 Name = addedDetails.Name,
                 Description = addedDetails.Description,
-                NodeId = addedDetails.NodeId
+                NodeId = addedDetails.NodeId,
+                Supervisor = addedDetails.Supervisor,
             };
 
             return Ok(cellDetails);

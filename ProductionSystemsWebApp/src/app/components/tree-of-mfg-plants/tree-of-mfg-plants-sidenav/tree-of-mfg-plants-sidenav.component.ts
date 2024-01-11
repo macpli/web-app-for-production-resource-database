@@ -147,7 +147,10 @@ export class TreeOfMfgPlantsSidenavComponent {
     const nodeType = this.getNodeType(keyId);
     var maxNumericValue;
     var newKeyId: string;
-    
+    var location: string = '';
+    var manager: string = '';
+    var supervisor: string = '';
+
     // Adding Factory
     if(parentId == '0' && keyId == '0' && nodeId == '0'){
       this.nodesService.getAtomChildren(parentId).subscribe({
@@ -171,6 +174,7 @@ export class TreeOfMfgPlantsSidenavComponent {
             height = result.height;
             nodeDesc = result.description;
             idOrg = result.idOrg;
+            location = result.location;
             
             if(result){
               const newNode: TreeNode = {
@@ -187,9 +191,11 @@ export class TreeOfMfgPlantsSidenavComponent {
                 description: nodeDesc,
                 idFct: newKeyId,
                 idOrg: idOrg,
-                nodeId: newKeyId
+                nodeId: newKeyId,
+                location: location,
               }
 
+              console.log(newNodeDetails)
               this.nodeDetailsService.addFactoryDetails(newNodeDetails).subscribe({
                 next: (result) => {
                   console.log('Successfully added details');
@@ -236,6 +242,8 @@ export class TreeOfMfgPlantsSidenavComponent {
             idOrg = result.idOrg;
             celType = result.celType;
             wstType = result.wstType;
+            manager = result.manager;
+            supervisor = result.supervisor;
   
             if(result){
               const newNode: TreeNode = {
@@ -253,7 +261,8 @@ export class TreeOfMfgPlantsSidenavComponent {
                   description: nodeDesc,
                   idDep: newKeyId,
                   idFct: keyId,
-                  nodeId: nodeId+newKeyId
+                  nodeId: nodeId+newKeyId,
+                  manager: manager
                 }
                 this.nodeDetailsService.addDepartmentDetails(newNodeDetails).subscribe({
                   next: (result) => {
@@ -267,6 +276,7 @@ export class TreeOfMfgPlantsSidenavComponent {
                   idCel: newKeyId,
                   idDep: keyId,
                   nodeId: nodeId+newKeyId,
+                  supervisor: supervisor,
                   celType: celType,
                 }
                 this.nodeDetailsService.addCellDetails(newNodeDetails).subscribe({
