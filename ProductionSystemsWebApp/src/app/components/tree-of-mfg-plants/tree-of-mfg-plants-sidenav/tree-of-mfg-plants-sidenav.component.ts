@@ -150,6 +150,7 @@ export class TreeOfMfgPlantsSidenavComponent {
     var location: string = '';
     var manager: string = '';
     var supervisor: string = '';
+    var warehouseType: number;
 
     // Adding Factory
     if(parentId == '0' && keyId == '0' && nodeId == '0'){
@@ -244,6 +245,7 @@ export class TreeOfMfgPlantsSidenavComponent {
             wstType = result.wstType;
             manager = result.manager;
             supervisor = result.supervisor;
+            warehouseType = result.warehouseType;
   
             if(result){
               const newNode: TreeNode = {
@@ -278,6 +280,7 @@ export class TreeOfMfgPlantsSidenavComponent {
                   nodeId: nodeId+newKeyId,
                   supervisor: supervisor,
                   celType: celType,
+                  warehouseType: warehouseType,
                 }
                 this.nodeDetailsService.addCellDetails(newNodeDetails).subscribe({
                   next: (result) => {
