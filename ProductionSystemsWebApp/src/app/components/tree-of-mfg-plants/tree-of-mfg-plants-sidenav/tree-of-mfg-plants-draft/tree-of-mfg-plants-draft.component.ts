@@ -16,6 +16,11 @@ interface ExtendedTreeNode extends TreeNode {
   yCoordinate: number;
 }
 
+interface ConnectionPoints {
+  xCoordinate: number;
+  yCoordinate: number;
+}
+
 @Component({
   selector: 'tree-of-mfg-plants-draft',
   standalone: true,
@@ -45,6 +50,8 @@ export class TreeOfMfgPlantsDraftComponent {
     { name: 'Fioletowy', value: '#f6e3ff' }
   ];
   selectedColor = '#bae1ff';
+
+  connectionPoints: ConnectionPoints[] = [];
 
   ngAfterViewInit() {
     this.canvas = new fabric.Canvas(this.layoutCanvas.nativeElement, {
@@ -138,7 +145,7 @@ export class TreeOfMfgPlantsDraftComponent {
     }
 
     canvas.add(rect);
-
+    //this.drawConnections()
     const savedDraft = this.saveCanvasAsImage('png');
     this.canvasImage.emit(savedDraft);
     this.canvas.renderAll(); 
@@ -212,6 +219,124 @@ export class TreeOfMfgPlantsDraftComponent {
      const savedDraft = this.saveCanvasAsImage('png');
      this.canvasImage.emit(savedDraft);
      this.canvas.renderAll(); 
+  }
+
+  drawConnections(){
+    const cells = this.renderedNodes.filter(n => n.keyId.charAt(0) === 'C');
+    if(cells && cells.length > 0){
+
+      var inputWarehouse: { xCoordinate: any; yCoordinate: any; }  
+      inputWarehouse =
+      {
+        xCoordinate: (cells[0].xCoordinate + cells[0].width/2),
+        yCoordinate: (cells[0].yCoordinate + cells[0].height/2),
+      }
+
+      var outputWarehouse: { xCoordinate: any; yCoordinate: any; }
+      outputWarehouse =
+      {
+        xCoordinate: (cells[cells.length-1].xCoordinate + cells[cells.length-1].width/2),
+        yCoordinate: (cells[cells.length-1].yCoordinate + cells[cells.length-1].height/2),
+      }
+
+      const startPoint = {x: inputWarehouse.xCoordinate, y: inputWarehouse.yCoordinate}
+      const endPoint = {x: outputWarehouse.xCoordinate, y: outputWarehouse.yCoordinate}
+      var renderedDeps = this.renderedNodes.filter(n => n.keyId.charAt(0) === 'M');
+
+      renderedDeps.forEach(d => {
+        var depCenter: any = {
+          xCoordinate: d.width/2 + d.xCoordinate,
+          yCoordinate: d.height/2 + d.yCoordinate
+        }
+        this.connectionPoints.push(depCenter);
+        console.log('connection points: ' + this.connectionPoints.length);
+      })
+
+      for(let i = 0; i < renderedDeps.length-1; i++){
+        if(i == 0){
+          // Generate connection from inputWarehouse to first connection point
+          console.log('Generating 1')
+          let lineStart = {x: startPoint.x, y: startPoint.y }
+          let lineEnd = { x: this.connectionPoints[1].xCoordinate, 
+                          y: startPoint.y };
+          let line = new fabric.Line([lineStart.x, lineStart.y, lineEnd.x, lineEnd.y], {
+            fill: 'yellow',
+            stroke: 'yellow',
+            strokeWidth: 8,
+          });
+          this.canvas.add(line);
+          
+          lineStart = {x: this.connectionPoints[1].xCoordinate, 
+            y: startPoint.y }
+          lineEnd = { x: this.connectionPoints[1].xCoordinate, 
+                      y: this.connectionPoints[1].yCoordinate,};
+          line = new fabric.Line([lineStart.x, lineStart.y, lineEnd.x, lineEnd.y], {
+            fill: 'yellow',
+            stroke: 'yellow',
+            strokeWidth: 8,
+          });
+          this.canvas.add(line);
+
+        }else if(this.connectionPoints.length-2 === i && outputWarehouse){
+          // generate connection to outputWarehouse cell
+          console.log('Generating 2')
+          let lineStart = {x: this.connectionPoints[i].xCoordinate, 
+                          y: this.connectionPoints[i].yCoordinate }
+          let lineEnd = { x: endPoint.x, 
+                           y: this.connectionPoints[i].yCoordinate };
+          
+          let line = new fabric.Line([lineStart.x, lineStart.y, lineEnd.x, lineEnd.y], {
+            fill: 'yellow',
+            stroke: 'yellow',
+            strokeWidth: 8,
+          }); 
+          this.canvas.add(line);
+
+          lineStart = {x: endPoint.x, 
+                      y: this.connectionPoints[i].yCoordinate }
+          lineEnd = { x: endPoint.x, 
+                     y: endPoint.y };
+          
+          line = new fabric.Line([lineStart.x, lineStart.y, lineEnd.x, lineEnd.y], {
+            fill: 'yellow',
+            stroke: 'yellow',
+            strokeWidth: 8,
+          }); 
+          this.canvas.add(line);
+
+        }else {
+          if(this.connectionPoints.length-1 != i){
+            console.log('Generating 3')
+            // Generate normal connections
+            let j = i + 1;
+            let lineStart = {x: this.connectionPoints[i].xCoordinate, 
+                             y: this.connectionPoints[i].yCoordinate }
+            let lineEnd = { x: this.connectionPoints[j].xCoordinate, 
+                            y: this.connectionPoints[i].yCoordinate };
+
+            let line = new fabric.Line([lineStart.x, lineStart.y, lineEnd.x, lineEnd.y], {
+              fill: 'yellow',
+              stroke: 'yellow',
+              strokeWidth: 8,
+            }); 
+            this.canvas.add(line);
+
+            lineStart = {x: this.connectionPoints[j].xCoordinate, 
+                        y: this.connectionPoints[i].yCoordinate }
+            lineEnd   = { x: this.connectionPoints[j].xCoordinate, 
+                        y: this.connectionPoints[j].yCoordinate };
+
+            line = new fabric.Line([lineStart.x, lineStart.y, lineEnd.x, lineEnd.y], {
+              fill: 'yellow',
+            stroke: 'yellow',
+            strokeWidth: 8,
+          }); 
+          this.canvas.add(line);
+
+          }
+        }
+      } 
+    }
   }
 
   saveCanvasAsImage(format: string): string {
