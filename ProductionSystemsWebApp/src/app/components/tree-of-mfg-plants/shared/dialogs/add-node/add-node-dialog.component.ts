@@ -43,12 +43,18 @@ import {MatSelectModule} from '@angular/material/select';
     location: string = '';
     manager: string = '';
     supervisor: string = '';
+    warehouseType: number = 0;
 
     cellTypes = [
       { value: 'Cell', label: 'Komórka' },
       { value: 'Line', label: 'Linia' },
       { value: 'Warehouse', label: 'Magazyn' }
     ];
+
+    warehouseTypes = [
+      { value: 1, label: 'Magazyn wejściowy'},
+      { value: 2, label: 'Magazyn wyjściowy'}
+    ]
 
     wstTypes = [
       { value: 'Machining', label: 'Obróbcze' },
@@ -97,7 +103,8 @@ import {MatSelectModule} from '@angular/material/select';
             return this.inputValid = false;
           } else return this.inputValid = true;
         case 'C':
-          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || celType.length == 0 || this.supervisor.length == 0){
+          if(name.length == 0 || description.length == 0 || width == 0 || height == 0 || celType.length == 0 || this.supervisor.length == 0 || (this.celType == 'Warehouse' && this.warehouseType == 0)){
+            console.log(this.warehouseType,this.celType)
             return this.inputValid = false;
           } else return this.inputValid = true;
         case 'D':

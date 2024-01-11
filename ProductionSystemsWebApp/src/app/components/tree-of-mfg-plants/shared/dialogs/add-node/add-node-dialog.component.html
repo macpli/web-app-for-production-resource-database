@@ -47,9 +47,18 @@
     </mat-form-field>
 
     <mat-form-field *ngIf="data.nodeType == 'C'">
-      <mat-label >Typ komórki</mat-label>
-      <mat-select [(ngModel)] ="celType" name="type">
+      <mat-label >Rodzaj komórki</mat-label>
+      <mat-select [(ngModel)] ="celType" name="type" (selectionChange)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
         @for (type of cellTypes; track type) {
+          <mat-option [value]="type.value">{{type.label}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="data.nodeType == 'C' && this.celType == 'Warehouse'">
+      <mat-label >Rodzaj magazynu</mat-label>
+      <mat-select [(ngModel)] ="warehouseType" name="type" (selectionChange)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        @for (type of warehouseTypes; track type) {
           <mat-option [value]="type.value">{{type.label}}</mat-option>
         }
       </mat-select>
@@ -72,7 +81,8 @@
           [mat-dialog-close]="
           {name: name, description: description, idOrg: idOrg, 
           celType: celType, wstType: wstType, width: width, 
-          height: height, location: location, manager: manager, supervisor: supervisor}" 
+          height: height, location: location, manager: manager, supervisor: supervisor,
+          warehouseType: warehouseType}" 
           cdkFocusInitial>
           Zapisz
   </button>
