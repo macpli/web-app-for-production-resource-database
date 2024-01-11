@@ -13,4 +13,5 @@ export interface NodeDetails {
   location?: string;
   manager?: string;
   supervisor?: string;
+  warehouseType?: number;
 }
