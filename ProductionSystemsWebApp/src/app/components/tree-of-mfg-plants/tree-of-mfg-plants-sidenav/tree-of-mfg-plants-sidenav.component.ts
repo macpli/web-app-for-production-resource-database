@@ -322,7 +322,7 @@ export class TreeOfMfgPlantsSidenavComponent {
   openCreator(){
     const dialogRef = this.dialog.open(CreatorDialogComponent, {
       width: '80%',
-      height: '90%',
+      height: '95%',
     });
 
     dialogRef.afterClosed().subscribe(result => {

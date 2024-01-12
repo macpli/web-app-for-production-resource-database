@@ -277,6 +277,7 @@ export class CreatorDialogComponent {
   }
 
   selectDepartment(nodeId: string, keyId: string) {
+    console.log(this.selectedDepartment)
     this.selectedDepartment.nodeId = nodeId;
     this.selectedDepartment.keyId = keyId;
 

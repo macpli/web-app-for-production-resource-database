@@ -39,7 +39,7 @@
           </div>
           
           <div style="margin-top: 25px;">
-            <button mat-raised-button matStepperNext >Dalej</button>
+            <button mat-raised-button matStepperNext [disabled]="this.factoryToAdd == undefined">Dalej</button>
           </div>
         </form>
   </div>
@@ -59,7 +59,7 @@
       <mat-divider></mat-divider>
       <div>
         <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
-        <button mat-raised-button matStepperNext>Dalej</button>
+        <button mat-raised-button matStepperNext [disabled]="this.departmentsToAdd.length == 0">Dalej</button>
       </div>
     </div>
 
@@ -103,6 +103,7 @@
     <div style="display: flex; flex-direction: column;">
       <h2>Wydziały:</h2>
       <mat-divider></mat-divider>
+      <h4>Wybierz wydział:</h4>
       <mat-list role="list" style="height: 300px;">
         <mat-list-item *ngFor="let department of departmentsToAdd;" 
                         (click)="selectDepartment(department.nodeId, department.keyId)"
@@ -179,7 +180,7 @@
 
   <div>
     <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
-    <button mat-raised-button matStepperNext>Dalej</button>
+    <button mat-raised-button matStepperNext [disabled]="this.cellsToAdd.length == 0">Dalej</button>
   </div>
 </mat-step>
 
@@ -189,6 +190,7 @@
     <div style="display: flex; flex-direction: column;">
       <h2>Komórki:</h2>
       <mat-divider></mat-divider>
+      <h4>Wybierz komórkę:</h4>
       <mat-list role="list" style="height: 300px;">
         <mat-list-item *ngFor="let cell of cellsToAdd;" 
                         (click)="selectCell(cell.nodeId, cell.keyId)"
@@ -252,7 +254,7 @@
 
   <div>
     <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
-    <button mat-raised-button matStepperNext>Dalej</button>
+    <button mat-raised-button matStepperNext [disabled]="this.stationsToAdd.length == 0">Dalej</button>
   </div>
 </mat-step>
 
@@ -262,6 +264,7 @@
     <div style="display: flex; flex-direction: column;">
       <h2>Stanowiska:</h2>
       <mat-divider></mat-divider>
+      <h4>Wybierz stanowisko:</h4>
       <mat-list role="list" style="height: 300px;">
         <mat-list-item *ngFor="let station of stationsToAdd;" 
                         (click)="selectStation(station.nodeId, station.keyId)"
