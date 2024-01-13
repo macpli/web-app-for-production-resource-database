@@ -103,7 +103,7 @@
     <div style="display: flex; flex-direction: column;">
       <h2>Wydziały:</h2>
       <mat-divider></mat-divider>
-      <h4>Wybierz wydział:</h4>
+      <h4 style="color: #20B2AA;">Wybierz wydział:</h4>
       <mat-list role="list" style="height: 300px;">
         <mat-list-item *ngFor="let department of departmentsToAdd;" 
                         (click)="selectDepartment(department.nodeId, department.keyId)"
@@ -127,7 +127,7 @@
       </div>
     </div>
 
-    <div> 
+    <div [hidden]="this.selectedDepartment.keyId == ''"> 
       <form [formGroup]="thirdFormGroup" style="display: flex; flex-direction: column;">
         <mat-form-field>
           <mat-label >Nazwa</mat-label>
@@ -190,7 +190,7 @@
     <div style="display: flex; flex-direction: column;">
       <h2>Komórki:</h2>
       <mat-divider></mat-divider>
-      <h4>Wybierz komórkę:</h4>
+      <h4 style="color: #20B2AA;">Wybierz komórkę:</h4>
       <mat-list role="list" style="height: 300px;">
         <mat-list-item *ngFor="let cell of cellsToAdd;" 
                         (click)="selectCell(cell.nodeId, cell.keyId)"
@@ -214,7 +214,7 @@
       </div>
     </div>
 
-    <div> 
+    <div [hidden]="this.selectedDepartment.keyId == ''"> 
       <form [formGroup]="fourthFormGroup" style="display: flex; flex-direction: column;">
         <mat-form-field>
           <mat-label >Nazwa</mat-label>
@@ -264,7 +264,7 @@
     <div style="display: flex; flex-direction: column;">
       <h2>Stanowiska:</h2>
       <mat-divider></mat-divider>
-      <h4>Wybierz stanowisko:</h4>
+      <h4 style="color: #20B2AA;">Wybierz stanowisko:</h4>
       <mat-list role="list" style="height: 300px;">
         <mat-list-item *ngFor="let station of stationsToAdd;" 
                         (click)="selectStation(station.nodeId, station.keyId)"
@@ -288,7 +288,7 @@
       </div>
     </div>
 
-    <div> 
+    <div [hidden]="this.selectedStation.keyId == ''"> 
       <form [formGroup]="fifthFormGroup" style="display: flex; flex-direction: column;">
         <mat-form-field>
           <mat-label >Nazwa</mat-label>
