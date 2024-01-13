@@ -1,7 +1,7 @@
-<div style="display: flex; gap: 30px; margin: 10px 10px;">
-    <canvas style="border: 1px black solid;" #layoutCanvas width="0" height="0"></canvas>
+<div style="display: flex; gap: 100px; margin: 10px 10px;">
+    <canvas class="canvas" #layoutCanvas width="0" height="0"></canvas>
     
-    <div style="display: flex">
+    <div style="display: flex; gap: 15px;">
         <div style="display: flex; flex-direction: column;">
             <mat-form-field class="example-full-width" style="margin-right: 15px;">
                 <mat-label>X</mat-label>
@@ -21,17 +21,25 @@
                       }
                 </mat-select>
               </mat-form-field>
-
-              <button mat-raised-button (click)="drawConnections()">Ścieżki</button>
+              <button mat-raised-button (click)="renderRectangle()">
+                <span *ngIf="this.isRendered">Zmień</span>
+                <span *ngIf="!this.isRendered">Dodaj</span>
+              </button>
+              <button mat-raised-button (click)="drawConnections()" style="margin-top: 15px;">Ścieżki</button>
         </div>
     
-        <mat-list role="list">
-            <mat-list-item *ngFor="let node of nodesFlat" role="listitem" style="cursor: pointer;">
-                {{node.name}}
-                <mat-icon (click)="getNodeToDraft(node)">add</mat-icon>
-                
+        <div class="nodes-list">
+          <mat-list role="list" style="overflow-y: scroll; height: 600px;">
+            <mat-list-item *ngFor="let node of nodesFlat; let i = index" 
+                            role="listitem" 
+                            style="cursor: pointer;" 
+                            [ngClass]="{'grey-background': i % 2 === 1, 'selected-node': selectedNode && selectedNode.nodeId === node.nodeId}"
+                            (click)="getNodeToRender(node)">
+                            {{node.name}}
             </mat-list-item>
         </mat-list>
+        </div>
+        
     </div>
     
 </div>

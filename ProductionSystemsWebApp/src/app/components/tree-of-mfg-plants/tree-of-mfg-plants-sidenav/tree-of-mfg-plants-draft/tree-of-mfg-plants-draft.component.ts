@@ -14,6 +14,15 @@ import { NodeDetailsService } from '../../../../services/node-details.service';
 import { NodeDetails } from '../../../../models/nodeDetails.model';
 import { forkJoin } from 'rxjs';
 
+declare module 'fabric' {
+  namespace fabric {
+    interface IRectOptions {
+      id?: string;
+    }
+  }
+}
+
+
 interface ExtendedTreeNode extends TreeNode {
   xCoordinate: number;
   yCoordinate: number;
@@ -42,9 +51,13 @@ export class TreeOfMfgPlantsDraftComponent {
   @Input() node!: TreeNode;
   @Output() canvasImage: EventEmitter<string> = new EventEmitter<string>();
 
+  selectedNode!: TreeNode;
+
   nodesFlat: TreeNode[] = [];
 
   renderedNodes: ExtendedTreeNode[] = [];
+  renderedRectangles: fabric.Rect[] = [];
+  isRendered!: boolean;
 
   xCoordinate: number = 0;
   yCoordinate: number = 0;
@@ -62,9 +75,10 @@ export class TreeOfMfgPlantsDraftComponent {
 
   ngAfterViewInit() {
     this.canvas = new fabric.Canvas(this.layoutCanvas.nativeElement, {
-      width: 700,
-      height: 700,
+      width: 600,
+      height: 600,
     });
+    
 
     this.getFlatNodes(this.node);
     //this.generateLayout(this.canvas);
@@ -79,34 +93,35 @@ export class TreeOfMfgPlantsDraftComponent {
     }
   }
 
-  getKeyIdClass(): string {
-    
-    if (this.node.keyId.startsWith('F')) {
-      return 'red-border';
-    } else if (this.node.keyId.startsWith('M')) {
-      return 'blue-border';
-    } else if (this.node.keyId.startsWith('C')) {
-      return 'green-border';
-    } else if (this.node.keyId.startsWith('D')){
-      return 'yellow-border'
-    } else if (this.node.keyId.startsWith('E')){
-      return 'violet-border'
-    }else return '';
-  }
-
   generateLayout(canvas: fabric.Canvas, node?: TreeNode) {
     const colors = ['#bae1ff', '#ffb3ba',  '#baffc9', '#ffffba', '#f6e3ff'];
     //this.drawLayoutAuto(this.node, canvas, 0, 0, colors, 0);
     const scale = this.scaleNodes();
-    this.drawLayoutManual(node!, canvas,colors, 0, scale);
+    this.drawLayoutManual(node!, canvas, colors, 0, scale);
+    canvas.forEachObject(function(object) {
+      object.set({
+          selectable: false,
+          evented: false
+        });
+    });
   }
 
-  getNodeToDraft(node: TreeNode){
-    this.generateLayout(this.canvas, node);
+  getNodeToRender(node: TreeNode){
+    this.selectedNode = node;
+    this.isRendered = this.renderedNodes.some(renderedNode => renderedNode.nodeId === node.nodeId);
+  }
+
+  renderRectangle(){
+    if(this.selectedNodeRendered(this.selectedNode)){
+      this.moveRenderedNode(this.canvas, this.selectedNode.nodeId, this.xCoordinate, this.yCoordinate);
+    } else this.generateLayout(this.canvas, this.selectedNode);
+  }
+
+  selectedNodeRendered(node: TreeNode): boolean{
+    return this.renderedNodes.some(renderedNode => renderedNode.nodeId === node.nodeId);
   }
 
   drawLayoutManual(node: TreeNode, canvas: fabric.Canvas ,colors: string[], colorIndex: number, scale: number){
-    
     if(this.renderedNodes.length > 0){
 
       console.log('renderedNodes: ' + this.renderedNodes)
@@ -123,6 +138,7 @@ export class TreeOfMfgPlantsDraftComponent {
       }
       
       var rect = new fabric.Rect({
+        id: node.nodeId,
         left: realXCoordinate * scale,
         top: realYCoordinate * scale,
         width: node.width * scale,
@@ -130,8 +146,7 @@ export class TreeOfMfgPlantsDraftComponent {
         fill: this.selectedColor,
       });
 
-      console.log('child rectangle: ' + rect)
-
+      this.renderedRectangles.push(rect);
       this.renderedNodes.push(extendedNode);
 
     } else {
@@ -143,18 +158,17 @@ export class TreeOfMfgPlantsDraftComponent {
       };
 
       var rect = new fabric.Rect({
+        id: node.nodeId,
         left:  this.xCoordinate * scale,
         top: this.yCoordinate * scale,
         width: node.width * scale,
         height: node.height * scale,
         fill: this.selectedColor,
       });
-
-      console.log('main rectangle:' + rect)
-
       this.renderedNodes.push(extendedNode);
     }
 
+    
     canvas.add(rect);
     const savedDraft = this.saveCanvasAsImage('png');
     this.canvasImage.emit(savedDraft);
@@ -365,19 +379,29 @@ export class TreeOfMfgPlantsDraftComponent {
     this.canvas.renderAll(); 
   }
 
-  scaleNodes(targetSize: number = 700): number {
+  moveRenderedNode(canvas: fabric.Canvas, nodeId: string, newX: number, newY: number){
+    const renderedRect = canvas.getObjects('rect').find(obj => (obj as any).id === nodeId) as fabric.Rect;
+
+    if(renderedRect){
+      console.log('SUKCES')
+
+      renderedRect.set({ left: newX, top: newY});
+      renderedRect.setCoords();
+      const savedDraft = this.saveCanvasAsImage('jpeg');
+            this.canvasImage.emit(savedDraft);
+            this.canvas.renderAll();
+    }
+  }
+
+  scaleNodes(targetSize: number = 600): number {
     let maxNodeWidth = 0, maxNodeHeight = 0;
 
-    console.log('main node: ' + this.node)
-  
     // Find the largest node dimensions
     maxNodeWidth = this.node.width;
     maxNodeHeight = this.node.height;
-  
     
     // Determine the scaling factor based on the largest node
     const scaleFactor = Math.min(targetSize / maxNodeWidth, targetSize / maxNodeHeight);
-    console.log('scale: ' + scaleFactor);
     return scaleFactor;
   }
 

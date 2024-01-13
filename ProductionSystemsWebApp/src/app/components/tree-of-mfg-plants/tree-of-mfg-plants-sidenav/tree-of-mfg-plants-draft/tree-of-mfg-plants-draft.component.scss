@@ -1,40 +1,18 @@
-/* tree-of-mfg-plants-draft.component.css */
-.tree-node {
-  border: 3px solid #000;
-  margin: 5px;
-  padding: 5px;
-  box-sizing: border-box;
-  display: flex;
-  flex-wrap: wrap; /* Allow child nodes to wrap to the next line */
+.grey-background {
+  background-color: rgb(239, 239, 239);
 }
 
-.children-container {
-  display: flex;
-
-  flex-wrap: wrap; /* Allow child nodes to wrap to the next line */
-  gap: 5px; /* Adjust the spacing between child nodes */
+.selected-node {
+  background-color: #20B2AA;
 }
 
-.child-node {
-  margin-bottom: 5px; /* Adjust the spacing between rows of child nodes */
+.canvas {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 6px;
 }
 
-.red-border {
-  border-color: red;
-}
-
-.blue-border {
-  border-color: blue;
-}
-
-.green-border {
-  border-color: green;
-}
-
-.yellow-border {
-  border-color: yellow;
-}
-
-.violet-border {
-  border-color: violet;
+.nodes-list {
+  height: 100%;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
