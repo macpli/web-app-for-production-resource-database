@@ -62,8 +62,8 @@ export class TreeOfMfgPlantsDraftComponent {
 
   ngAfterViewInit() {
     this.canvas = new fabric.Canvas(this.layoutCanvas.nativeElement, {
-      width: this.node.width,
-      height: this.node.height,
+      width: 700,
+      height: 700,
     });
 
     this.getFlatNodes(this.node);
@@ -96,25 +96,25 @@ export class TreeOfMfgPlantsDraftComponent {
 
   generateLayout(canvas: fabric.Canvas, node?: TreeNode) {
     const colors = ['#bae1ff', '#ffb3ba',  '#baffc9', '#ffffba', '#f6e3ff'];
-
     //this.drawLayoutAuto(this.node, canvas, 0, 0, colors, 0);
-    this.drawLayoutManual(node!, canvas,colors, 0);
+    const scale = this.scaleNodes();
+    this.drawLayoutManual(node!, canvas,colors, 0, scale);
   }
 
   getNodeToDraft(node: TreeNode){
     this.generateLayout(this.canvas, node);
   }
 
-  drawLayoutManual(node: TreeNode, canvas: fabric.Canvas ,colors: string[], colorIndex: number){
+  drawLayoutManual(node: TreeNode, canvas: fabric.Canvas ,colors: string[], colorIndex: number, scale: number){
     
     if(this.renderedNodes.length > 0){
 
-      console.log(this.renderedNodes)
+      console.log('renderedNodes: ' + this.renderedNodes)
 
       var parentNode = this.renderedNodes.filter(n => n.nodeId === node.parentId);
 
-      var realXCoordinate = parentNode[0].xCoordinate + this.xCoordinate;
-      var realYCoordinate = parentNode[0].yCoordinate + this.yCoordinate;
+      var realXCoordinate = (parentNode[0].xCoordinate + this.xCoordinate) ;
+      var realYCoordinate = (parentNode[0].yCoordinate + this.yCoordinate) ;
 
       const extendedNode: ExtendedTreeNode = {
         ...node,
@@ -123,12 +123,14 @@ export class TreeOfMfgPlantsDraftComponent {
       }
       
       var rect = new fabric.Rect({
-        left: realXCoordinate,
-        top: realYCoordinate,
-        width: node.width,
-        height: node.height,
+        left: realXCoordinate * scale,
+        top: realYCoordinate * scale,
+        width: node.width * scale,
+        height: node.height * scale,
         fill: this.selectedColor,
       });
+
+      console.log('child rectangle: ' + rect)
 
       this.renderedNodes.push(extendedNode);
 
@@ -136,23 +138,24 @@ export class TreeOfMfgPlantsDraftComponent {
 
       const extendedNode: ExtendedTreeNode = {
         ...node,
-        xCoordinate: this.xCoordinate,
-        yCoordinate: this.yCoordinate
+        xCoordinate: this.xCoordinate * scale,
+        yCoordinate: this.yCoordinate * scale
       };
 
       var rect = new fabric.Rect({
-        left:  this.xCoordinate,
-        top: this.yCoordinate,
-        width: node.width,
-        height: node.height,
+        left:  this.xCoordinate * scale,
+        top: this.yCoordinate * scale,
+        width: node.width * scale,
+        height: node.height * scale,
         fill: this.selectedColor,
       });
+
+      console.log('main rectangle:' + rect)
 
       this.renderedNodes.push(extendedNode);
     }
 
     canvas.add(rect);
-    //this.drawConnections()
     const savedDraft = this.saveCanvasAsImage('png');
     this.canvasImage.emit(savedDraft);
     this.canvas.renderAll(); 
@@ -230,6 +233,7 @@ export class TreeOfMfgPlantsDraftComponent {
 
   drawConnections(){
     const cells = this.renderedNodes.filter(n => n.keyId.charAt(0) === 'C');
+    const scale = this.scaleNodes();
 
     var cellsDetails: NodeDetails[] = [];
     var inputWarehouse: NodeDetails | undefined;
@@ -251,14 +255,14 @@ export class TreeOfMfgPlantsDraftComponent {
 
         console.log(start?.xCoordinate, start?.yCoordinate);
   
-        const startPoint = {x: (-4 + start!.xCoordinate + start!.width/2), y: (-4 + start!.yCoordinate + start!.width/2 )}
-        const endPoint = {x: (-4 + end!.xCoordinate + end!.width/2), y: (-8 + end!.yCoordinate + end!.height/2) }
+        const startPoint = {x: (-4 + start!.xCoordinate + start!.width/2) * scale, y: (-4 + start!.yCoordinate + start!.width/2) * scale}
+        const endPoint = {x: (-4 + end!.xCoordinate + end!.width/2) * scale, y: (-8 + end!.yCoordinate + end!.height/2) * scale }
         var renderedDeps = this.renderedNodes.filter(n => n.keyId.charAt(0) === 'M');
 
         renderedDeps.forEach(d => {
           var depCenter: any = {
-            xCoordinate: d.width/2 + d.xCoordinate,
-            yCoordinate: d.height/2 + d.yCoordinate
+            xCoordinate: (d.width/2 + d.xCoordinate) * scale,
+            yCoordinate: (d.height/2 + d.yCoordinate) * scale
           }
           this.connectionPoints.push(depCenter);
           console.log('connection points: ' + this.connectionPoints.length);
@@ -356,10 +360,25 @@ export class TreeOfMfgPlantsDraftComponent {
         } 
       });
     }
-
     const savedDraft = this.saveCanvasAsImage('jpeg');
     this.canvasImage.emit(savedDraft);
     this.canvas.renderAll(); 
+  }
+
+  scaleNodes(targetSize: number = 700): number {
+    let maxNodeWidth = 0, maxNodeHeight = 0;
+
+    console.log('main node: ' + this.node)
+  
+    // Find the largest node dimensions
+    maxNodeWidth = this.node.width;
+    maxNodeHeight = this.node.height;
+  
+    
+    // Determine the scaling factor based on the largest node
+    const scaleFactor = Math.min(targetSize / maxNodeWidth, targetSize / maxNodeHeight);
+    console.log('scale: ' + scaleFactor);
+    return scaleFactor;
   }
 
   saveCanvasAsImage(format: string): string {
