@@ -8,6 +8,8 @@
         public string Name { get; set; }
         public int? Width { get; set; }
         public int? Height { get; set; }
+        public int? xCoordinate { get; set; }
+        public int? yCoordinate { get; set; }
         public List<TreeNodeDTO>? Children { get; set;} 
     }
 }

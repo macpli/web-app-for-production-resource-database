@@ -31,12 +31,34 @@ namespace WebApi.Services
                 Name = node.Name,
                 Width = node.Width,
                 Height = node.Height,
+                xCoordinate = node.xCoordinate,
+                yCoordinate = node.yCoordinate
             };
 
             _context.TreeOfMfgPlants.Add(nodeEntity);
             await _context.SaveChangesAsync();
 
             return nodeEntity;
+        }
+
+        //
+        // Method for updating nodes coordinates
+        //
+        public async Task<bool> UpdateNode(NodeCoordinatesUpdateDTO nodeToUpdate)
+        {
+            var existingNode = await _context.TreeOfMfgPlants.FirstOrDefaultAsync(n => n.NodeId == nodeToUpdate.NodeId);
+            if (existingNode == null)
+            {
+                return false;
+            }
+
+            existingNode.xCoordinate = nodeToUpdate.xCoordinate;
+            existingNode.yCoordinate = nodeToUpdate.yCoordinate;
+
+            _context.TreeOfMfgPlants.Update(existingNode);
+            int saveResult = await _context.SaveChangesAsync();
+
+            return saveResult > 0;
         }
 
         //
@@ -59,6 +81,14 @@ namespace WebApi.Services
                     await DeleteNode(child.NodeId);
                 }
             }
+        }
+
+        //
+        // Method for getting a single node
+        //
+        public async Task<TreeOfMfgPlants> GetSingleNode(string nodeId)
+        {
+            return await _context.TreeOfMfgPlants.FirstOrDefaultAsync(n => n.NodeId == nodeId);
         }
 
         //

@@ -20,6 +20,14 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("GetSingleNode/{nodeId}")]
+        public async Task<ActionResult<IEnumerable<TreeNodeDTO>>> GetAllFactories(string nodeId)
+        {
+            var node = await _productionSystemsRepository.GetSingleNode(nodeId);
+            return Ok(node);
+        }
+
+        [HttpGet]
         [Route("GetAllFactories")]
         public async Task<ActionResult<IEnumerable<TreeNodeDTO>>> GetAllFactories()
         {
@@ -151,11 +159,24 @@ namespace WebApi.Controllers
                 ParentId = addedNode.ParentId,
                 Name = addedNode.Name,
                 Width = addedNode.Width,
-                Height = addedNode.Height
+                Height = addedNode.Height,
             };
 
             return Ok(treeNode);
         }
+
+        [HttpPatch("UpdateNodeCoordinates")]
+        public async Task<ActionResult> UpdateNodeCoordinates([FromBody] NodeCoordinatesUpdateDTO nodeToUpdate)
+        {
+            var success = await _productionSystemsRepository.UpdateNode(nodeToUpdate);
+            if (!success)
+            {
+                return BadRequest("Failed to update the node.");
+            }
+
+            return NoContent(); 
+        }
+
 
         [HttpDelete("{nodeId}")]
         public async Task<IActionResult> DeleteNodeAndChildren(string nodeId)

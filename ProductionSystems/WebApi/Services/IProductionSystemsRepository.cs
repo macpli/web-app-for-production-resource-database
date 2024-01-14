@@ -6,6 +6,7 @@ namespace WebApi.Services
     public interface IProductionSystemsRepository
     {
         // TreeOfMfgPlants
+        Task<TreeOfMfgPlants>               GetSingleNode(string nodeId);
         Task<IEnumerable<TreeOfMfgPlants>>  GetAllFactories();
         Task<List<TreeOfMfgPlants>>         GetWorkPieces();
         Task<IEnumerable<string>>           GetAtomChildren(string nodeId);
@@ -13,7 +14,8 @@ namespace WebApi.Services
         Task<List<TreeOfMfgPlants>>         GetNodesToDraft(string nodeId);
 
         Task<TreeOfMfgPlants> AddNode(TreeNodeDTO node);
-        Task DeleteNode(string nodeId);
+        Task<bool>            UpdateNode(NodeCoordinatesUpdateDTO node);
+        Task                  DeleteNode(string nodeId);
 
         // Details
         // Getting Details

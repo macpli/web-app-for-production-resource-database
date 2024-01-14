@@ -13,6 +13,8 @@ import { fabric } from 'fabric';
 import { NodeDetailsService } from '../../../../services/node-details.service';
 import { NodeDetails } from '../../../../models/nodeDetails.model';
 import { forkJoin } from 'rxjs';
+import { NodesService } from '../../../../services/nodes.service';
+import { NodeToUpdate } from '../../../../models/nodeToUpdate';
 
 declare module 'fabric' {
   namespace fabric {
@@ -39,11 +41,12 @@ interface ConnectionPoints {
   imports: [CommonModule, MatButtonModule,MatIconModule, MatSelectModule, TreeOfMfgPlantsDraftComponent, MatListModule, FormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './tree-of-mfg-plants-draft.component.html',
   styleUrl: './tree-of-mfg-plants-draft.component.scss',
-  providers: [NodeDetailsService],
+  providers: [NodeDetailsService, NodesService],
 })
 export class TreeOfMfgPlantsDraftComponent {
 
-  constructor(private nodeDetailsService: NodeDetailsService,) {}
+  constructor(private nodeDetailsService: NodeDetailsService,
+              private nodesService: NodesService) {}
 
   @ViewChild('layoutCanvas') layoutCanvas!: ElementRef<HTMLCanvasElement>;
   private canvas!: fabric.Canvas;
@@ -146,6 +149,18 @@ export class TreeOfMfgPlantsDraftComponent {
         fill: this.selectedColor,
       });
 
+      var nodeToUpdate: NodeToUpdate = {
+        nodeId: node.nodeId,
+        xCoordinate: realXCoordinate,
+        yCoordinate: realYCoordinate,
+      }
+
+      this.nodesService.updateNodeCoordinates(nodeToUpdate).subscribe({
+        error: (err) => {
+          console.error('Error updating node coordinates:', err);
+      }
+      })
+
       this.renderedRectangles.push(rect);
       this.renderedNodes.push(extendedNode);
 
@@ -168,6 +183,17 @@ export class TreeOfMfgPlantsDraftComponent {
       this.renderedNodes.push(extendedNode);
     }
 
+    var nodeToUpdate: NodeToUpdate = {
+      nodeId: node.nodeId,
+      xCoordinate: this.xCoordinate,
+      yCoordinate: this.yCoordinate,
+    }
+
+    this.nodesService.updateNodeCoordinates(nodeToUpdate).subscribe({
+      error: (err) => {
+        console.error('Error updating node coordinates:', err);
+    }
+    })
     
     canvas.add(rect);
     const savedDraft = this.saveCanvasAsImage('png');
@@ -383,10 +409,22 @@ export class TreeOfMfgPlantsDraftComponent {
     const renderedRect = canvas.getObjects('rect').find(obj => (obj as any).id === nodeId) as fabric.Rect;
 
     if(renderedRect){
-      console.log('SUKCES')
-
       renderedRect.set({ left: newX, top: newY});
       renderedRect.setCoords();
+
+      var nodeToUpdate: NodeToUpdate = {
+        nodeId: nodeId,
+        xCoordinate: newX,
+        yCoordinate: newY,
+      }
+
+      this.nodesService.updateNodeCoordinates(nodeToUpdate).subscribe({
+        error: (err) => {
+          console.error('Error updating node coordinates:', err);
+      }
+      })
+      
+
       const savedDraft = this.saveCanvasAsImage('jpeg');
             this.canvasImage.emit(savedDraft);
             this.canvas.renderAll();

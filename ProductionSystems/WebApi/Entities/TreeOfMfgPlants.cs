@@ -36,6 +36,12 @@ namespace WebApi.Entities
         [Column("Height")]
         public int? Height { get; set; }
 
+        [Column("xCoordinate")]
+        public int? xCoordinate { get; set; }
+
+        [Column("yCoordinate")]
+        public int? yCoordinate { get; set; }
+
         [NotMapped]
         public List<TreeOfMfgPlants> Children { get; set; } = new List<TreeOfMfgPlants>();
     }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TreeNode } from '../models/treeNode.model';
+import { NodeToUpdate } from '../models/nodeToUpdate'
 
 @Injectable({
   providedIn: 'any'
@@ -29,6 +30,10 @@ export class NodesService {
 
   addNode(node: TreeNode): Observable<TreeNode> {
     return this.http.post<TreeNode>(this.baseApiUrl + '/api/TreeOfMfgPlants/AddNode', node);
+  }
+
+  updateNodeCoordinates(nodeToUpdate: NodeToUpdate): Observable<NodeToUpdate> {
+    return this.http.patch<NodeToUpdate>(this.baseApiUrl + '/api/TreeOfMfgPlants/UpdateNodeCoordinates', nodeToUpdate)
   }
 
   deleteNode(nodeId: string): Observable<string> {
