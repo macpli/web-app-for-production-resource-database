@@ -25,6 +25,7 @@
                 <span *ngIf="this.isRendered">Zmień</span>
                 <span *ngIf="!this.isRendered">Dodaj</span>
               </button>
+              <button mat-raised-button (click)="drawFromSaved(this.selectedNode)" style="margin-top: 15px;">Rysuj z zapisanych</button>
               <button mat-raised-button (click)="drawConnections()" style="margin-top: 15px;">Ścieżki</button>
         </div>
     

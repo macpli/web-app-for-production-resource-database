@@ -74,6 +74,8 @@ export class TreeOfMfgPlantsDraftComponent {
   ];
   selectedColor = '#bae1ff';
 
+  scale!: number;
+
   connectionPoints: ConnectionPoints[] = [];
 
   ngAfterViewInit() {
@@ -82,9 +84,9 @@ export class TreeOfMfgPlantsDraftComponent {
       height: 600,
     });
     
+    this.scale = this.scaleNodes();
 
     this.getFlatNodes(this.node);
-    //this.generateLayout(this.canvas);
   }
 
   getFlatNodes( node: TreeNode ){
@@ -99,8 +101,10 @@ export class TreeOfMfgPlantsDraftComponent {
   generateLayout(canvas: fabric.Canvas, node?: TreeNode) {
     const colors = ['#bae1ff', '#ffb3ba',  '#baffc9', '#ffffba', '#f6e3ff'];
     //this.drawLayoutAuto(this.node, canvas, 0, 0, colors, 0);
-    const scale = this.scaleNodes();
-    this.drawLayoutManual(node!, canvas, colors, 0, scale);
+    this.scale = this.scaleNodes();
+
+    this.drawLayoutManual(node!, canvas, colors, 0, this.scale);
+    
     canvas.forEachObject(function(object) {
       object.set({
           selectable: false,
@@ -115,13 +119,48 @@ export class TreeOfMfgPlantsDraftComponent {
   }
 
   renderRectangle(){
+    var test = this.renderedRectangles.find(n => n.id === this.selectedNode.nodeId);
+
     if(this.selectedNodeRendered(this.selectedNode)){
+
       this.moveRenderedNode(this.canvas, this.selectedNode.nodeId, this.xCoordinate, this.yCoordinate);
-    } else this.generateLayout(this.canvas, this.selectedNode);
+    } else this.generateLayout(this.canvas, this.selectedNode)
   }
 
   selectedNodeRendered(node: TreeNode): boolean{
-    return this.renderedNodes.some(renderedNode => renderedNode.nodeId === node.nodeId);
+    if(this.renderedNodes.some(renderedNode => renderedNode.nodeId === node.nodeId) || this.renderedRectangles.find(n => n.id === node.nodeId)){
+      return true;
+    } else return false
+  }
+
+  drawFromSaved(node: TreeNode){
+    this.drawNodeAndChildren(node);
+      
+    const savedDraft = this.saveCanvasAsImage('png');
+    this.canvasImage.emit(savedDraft);
+    this.canvas.renderAll(); 
+    
+  }
+
+  drawNodeAndChildren(node: TreeNode) {
+    const fillColor = this.getColorByKeyId(node.keyId);
+    // Draw the node
+    var rect = new fabric.Rect({
+      id: node.nodeId,
+      left: node.xCoordinate as number * this.scale,
+      top: node.yCoordinate as number * this.scale,
+      width: node.width * this.scale,
+      height: node.height * this.scale,
+      fill: fillColor || '#f6e3ff', 
+    });
+  
+    this.canvas.add(rect);
+    this.renderedRectangles.push(rect);
+
+    // Recursively draw children
+    node.children?.forEach(childNode => {
+      this.drawNodeAndChildren(childNode);
+    });
   }
 
   drawLayoutManual(node: TreeNode, canvas: fabric.Canvas ,colors: string[], colorIndex: number, scale: number){
@@ -423,11 +462,21 @@ export class TreeOfMfgPlantsDraftComponent {
           console.error('Error updating node coordinates:', err);
       }
       })
-      
 
       const savedDraft = this.saveCanvasAsImage('jpeg');
-            this.canvasImage.emit(savedDraft);
-            this.canvas.renderAll();
+      this.canvasImage.emit(savedDraft);
+      this.canvas.renderAll();
+    }
+  }
+
+  getColorByKeyId(keyId: string): string {
+    switch (keyId.charAt(0)) {
+      case 'F': return this.colors[0].value;
+      case 'M': return this.colors[1].value;
+      case 'C': return this.colors[2].value; 
+      case 'D': return this.colors[3].value;
+      case 'E': return this.colors[4].value;
+      default: return '#FFFFFF'; 
     }
   }
 

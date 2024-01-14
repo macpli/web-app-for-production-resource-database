@@ -125,7 +125,7 @@ namespace WebApi.Services
                     // Break the loop if the current child's KeyId starts with 'E'
                     break;
                 }
-                // Fetch width and height values from the database for the child
+                
                 var childFromDatabase = await _context.TreeOfMfgPlants
                     .Where(n => n.NodeId == child.NodeId)
                     .FirstOrDefaultAsync();

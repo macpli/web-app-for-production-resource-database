@@ -62,6 +62,8 @@ namespace WebApi.Controllers
                     Name = node.Name,
                     Width = node.Width,
                     Height = node.Height,
+                    xCoordinate = node.xCoordinate,
+                    yCoordinate = node.yCoordinate,
                     Children = ConvertToTreeNode(node.Children),
                     
                 };
@@ -88,6 +90,8 @@ namespace WebApi.Controllers
                     Name = node.Name,
                     Width = node.Width,
                     Height = node.Height,
+                    xCoordinate = node.xCoordinate,
+                    yCoordinate = node.yCoordinate,
                     Children = ConvertToTreeNode(node.Children),
                 };
 
@@ -133,7 +137,9 @@ namespace WebApi.Controllers
                     Name = node.Name,
                     Children = ConvertToTreeNode(node.Children),
                     Width = node.Width,
-                    Height = node.Height
+                    Height = node.Height,
+                    xCoordinate = node.xCoordinate,
+                    yCoordinate = node.yCoordinate
                 };
 
                 result.Add(treeNode);

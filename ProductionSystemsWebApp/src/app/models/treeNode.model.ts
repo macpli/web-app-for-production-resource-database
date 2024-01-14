@@ -8,4 +8,6 @@ export interface TreeNode {
   children?: TreeNode[];
   width: number;
   height: number;
+  xCoordinate?: number;
+  yCoordinate?: number;
 }
