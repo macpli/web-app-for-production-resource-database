@@ -87,6 +87,11 @@ export class TreeOfMfgPlantsDraftComponent {
     this.scale = this.scaleNodes();
 
     this.getFlatNodes(this.node);
+
+    if(this.node){
+      this.selectedNode = this.node;
+      this.drawFromSaved(this.selectedNode);
+    }
   }
 
   getFlatNodes( node: TreeNode ){
@@ -122,13 +127,13 @@ export class TreeOfMfgPlantsDraftComponent {
     var test = this.renderedRectangles.find(n => n.id === this.selectedNode.nodeId);
 
     if(this.selectedNodeRendered(this.selectedNode)){
-
       this.moveRenderedNode(this.canvas, this.selectedNode.nodeId, this.xCoordinate, this.yCoordinate);
     } else this.generateLayout(this.canvas, this.selectedNode)
   }
 
   selectedNodeRendered(node: TreeNode): boolean{
     if(this.renderedNodes.some(renderedNode => renderedNode.nodeId === node.nodeId) || this.renderedRectangles.find(n => n.id === node.nodeId)){
+      
       return true;
     } else return false
   }
@@ -147,8 +152,8 @@ export class TreeOfMfgPlantsDraftComponent {
     // Draw the node
     var rect = new fabric.Rect({
       id: node.nodeId,
-      left: node.xCoordinate as number * this.scale,
-      top: node.yCoordinate as number * this.scale,
+      left: (node.xCoordinate as number - this.selectedNode.xCoordinate!) * this.scale,
+      top: (node.yCoordinate as number - this.selectedNode.yCoordinate!) * this.scale,
       width: node.width * this.scale,
       height: node.height * this.scale,
       fill: fillColor || '#f6e3ff', 
@@ -156,6 +161,7 @@ export class TreeOfMfgPlantsDraftComponent {
   
     this.canvas.add(rect);
     this.renderedRectangles.push(rect);
+    this.renderedNodes.push(node as ExtendedTreeNode);
 
     // Recursively draw children
     node.children?.forEach(childNode => {
@@ -165,9 +171,6 @@ export class TreeOfMfgPlantsDraftComponent {
 
   drawLayoutManual(node: TreeNode, canvas: fabric.Canvas ,colors: string[], colorIndex: number, scale: number){
     if(this.renderedNodes.length > 0){
-
-      console.log('renderedNodes: ' + this.renderedNodes)
-
       var parentNode = this.renderedNodes.filter(n => n.nodeId === node.parentId);
 
       var realXCoordinate = (parentNode[0].xCoordinate + this.xCoordinate) ;
@@ -204,7 +207,7 @@ export class TreeOfMfgPlantsDraftComponent {
       this.renderedNodes.push(extendedNode);
 
     } else {
-
+      
       const extendedNode: ExtendedTreeNode = {
         ...node,
         xCoordinate: this.xCoordinate * scale,
@@ -447,14 +450,24 @@ export class TreeOfMfgPlantsDraftComponent {
   moveRenderedNode(canvas: fabric.Canvas, nodeId: string, newX: number, newY: number){
     const renderedRect = canvas.getObjects('rect').find(obj => (obj as any).id === nodeId) as fabric.Rect;
 
-    if(renderedRect){
-      renderedRect.set({ left: newX, top: newY});
+    const node = this.renderedNodes.find(n => n.nodeId == nodeId);
+    const parentNode = this.renderedNodes.find(n => n.nodeId === node?.parentId);
+
+    if(renderedRect && parentNode){
+
+     node!.xCoordinate = (parentNode.xCoordinate + newX) * this.scale;
+      node!.yCoordinate = (parentNode.yCoordinate + newY) *  this.scale;
+
+      renderedRect.set({ left: (parentNode.xCoordinate + newX) * this.scale, top: (parentNode.yCoordinate + newY) *  this.scale});
       renderedRect.setCoords();
+      const savedDraft = this.saveCanvasAsImage('jpeg');
+      this.canvasImage.emit(savedDraft);
+      this.canvas.renderAll();
 
       var nodeToUpdate: NodeToUpdate = {
         nodeId: nodeId,
-        xCoordinate: newX,
-        yCoordinate: newY,
+        xCoordinate: parentNode.xCoordinate + newX,
+        yCoordinate: parentNode.yCoordinate + newY,
       }
 
       this.nodesService.updateNodeCoordinates(nodeToUpdate).subscribe({
@@ -463,9 +476,7 @@ export class TreeOfMfgPlantsDraftComponent {
       }
       })
 
-      const savedDraft = this.saveCanvasAsImage('jpeg');
-      this.canvasImage.emit(savedDraft);
-      this.canvas.renderAll();
+      
     }
   }
 
