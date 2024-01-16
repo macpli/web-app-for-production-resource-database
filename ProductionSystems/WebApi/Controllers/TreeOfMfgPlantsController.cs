@@ -101,27 +101,49 @@ namespace WebApi.Controllers
             return Ok(results);
         }
 
-        [HttpGet("GetWorkpieces")]
-        public async Task<IActionResult> GetWorkPieces()
+        [HttpGet("GetDevices")]
+        public async Task<IActionResult> GetDevices()
         {
-            var nodes = await _productionSystemsRepository.GetWorkPieces();
+            var nodes = await _productionSystemsRepository.GetDevices();
 
-            var results = new List<TreeNodeDTO>();
+            var results = new List<DeviceDTO>();
             foreach (var node in nodes)
             {
-                var treeNode = new TreeNodeDTO
+                var device = new DeviceDTO
                 {
-                    NodeId = node.NodeId,
-                    KeyId = node.KeyId,
-                    ParentId = node.ParentId,
+                    ID = node.ID,
                     Name = node.Name,
-                    Children = ConvertToTreeNode(node.Children)
+                    Width= node.Width,
+                    Height= node.Height,
+                    Type = node.Type,
                 };
 
-                results.Add(treeNode);
+                results.Add(device);
             }
 
             return Ok(results);
+        }
+
+        [HttpPost("AddDevice")]
+        public async Task<ActionResult<DeviceDTO>> AddDevice([FromBody] DeviceDTO newDevice)
+        {
+            var addedDevice = await _productionSystemsRepository.AddDevice(newDevice);
+
+            if (addedDevice == null)
+            {
+                return BadRequest("Failed to add the node.");
+            }
+
+            var device = new DeviceDTO
+            {
+                ID = addedDevice.ID,
+                Name= addedDevice.Name,
+                Width= addedDevice.Width,
+                Height= addedDevice.Height,
+                Type = addedDevice.Type,
+            };
+
+            return Ok(device);
         }
 
         private List<TreeNodeDTO> ConvertToTreeNode(List<TreeOfMfgPlants> nodes)

@@ -8,7 +8,6 @@ namespace WebApi.Services
         // TreeOfMfgPlants
         Task<TreeOfMfgPlants>               GetSingleNode(string nodeId);
         Task<IEnumerable<TreeOfMfgPlants>>  GetAllFactories();
-        Task<List<TreeOfMfgPlants>>         GetWorkPieces();
         Task<IEnumerable<string>>           GetAtomChildren(string nodeId);
         Task<List<TreeOfMfgPlants>>         GetChildrenForNode(string nodeId);
         Task<List<TreeOfMfgPlants>>         GetNodesToDraft(string nodeId);
@@ -16,6 +15,10 @@ namespace WebApi.Services
         Task<TreeOfMfgPlants> AddNode(TreeNodeDTO node);
         Task<bool>            UpdateNode(NodeCoordinatesUpdateDTO node);
         Task                  DeleteNode(string nodeId);
+
+        // Devices
+        Task<List<Device>> GetDevices();
+        Task<Device> AddDevice(DeviceDTO device);
 
         // Details
         // Getting Details

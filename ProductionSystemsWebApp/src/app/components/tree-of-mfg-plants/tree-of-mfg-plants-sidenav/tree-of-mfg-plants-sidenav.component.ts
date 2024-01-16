@@ -18,13 +18,17 @@ import { TreePainterDirective } from '../../../directives/painter.directive';
 import { NodeDetails } from '../../../models/nodeDetails.model';
 import { CreatorDialogComponent } from '../shared/dialogs/creator-dialog/creator-dialog.component';
 import { DeviceCreatorDialogComponent } from '../shared/dialogs/device-creator-dialog/device-creator-dialog.component';
+import { Device } from '../../../models/device.model';
+import {MatListModule} from '@angular/material/list';
 
 @Component({
     selector: 'tree-of-mfg-plants-sidenav',
     standalone: true,
     templateUrl: './tree-of-mfg-plants-sidenav.component.html',
     styleUrl: './tree-of-mfg-plants-sidenav.component.scss',
-    imports: [CommonModule, MatCardModule, MatSidenavModule, MatTreeModule, MatButtonModule, MatIconModule, MatTabsModule, TreeOfMfgPlantsDraftComponent, TreePainterDirective],
+    imports: [CommonModule, MatCardModule, MatSidenavModule, MatTreeModule, 
+      MatButtonModule, MatIconModule, MatTabsModule, TreeOfMfgPlantsDraftComponent, 
+      TreePainterDirective, MatListModule],
     
 })
 export class TreeOfMfgPlantsSidenavComponent {
@@ -39,7 +43,7 @@ export class TreeOfMfgPlantsSidenavComponent {
   public factories!: TreeNode[];
   treeControl = new NestedTreeControl<TreeNode>(node => node.children);
   factoriesData = new MatTreeNestedDataSource<TreeNode>();
-  workPiecesData = new MatTreeNestedDataSource<TreeNode>();
+  devicesData: Device[] = [];
   isLoading: boolean = true;
   hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
 
@@ -61,7 +65,7 @@ export class TreeOfMfgPlantsSidenavComponent {
 
   refresh(){
     this.getAllNodes();
-    this.getWorkPieces();
+    this.getDevices();
   }
 
   getFactoryToDraft(nodeId: string){
@@ -84,11 +88,11 @@ export class TreeOfMfgPlantsSidenavComponent {
     })
   }
 
-  getWorkPieces(){
-    this.nodesService.getWorkPieces()
+  getDevices(){
+    this.nodesService.getDevices()
     .subscribe({
       next: (result) => {
-        this.workPiecesData.data = result;
+        this.devicesData = result;
       }
     })
   }
@@ -102,6 +106,7 @@ export class TreeOfMfgPlantsSidenavComponent {
       E: 'precision_manufacturing',
       M: 'factory',
       C: 'warehouse', //conveyor_belt
+      default: ''
     };
 
     return iconClasses[startingLetter] || iconClasses.default;

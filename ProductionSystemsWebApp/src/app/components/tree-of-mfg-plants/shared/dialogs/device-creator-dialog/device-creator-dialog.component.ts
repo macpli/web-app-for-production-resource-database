@@ -22,6 +22,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
 import { NodeDetails } from '../../../../../models/nodeDetails.model';
 import { NodeDetailsService } from '../../../../../services/node-details.service';
+import { Device } from '../../../../../models/device.model';
 
 @Component({
   selector: 'app-device-creator-dialog',
@@ -42,8 +43,50 @@ import { NodeDetailsService } from '../../../../../services/node-details.service
     MatListModule,
     MatSelectModule,
   ],
-  templateUrl: './device-creator-dialog.component.html'
+  templateUrl: './device-creator-dialog.component.html',
+  providers: [NodesService],
 })
 export class DeviceCreatorDialogComponent {
+
+  constructor(
+    private _formBuilder: FormBuilder,
+    private nodesService: NodesService,
+  ) {}
+
+  name!: string;
+  width!: number;
+  height!: number;
+  type!: string;
+
+  devicesControlGroup = this._formBuilder.group({
+    name: ['', Validators.required],
+    width: [2, Validators.required],
+    height: [2, Validators.required],
+    type: ['', Validators.required]
+  });
+
+  //deviceToAdd: Device;
+
+  save(){
+    console.log('test')
+    if (this.devicesControlGroup && this.devicesControlGroup.valid) {
+
+      var deviceToAdd: Device = {
+        id: 'ee123',
+        name: this.devicesControlGroup.get('name')!.value ?? '',
+        width: this.devicesControlGroup.get('width')!.value ?? 0,
+        height: this.devicesControlGroup.get('height')!.value ?? 0,
+        type: this.devicesControlGroup.get('type')!.value?? ''
+      };
+
+      this.nodesService.addDevice(deviceToAdd).subscribe({
+        next: (result) => {
+          console.log(result)
+        }
+      })
+
+      console.log(deviceToAdd)
+    }
+  }
 
 }

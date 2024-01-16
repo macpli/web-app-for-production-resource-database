@@ -107,7 +107,6 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
     this.nodesService.getNodesToDraft(nodeId).subscribe({
       next: (result) => {
         this.nodeToDraw = result;
-        console.log(result)
       }
     })
   }

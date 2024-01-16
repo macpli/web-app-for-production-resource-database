@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TreeNode } from '../models/treeNode.model';
 import { NodeToUpdate } from '../models/nodeToUpdate'
+import { Device } from '../models/device.model';
 
 @Injectable({
   providedIn: 'any'
@@ -40,7 +41,11 @@ export class NodesService {
     return this.http.delete<string>(this.baseApiUrl+ '/api/TreeOfMfgPlants/' + nodeId);
   }
 
-  getWorkPieces(): Observable<TreeNode[]> {
-    return this.http.get<TreeNode[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetWorkpieces');
+  addDevice(device: Device): Observable<Device> {
+    return this.http.post<Device>(this.baseApiUrl + '/api/TreeOfMfgPlants/AddDevice', device);
+  }
+
+  getDevices(): Observable<Device[]> {
+    return this.http.get<Device[]>(this.baseApiUrl + '/api/TreeOfMfgPlants/GetDevices');
   }
 }

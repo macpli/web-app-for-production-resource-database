@@ -24,15 +24,15 @@
                         <button class="edit-buttons" mat-raised-button [hidden]="!this.editMode" (click)="deleteNode(this.nodeId)">Usuń element</button>
                     </mat-card-actions>
                     <mat-card-content>
-                        <div class="input-fields">
+                        <div class="input-fields" *ngIf="this.nodeToDraw">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Szerokość</mat-label>
-                                <input [disabled]="!this.editMode" matInput  value="{{this.nodeToDraw[0].width}}">
+                                <input [disabled]="this.editMode" matInput  value="{{this.nodeToDraw[0].width}}">
                             </mat-form-field>
 
                             <mat-form-field class="example-full-width">
                                 <mat-label>Długość</mat-label>
-                                <input [disabled]="!this.editMode" matInput  value="{{this.nodeToDraw[0].height}}">
+                                <input [disabled]="this.editMode" matInput  value="{{this.nodeToDraw[0].height}}">
                             </mat-form-field>
 
                             <mat-form-field class="example-full-width">
@@ -42,27 +42,27 @@
 
                             <mat-form-field *ngIf="this.keyId.charAt(0) == 'F'" class="example-full-width">
                                 <mat-label>ID Organizacji</mat-label>
-                                <input [disabled]="!this.editMode" matInput placeholder="ORG001" value="{{this.idOrg}}">
+                                <input [disabled]="this.editMode" matInput placeholder="ORG001" value="{{this.idOrg}}">
                             </mat-form-field>
 
                             <mat-form-field *ngIf="this.keyId.charAt(0) == 'F'" class="example-full-width">
                                 <mat-label>Lokalizacja</mat-label>
-                                <input [disabled]="!this.editMode" matInput placeholder="Miasto" value="{{this.location}}">
+                                <input [disabled]="this.editMode" matInput placeholder="Miasto" value="{{this.location}}">
                             </mat-form-field>
 
                             <mat-form-field *ngIf="this.keyId.charAt(0) == 'M'" class="example-full-width">
                                 <mat-label>Kierownik</mat-label>
-                                <input [disabled]="!this.editMode" matInput value="{{this.manager}}">
+                                <input [disabled]="this.editMode" matInput value="{{this.manager}}">
                             </mat-form-field>
 
                             <mat-form-field *ngIf="this.keyId.charAt(0) == 'C'" class="example-full-width">
                                 <mat-label>Nadzorca</mat-label>
-                                <input [disabled]="!this.editMode" matInput value="{{this.supervisor}}">
+                                <input [disabled]="this.editMode" matInput value="{{this.supervisor}}">
                             </mat-form-field>
 
                             <mat-form-field *ngIf="this.keyId.charAt(0) == 'C'" class="example-full-width">
                                 <mat-label>Typ komórki</mat-label>
-                                <mat-select [disabled]="!this.editMode" [(ngModel)] ="this.nodeType" name="type">
+                                <mat-select [disabled]="this.editMode" [(ngModel)] ="this.nodeType" name="type">
                                     @for (type of cellTypes; track type) {
                                       <mat-option [value]="type.value">{{type.label}}</mat-option>
                                     }

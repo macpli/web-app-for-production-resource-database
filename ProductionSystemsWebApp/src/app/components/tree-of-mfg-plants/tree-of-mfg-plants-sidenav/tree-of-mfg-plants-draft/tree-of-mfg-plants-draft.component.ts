@@ -327,18 +327,19 @@ export class TreeOfMfgPlantsDraftComponent {
       forkJoin(observables).subscribe(results => {
         // results is an array of all responses
         cellsDetails = results;
-        console.log(cellsDetails);
         
         inputWarehouse  = cellsDetails.find(c => c.warehouseType === 1);
         outputWarehouse = cellsDetails.find(c => c.warehouseType === 2);
 
         var start = cells.find(c => c.nodeId === inputWarehouse?.nodeId);
         var end   = cells.find(c => c.nodeId === outputWarehouse?.nodeId);
-
-        console.log(start?.xCoordinate, start?.yCoordinate);
   
-        const startPoint = {x: (-4 + start!.xCoordinate + start!.width/2) * scale, y: (-4 + start!.yCoordinate + start!.width/2) * scale}
-        const endPoint = {x: (-4 + end!.xCoordinate + end!.width/2) * scale, y: (-8 + end!.yCoordinate + end!.height/2) * scale }
+        const startPoint = {x: (start!.xCoordinate + start!.width/2) * scale, 
+          y: (start!.yCoordinate + start!.height/2) * scale}
+
+        const endPoint = {x: (end!.xCoordinate + end!.width/2) * scale, 
+          y: (end!.yCoordinate + end!.height/2) * scale }
+
         var renderedDeps = this.renderedNodes.filter(n => n.keyId.charAt(0) === 'M');
 
         renderedDeps.forEach(d => {

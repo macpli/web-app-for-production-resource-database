@@ -1,21 +1,46 @@
 <mat-stepper>
-    <mat-step label="Start">
+  <mat-step label="Start">
+    <div style="display: flex; flex-direction: column;">
+      <form [formGroup]="devicesControlGroup" style="display: flex; flex-direction: column;">  
         <mat-form-field>
-            <mat-label>Rodzaj urządzenia</mat-label>
-            <mat-select formControlName="celType" required>
-              <mat-option value="Machining">Obróbcze</mat-option>
-              <mat-option value="Transport">Transportowe</mat-option>
-              <mat-option value="Storage">Magazynowe</mat-option>
-              <mat-option value="Measurement">Pomiarowe</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <mat-label >Nazwa</mat-label>
+          <input matInput formControlName="name" required>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label >Szerokość</mat-label>
+          <input matInput formControlName="width" required>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label >Długość</mat-label>
+          <input matInput formControlName="height" required>
+        </mat-form-field>
 
-          <div style="margin-top: 25px;">
-            <button mat-raised-button matStepperNext >Dalej</button>
-          </div>
-    </mat-step>
+        <mat-form-field>
+          <mat-label>Rodzaj urządzenia</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option value="Machining">Obróbcze</mat-option>
+            <mat-option value="Transport">Transportowe</mat-option>
+            <mat-option value="Storage">Magazynowe</mat-option>
+            <mat-option value="Measurement">Pomiarowe</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+      
+    <div style="margin-top: 25px;">
+      <button mat-raised-button matStepperNext >Dalej</button>
+    </div>
+  </mat-step>
+  <mat-step label="Zapisz">
+    <div style="margin-bottom: 25px;">
+      Czy chcesz dodać to urządzenie?
+    </div>
 
-    <mat-step label="Zapisz">
-
-    </mat-step>
+    <div>
+      <button mat-raised-button matStepperPrevious style="margin-right: 15px;">Wstecz</button>
+      <button mat-raised-button (click)="save()">Zapisz</button>
+    </div>
+  </mat-step>
 </mat-stepper>

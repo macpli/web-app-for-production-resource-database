@@ -22,6 +22,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatSelectModule} from '@angular/material/select';
 import { NodeDetails } from '../../../../../models/nodeDetails.model';
 import { NodeDetailsService } from '../../../../../services/node-details.service';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'creator-dialog',
@@ -41,12 +42,14 @@ import { NodeDetailsService } from '../../../../../services/node-details.service
     HttpClientModule,
     MatListModule,
     MatSelectModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './creator-dialog.component.html',
   styles: ['.mat-stepper-horizontal { margin-top: 8px; } ',
            '.mat-mdc-form-field { margin-top: 16px; } ',
            '.mat-mdc-form-field { margin-right: 8px!important; }',
-           '.selected-department { font-weight: bold; background: #20B2AA; color: white; border-radius: 6px; }'
+           '.selected-department { font-weight: bold; background: #20B2AA; color: white; border-radius: 6px; }',
+           
   ],
   providers: [NodesService, NodeDetailsService],
 })
@@ -72,6 +75,9 @@ export class CreatorDialogComponent {
   manager: string = '';
   warehouseType: number = 0;
   supervisor: string = '';
+
+  selectFromList: boolean = true;
+  devices: any [] = [];
 
   selectedDepartment: any = { nodeId: '', keyId: '' }
   selectedCell: any = { nodeId: '', keyId: '' }
@@ -141,6 +147,14 @@ export class CreatorDialogComponent {
     width: [100, Validators.required],
     height: [100, Validators.required],
   });
+
+  ngOnInit() {
+    this.nodesService.getDevices().subscribe({
+      next: (result) => {
+        this.devices = result;
+      }
+    })
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

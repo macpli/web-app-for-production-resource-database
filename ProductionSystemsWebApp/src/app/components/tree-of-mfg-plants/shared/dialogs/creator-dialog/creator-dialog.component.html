@@ -288,26 +288,36 @@
       </div>
     </div>
 
-    <div [hidden]="this.selectedStation.keyId == ''"> 
+    <div [hidden]="this.selectedStation.keyId !== ''"> 
+      <mat-slide-toggle color="primary" [(ngModel)]="selectFromList">Wybierz z listy</mat-slide-toggle>
       <form [formGroup]="fifthFormGroup" style="display: flex; flex-direction: column;">
-        <mat-form-field>
-          <mat-label >Nazwa</mat-label>
-          <input matInput formControlName="name" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
-        </mat-form-field>
-    
-        <mat-form-field>
-          <mat-label >Opis</mat-label>
-          <input matInput formControlName="description" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
-        </mat-form-field>
-    
-        <mat-form-field>
-          <mat-label >Długość</mat-label>
-          <input matInput formControlName="width" required  (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
-        </mat-form-field>
-    
-        <mat-form-field>
-          <mat-label >Szerokość</mat-label>
-          <input matInput formControlName="height" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+        <div *ngIf="!this.selectFromList" style="display: flex; flex-direction: column;">
+          <mat-form-field>
+            <mat-label >Nazwa</mat-label>
+            <input matInput formControlName="name" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+          </mat-form-field>
+      
+          <mat-form-field>
+            <mat-label >Opis</mat-label>
+            <input matInput formControlName="description" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+          </mat-form-field>
+      
+          <mat-form-field>
+            <mat-label >Długość</mat-label>
+            <input matInput formControlName="width" required  (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+          </mat-form-field>
+      
+          <mat-form-field>
+            <mat-label >Szerokość</mat-label>
+            <input matInput formControlName="height" required (keyup)="validateInput(data.nodeType, name, description, height, width, idOrg, celType, wstType)">
+          </mat-form-field>
+        </div>  
+
+        <mat-form-field *ngIf="this.selectFromList">
+          <mat-label>Wybierz urządzenie z listy</mat-label>
+          <mat-select required>
+            <mat-option *ngFor="let device of this.devices" [value]="device.name">{{device.name}}</mat-option>
+          </mat-select>
         </mat-form-field>
 
         <button mat-raised-button (click)="addDevice(this.selectedStation.nodeId, this.selectedStation.keyId)">Dodaj</button>

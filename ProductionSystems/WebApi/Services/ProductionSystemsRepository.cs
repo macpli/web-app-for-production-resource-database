@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Xml.Linq;
 using WebApi.Entities;
 using WebApi.Models;
 
@@ -155,21 +156,31 @@ namespace WebApi.Services
         }
 
         //
-        // Method for getting workpieces
+        // Method for getting devices
         //
-        public async Task<List<TreeOfMfgPlants>> GetWorkPieces()
+        public async Task<List<Device>> GetDevices()
         {
-            var children = await _context.TreeOfMfgPlants.Where(n => n.KeyId.StartsWith("E")).ToListAsync();
+            return await _context.Devices.ToListAsync();
+        }
 
-            List<TreeOfMfgPlants> result = new List<TreeOfMfgPlants>();
-
-            foreach (var startingNode in children)
+        //
+        // Method for adding devices
+        //
+        public async Task<Device> AddDevice(DeviceDTO device)
+        {
+            var deviceEntity = new Device
             {
-                startingNode.Children = await GetChildrenForNode(startingNode.NodeId);
-                result.Add(startingNode);
-            }
+                ID = device.ID,
+                Name = device.Name,
+                Width = device.Width,
+                Height = device.Height,
+                Type = device.Type,
+            };
 
-            return result;
+            _context.Devices.Add(deviceEntity);
+            await _context.SaveChangesAsync();
+
+            return deviceEntity;
         }
 
         //

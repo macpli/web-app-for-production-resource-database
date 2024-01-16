@@ -18,6 +18,9 @@ namespace WebApi.Models
         public DbSet<DepartmentDetails> DepartmentDetails { get; set; }        
         public DbSet<CellDetails> CellDetails { get; set; }
         public DbSet<WorkstationDetails> WorkstationDetails { get; set; }
+
+        // Devices
+        public DbSet<Device> Devices {  get; set; }
         
 
         public ProductionSystemContext(DbContextOptions<ProductionSystemContext> options)
