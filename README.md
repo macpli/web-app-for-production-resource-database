@@ -2,13 +2,13 @@
 
 ## A lightweight tool for prototyping production systems strucutures
 
-## Overview
+### Overview
 
 The Production System Designer is a tool developed as a practical component for my engineering thesis. This application serves as a simple solution for designing and visualizing production systems. Whether you are a student working on an engineering thesis or a professional involved in production system design, this app simplifies the process and enhances your ability to quickly prototype efficient and well-organized production systems.
 
 ## Features
 
-### 1. Design Production System Structures
+### 1. Designing Production System Structures
 
 Easily create a tree list representation of your production system. Organize and structure components and devices to get a clear overview of the entire system hierarchy.
 
