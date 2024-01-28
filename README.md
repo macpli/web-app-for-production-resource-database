@@ -1,12 +1,14 @@
 # Production System Designer
 
+## A lightweight tool for prototyping production systems strucutures
+
 ## Overview
 
 The Production System Designer is a tool developed as a practical component for my engineering thesis. This application serves as a simple solution for designing and visualizing production systems. Whether you are a student working on an engineering thesis or a professional involved in production system design, this app simplifies the process and enhances your ability to quickly prototype efficient and well-organized production systems.
 
 ## Features
 
-### 1. Tree List Creation
+### 1. Design Production System Structures
 
 Easily create a tree list representation of your production system. Organize and structure components and devices to get a clear overview of the entire system hierarchy.
 
@@ -16,10 +18,11 @@ Utilize the intuitive layout drawing feature to design the physical arrangement 
 
 ### 3. Report Generation
 
-Generate summary reports for your designed production systems in PDF or TXT format. These reports provide valuable insights into the structure, layout, and key components of the system, aiding in documentation and analysis.
+Generate summary reports for your designed production systems in PDF format. These reports provide valuable insights into the structure, layout, and key components of the system, aiding in documentation and analysis.
 
 ## Getting Started
 
+In current state, the application is only able tu run locally and requires You to set it up by yourself.
 To get started with the Production System Designer, follow these steps:
 
 1. **Clone the Repository:**
@@ -49,6 +52,9 @@ To get started with the Production System Designer, follow these steps:
 
 ## Acknowledgments
 
+This app uses fabric.js for drawing 2D layouts and pdfmake for PDF generation:
+1) fabric.js: https://github.com/fabricjs/fabric.js
+2) pdfmake: https://github.com/bpampuch/pdfmake 
 
 ---
 
