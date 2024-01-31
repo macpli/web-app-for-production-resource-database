@@ -207,9 +207,16 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
     const content: any[] = [];
 
   // Add a title to the PDF
-  content.push({ text: 'Raport:', style: 'header' });
+  content.push({ text: 'Systemy Produkcyjne', style: 'header' });
+  content.push({ text: 'Raport projektu struktury systemu produkcyjnego: ', style: 'subheader' });
+  content.push({ text: '\n' });
+  
 
   this.addNodesToContent(nodeToDraw, content);
+
+  content.push({ text: '\n' });
+  content.push({ text: 'Schemat fizycznego rozmieszczenia elementów struktury:', style: 'subheader' });
+  content.push({ text: '\n' });
   
   if (canvasImageDataURL) {
     content.push({ image: canvasImageDataURL, width: 500 }); // Adjust the width as needed
@@ -222,6 +229,10 @@ export class TreeOfMfgPlantsNodeDetailsComponent {
         fontSize: 18,
         bold: true,
       },
+      subheader: {
+        fontSize: 14,
+        bold: true
+      }
     },
   };
 

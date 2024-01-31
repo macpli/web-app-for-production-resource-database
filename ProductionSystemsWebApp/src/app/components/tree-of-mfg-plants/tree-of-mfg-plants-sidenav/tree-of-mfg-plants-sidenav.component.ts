@@ -112,12 +112,9 @@ export class TreeOfMfgPlantsSidenavComponent {
     return iconClasses[startingLetter] || iconClasses.default;
   }
 
-  setNodeDetails(nodeId: string, keyId: string, parentId: string, width: number, height: number)
+  setNodeDetails(nodeId: string, keyId: string, parentId: string)
   {
-    this.chosenNode = { nodeId, keyId, parentId, width, height };
-  
-    this.getFactoryToDraft(nodeId);
-
+    this.chosenNode = { nodeId, keyId, parentId };
     this.nodeDetailsService.setNodeDetails(nodeId, keyId, parentId);
   }
 
