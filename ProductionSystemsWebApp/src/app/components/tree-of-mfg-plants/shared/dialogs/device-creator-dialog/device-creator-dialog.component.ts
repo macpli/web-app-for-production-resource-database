@@ -65,27 +65,32 @@ export class DeviceCreatorDialogComponent {
     type: ['', Validators.required]
   });
 
-  //deviceToAdd: Device;
-
   save(){
-    console.log('test')
     if (this.devicesControlGroup && this.devicesControlGroup.valid) {
 
-      var deviceToAdd: Device = {
-        id: 'ee123',
-        name: this.devicesControlGroup.get('name')!.value ?? '',
-        width: this.devicesControlGroup.get('width')!.value ?? 0,
-        height: this.devicesControlGroup.get('height')!.value ?? 0,
-        type: this.devicesControlGroup.get('type')!.value?? ''
-      };
+      var newKeyId: string = '';
 
-      this.nodesService.addDevice(deviceToAdd).subscribe({
+      this.nodesService.getDevices().subscribe({
         next: (result) => {
-          console.log(result)
+          newKeyId = 'U0' + result.length +1;
+
+          var deviceToAdd: Device = {
+            id: newKeyId,
+            keyId: newKeyId,
+            parentId: '0',
+            name: this.devicesControlGroup.get('name')!.value ?? '',
+            width: this.devicesControlGroup.get('width')!.value ?? 0,
+            height: this.devicesControlGroup.get('height')!.value ?? 0,
+            type: this.devicesControlGroup.get('type')!.value?? ''
+          };
+    
+          this.nodesService.addDevice(deviceToAdd).subscribe({
+            next: (result) => {
+              console.log(result)
+            }
+          })        
         }
       })
-
-      console.log(deviceToAdd)
     }
   }
 
