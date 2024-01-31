@@ -12,5 +12,7 @@
         public string? Location { get; set; }
         public string? Manager { get; set; }
         public string? Supervisor { get; set; }
+        public string IDFct { get; set; }
+        public string IDDep { get; set; }
     }
 }

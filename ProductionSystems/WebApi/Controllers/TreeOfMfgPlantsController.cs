@@ -11,11 +11,9 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class TreeOfMfgPlantsController : Controller
     {
-        private readonly ProductionSystemContext _productionSystemContext;
         private readonly IProductionSystemsRepository _productionSystemsRepository;
-        public TreeOfMfgPlantsController(ProductionSystemContext productionSystemContext, IProductionSystemsRepository productionSystemsRepository)
+        public TreeOfMfgPlantsController(IProductionSystemsRepository productionSystemsRepository)
         {
-            _productionSystemContext = productionSystemContext;
             _productionSystemsRepository = productionSystemsRepository ?? throw new ArgumentNullException(nameof(productionSystemsRepository));
         }
 

@@ -23,6 +23,8 @@ namespace WebApi.Controllers
             var details = await _productionSystemsRepository.GetFactoryDetails(nodeId);
             var result = new nodeDetailsDTO()
             {
+                IDFct = details.IDFct,
+                NodeId = nodeId,
                 Name = details.Name,
                 Description = details.Description,
                 IdOrg = details.IDOrg,
@@ -39,6 +41,9 @@ namespace WebApi.Controllers
             var details = await _productionSystemsRepository.GetDepartmentDetails(nodeId);
             var result = new nodeDetailsDTO()
             {
+                IDDep = details.IDDep,
+                IDFct = details.IDFct,
+                NodeId = details.NodeId,
                 Name = details.Name,
                 Description = details.Description,
                 Manager = details.Manager,
