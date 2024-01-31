@@ -11,8 +11,10 @@
   border-radius: 6px;
 }
 
-.nodes-list {
-  height: 100%;
+.list {
+  width: 400px;
+  height: 300px;
+  overflow: hidden;
   border-radius: 12px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

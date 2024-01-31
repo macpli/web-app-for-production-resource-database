@@ -7,7 +7,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import {FormsModule} from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-
+import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import { fabric } from 'fabric';
 import { NodeDetailsService } from '../../../../services/node-details.service';
@@ -21,9 +21,16 @@ declare module 'fabric' {
     interface IRectOptions {
       id?: string;
     }
+
+    interface ILineOptions {
+      isConnectionLine?: boolean;
+    }
   }
 }
 
+interface ConnectionLine extends fabric.Line {
+  isConnectionLine: boolean;
+}
 
 interface ExtendedTreeNode extends TreeNode {
   xCoordinate: number;
@@ -38,7 +45,9 @@ interface ConnectionPoints {
 @Component({
   selector: 'tree-of-mfg-plants-draft',
   standalone: true,
-  imports: [CommonModule, MatButtonModule,MatIconModule, MatSelectModule, TreeOfMfgPlantsDraftComponent, MatListModule, FormsModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, MatButtonModule,MatIconModule, MatSelectModule, 
+    MatDividerModule, TreeOfMfgPlantsDraftComponent, MatListModule, 
+    FormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './tree-of-mfg-plants-draft.component.html',
   styleUrl: './tree-of-mfg-plants-draft.component.scss',
   providers: [NodeDetailsService, NodesService],
@@ -76,7 +85,11 @@ export class TreeOfMfgPlantsDraftComponent {
 
   scale!: number;
 
+  connectionLines: any[] = [];
   connectionPoints: ConnectionPoints[] = [];
+  conPointX: number = 0;
+  conPointY: number = 0;
+
 
   ngAfterViewInit() {
     this.canvas = new fabric.Canvas(this.layoutCanvas.nativeElement, {
@@ -167,6 +180,61 @@ export class TreeOfMfgPlantsDraftComponent {
     node.children?.forEach(childNode => {
       this.drawNodeAndChildren(childNode);
     });
+  }
+
+  addConnectionPoint(x: number, y: number){
+    const newPoint = {
+      xCoordinate: x,
+      yCoordinate: y
+    }
+
+    this.connectionPoints.push(newPoint);
+    console.log(this.connectionPoints);
+  }
+
+  removePoint(point: any){
+    this.connectionPoints = this.connectionPoints.filter( x => x != point);
+  }
+  
+  clearConnectionPoints(){
+    const lineObjects = this.canvas.getObjects().filter(obj => obj.type === 'line');
+
+    // Remove each line object from the canvas
+    lineObjects.forEach(line => this.canvas.remove(line));
+
+    this.connectionLines = [];
+
+    this.connectionPoints.splice(0, this.connectionPoints.length);
+    this.canvas.renderAll();
+    console.log(this.canvas)
+  }
+
+  drawFromConnectionPoints(){
+    if(this.connectionPoints.length >= 2){
+      
+      for(let i = 0; i < this.connectionPoints.length-1; i++){
+        const startPointX = this.connectionPoints[i].xCoordinate * this.scale;
+        const startPointY = this.connectionPoints[i].yCoordinate * this.scale;
+        const endPointX = this.connectionPoints[i+1].xCoordinate * this.scale;
+        const endPointY = this.connectionPoints[i+1].yCoordinate * this.scale;
+        console.log(startPointX, startPointY, endPointX, endPointY)
+
+        let lineStart = {x: startPointX, y: startPointY};
+        let lineEnd = {x: endPointX, y: endPointY};
+        let line = new fabric.Line([lineStart.x, lineStart.y, lineEnd.x, lineEnd.y], {
+          fill: 'yellow',
+          stroke: 'yellow',
+          strokeWidth: 8,
+          isConnectionLine: true
+        });
+        this.canvas.add(line);
+        this.connectionLines.push(line);
+        const savedDraft = this.saveCanvasAsImage('jpeg');
+        this.canvasImage.emit(savedDraft);
+        this.canvas.renderAll();
+      }
+
+    }
   }
 
   drawLayoutManual(node: TreeNode, canvas: fabric.Canvas ,colors: string[], colorIndex: number, scale: number){

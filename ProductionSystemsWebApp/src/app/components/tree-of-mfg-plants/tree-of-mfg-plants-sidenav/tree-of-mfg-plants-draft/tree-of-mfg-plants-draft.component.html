@@ -3,13 +3,14 @@
     
     <div style="display: flex; gap: 15px;">
         <div style="display: flex; flex-direction: column;">
+          <label style="margin-bottom: 20px; font-weight: 500;">Rozmieszczanie elementów</label>
             <mat-form-field class="example-full-width" style="margin-right: 15px;">
-                <mat-label>X</mat-label>
+                <mat-label>Podaj współrzędną X</mat-label>
                 <input matInput type="number" [(ngModel)]="this.xCoordinate">
               </mat-form-field>
     
               <mat-form-field class="example-full-width">
-                <mat-label>Y</mat-label>
+                <mat-label>Podaj współrzędną X</mat-label>
                 <input matInput type="number" [(ngModel)]="this.yCoordinate">
               </mat-form-field>
 
@@ -21,24 +22,56 @@
                       }
                 </mat-select>
               </mat-form-field>
-              <button mat-raised-button (click)="renderRectangle()">
+              <button mat-raised-button (click)="renderRectangle()" style="margin-bottom: 15px;">
                 <span *ngIf="this.isRendered">Zmień</span>
                 <span *ngIf="!this.isRendered">Dodaj</span>
               </button>
-              <button mat-raised-button (click)="drawFromSaved(this.selectedNode)" style="margin-top: 15px;">Rysuj z zapisanych</button>
-              <button mat-raised-button (click)="drawConnections()" style="margin-top: 15px;">Ścieżki</button>
+
+              <mat-divider style="margin: 20px 0;"></mat-divider>
+              <label style="margin-bottom: 15px; font-weight: 500;">Tworzenie ścieżki</label>
+              <!--<button mat-raised-button (click)="drawFromSaved(this.selectedNode)" style="margin-top: 15px;">Rysuj z zapisanych</button>-->
+              <mat-form-field class="example-full-width">
+                <mat-label>Dodaj współrzędną X punktu</mat-label>
+                <input [(ngModel)]="conPointX" matInput type="number">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Dodaj współrzędną Y punktu</mat-label>
+                <input [(ngModel)]="conPointY" matInput type="number">
+              </mat-form-field>
+              <button mat-raised-button (click)="addConnectionPoint(conPointX, conPointY)" style="margin-top: 15px;">Dodaj punkt ścieżki</button>
+              <button mat-raised-button (click)="drawFromConnectionPoints()" style="margin-top: 15px;">Rysuj ścieżkę</button>
+              <button mat-raised-button (click)="drawConnections()" style="margin-top: 15px;">Wygeneruj ścieżkę automatycznie</button>
         </div>
     
-        <div class="nodes-list">
-          <mat-list role="list" style="overflow-y: scroll; height: 600px;">
-            <mat-list-item *ngFor="let node of nodesFlat; let i = index" 
-                            role="listitem" 
-                            style="cursor: pointer;" 
-                            [ngClass]="{'grey-background': i % 2 === 1, 'selected-node': selectedNode && selectedNode.nodeId === node.nodeId}"
-                            (click)="getNodeToRender(node)">
-                            {{node.name}}
-            </mat-list-item>
-        </mat-list>
+        <div style="display: flex; flex-direction: column;">
+          <label style="margin-bottom: 5px; font-weight: 500;">Elementy</label>
+          <div class="list" style="margin-bottom: 35px;">
+            <mat-list role="list" style="overflow-y: auto; height: 100%;">
+              <mat-list-item *ngFor="let node of nodesFlat; let i = index" 
+                              role="listitem" 
+                              style="cursor: pointer;" 
+                              [ngClass]="{'grey-background': i % 2 === 1, 'selected-node': selectedNode && selectedNode.nodeId === node.nodeId}"
+                              (click)="getNodeToRender(node)">
+                              {{node.name}}
+              </mat-list-item>
+            </mat-list>
+          </div>
+  
+          <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 10px;">
+            <label style="font-weight: 500;">Punkty</label> 
+            <button mat-raised-button (click)="clearConnectionPoints()" >Wyczyść punkty</button>
+          </div>
+          
+
+          <div class="list">
+            <mat-list>
+              <mat-list-item *ngFor="let point of connectionPoints; let i = index" 
+                              role="listitem" [ngClass]="{'grey-background': i % 2 === 1}">
+              {{i+1}}. X: {{point.xCoordinate}} Y: {{point.yCoordinate}} 
+              <mat-icon (click)="removePoint(point)" style="cursor: pointer;">close</mat-icon>
+              </mat-list-item>
+            </mat-list>
+          </div>
         </div>
         
     </div>
