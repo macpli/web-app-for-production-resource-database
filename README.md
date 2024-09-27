@@ -5,7 +5,7 @@ A lightweight tool for prototyping production systems strucutures.
 [1. Overview](#overview) <br>
 [2. Features](#features)  
 [3. App setup](#run-the-app)  
-[4. Acknowledgments](#acknowledgments)
+[4. Acknowledgements](#acknowledgements)
 
 ### Overview
 
@@ -89,7 +89,7 @@ To get started with the Production System Designer, follow these steps:
 - dotnet 6.0
 - SqlServer
 
-## Acknowledgments
+## Acknowledgements
 
 This app uses fabric.js for drawing 2D layouts and pdfmake for PDF generation:
 1) fabric.js: https://github.com/fabricjs/fabric.js
