@@ -2,10 +2,10 @@
 A lightweight tool for prototyping production systems strucutures.
 
 ##### Table of Contents  
-[1. Overview](##overview) 
-[2. Features](##features)  
-[3. App setup](##run-the-app)  
-[4. Acknowledgments](##acknowledgments)
+[1. Overview](#overview) <br>
+[2. Features](#features)  
+[3. App setup](#run-the-app)  
+[4. Acknowledgments](#acknowledgments)
 
 ### Overview
 
