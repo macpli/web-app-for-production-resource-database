@@ -33,10 +33,10 @@ Generate summary reports for your designed production systems in PDF format. The
 In current state, the application is only able tu run locally and requires You to set it up by yourself.
 To get started with the Production System Designer, follow these steps:
 
-### Frontend Setup
+### Client Setup
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/production-system-designer.gitT
+   git clone https://github.com/macpli/production-system-designer.gitT
    ```
 
 2. **Install Dependencies:**
